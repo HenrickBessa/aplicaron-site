@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# O token do GitHub no CI só precisa ler o código.
+permissions:
+  contents: read
+
+# Um push novo na mesma branch cancela a execução anterior.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  segredos:
+    name: Scan de segredos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      # Procura chaves secret do Supabase (formato sb_secret_ + caracteres da chave) em todo arquivo versionado.
+      - name: Nenhuma chave sb_secret_ no repositório
+        run: |
+          if git grep -nE 'sb_secret_[A-Za-z0-9_-]{10,}'; then
+            echo "::error::Chave secret do Supabase encontrada no repositório. Remova e rotacione a chave."
+            exit 1
+          fi
+
+  app:
+    name: Typecheck, lint e testes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+
+  banco:
+    name: Testes do banco (pgTAP)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: supabase/setup-cli@v3
+        with:
+          version: 2.119.0
+      # Só o Postgres: os testes pgTAP não precisam dos demais serviços.
+      - run: supabase db start
+      - run: supabase test db
