@@ -1,26 +1,81 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Tokens do design system. Cada --color-* vira classe do Tailwind:
+ * --color-ciano -> bg-ciano, text-ciano, border-ciano, ring-ciano...
+ * O teste testes/contraste.test.ts lê estes valores e confere o contraste WCAG.
+ */
+@theme {
+  /* Tema único (escuro). Remove a paleta padrão do Tailwind para só existirem os nossos tokens. */
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --color-azul-noite: #0b1a2e;     /* fundo */
+  --color-azul-profundo: #12253d;  /* cards e superfícies */
+  --color-linha: #22395a;          /* só divisórias decorativas (contraste baixo de propósito) */
+  --color-borda-campo: #5b7391;    /* bordas de input: ≥ 3:1 sobre fundo e card */
+  --color-ciano: #38b6ff;          /* ações, links, foco; texto azul-noite sobre ele */
+  --color-gelo: #dce3ec;           /* texto principal */
+  --color-cinza-azulado: #93a4b8;  /* texto secundário */
+  --color-erro: #ff8a80;           /* mensagens de erro (fora da especificação original) */
+
+  /* Altura do cabeçalho fixo: usada no layout e no scroll-padding. */
+  --spacing-cabecalho: 4rem;
 }
 
+/* As variáveis das fontes são criadas pelo next/font no <html> (ver app/layout.tsx). */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-titulo: var(--font-sora), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Largura máxima e margens laterais do conteúdo (16px no celular, 24px a partir de 640px). */
+@utility container-site {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 72rem;
+  padding-inline: 1rem;
+  @media (width >= 40rem) {
+    padding-inline: 1.5rem;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  html {
+    color-scheme: dark;
+    /* Ao navegar por âncora ou pelo Tab, o alvo não fica escondido atrás do cabeçalho fixo (WCAG 2.4.11). */
+    scroll-padding-top: calc(var(--spacing-cabecalho) + 1rem);
+  }
+
+  body {
+    @apply bg-azul-noite font-sans text-gelo antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-titulo text-balance;
+  }
+
+  /* Foco visível padrão: anel ciano de 2px com respiro. Só aparece na navegação por teclado. */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ciano;
+  }
+
+  ::selection {
+    @apply bg-ciano text-azul-noite;
+  }
+}
+
+/* Quem pede menos movimento no sistema operacional não recebe animações nem rolagem suave. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
