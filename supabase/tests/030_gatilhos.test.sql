@@ -1,6 +1,9 @@
 -- Triggers: versao, histórico, updated_at, ultima_atividade_em e concorrência otimista.
 -- Dentro de uma transação now() é constante; por isso "envelhecemos" as datas antes de cada ação.
 begin;
+-- Isola o teste de dados que já existam no banco local (ex.: deixados pelos testes E2E).
+-- Tudo volta ao estado anterior no rollback do fim do arquivo.
+delete from public.leads;
 select plan(13);
 
 insert into auth.users (id, email) values ('00000000-0000-0000-0000-00000000a001', 'admin@teste.local');

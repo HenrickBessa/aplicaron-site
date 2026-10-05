@@ -43,13 +43,30 @@ jobs:
       - run: npm test
 
   banco:
-    name: Testes do banco (pgTAP)
+    name: Banco, integração e E2E
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
       - uses: supabase/setup-cli@v3
         with:
           version: 2.119.0
-      # Só o Postgres: os testes pgTAP não precisam dos demais serviços.
-      - run: supabase db start
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      # Só os serviços que os testes usam: Postgres, PostgREST, Kong (gateway) e Auth (gera as chaves novas).
+      - run: supabase start -x realtime,storage-api,imgproxy,mailpit,postgres-meta,studio,edge-runtime,logflare,vector,supavisor
       - run: supabase test db
+      - run: npm run test:integracao
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - name: Relatório do Playwright (se falhar)
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

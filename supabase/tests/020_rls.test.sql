@@ -3,6 +3,9 @@
 --   comum = usuário logado que não está em public.admins
 --   admin = usuário em public.admins (testado com aal1 e aal2)
 begin;
+-- Isola o teste de dados que já existam no banco local (ex.: deixados pelos testes E2E).
+-- Tudo volta ao estado anterior no rollback do fim do arquivo.
+delete from public.leads;
 select plan(26);
 
 -- ---------------------------------------------------------------------------

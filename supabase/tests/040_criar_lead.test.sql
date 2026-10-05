@@ -1,6 +1,9 @@
 -- sistema.criar_lead: idempotência, consentimento, defaults da fila e constraints.
 -- Chamado como service_role, que é o role da chave secret usada pelo servidor.
 begin;
+-- Isola o teste de dados que já existam no banco local (ex.: deixados pelos testes E2E).
+-- Tudo volta ao estado anterior no rollback do fim do arquivo.
+delete from public.leads;
 select plan(17);
 
 set local role service_role;

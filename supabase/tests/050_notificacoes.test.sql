@@ -2,6 +2,9 @@
 -- Aqui testamos as regras em uma única sessão. A concorrência real (duas sessões ao mesmo
 -- tempo devolvendo conjuntos disjuntos) é testada na fatia 5, com duas conexões.
 begin;
+-- Isola o teste de dados que já existam no banco local (ex.: deixados pelos testes E2E).
+-- Tudo volta ao estado anterior no rollback do fim do arquivo.
+delete from public.leads;
 select plan(21);
 
 -- ---------------------------------------------------------------------------

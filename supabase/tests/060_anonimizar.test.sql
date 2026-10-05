@@ -1,6 +1,9 @@
 -- sistema.anonimizar_vencidos: retenção LGPD.
 -- Regra: sem atividade há mais de 12 meses e status <> 'fechado'.
 begin;
+-- Isola o teste de dados que já existam no banco local (ex.: deixados pelos testes E2E).
+-- Tudo volta ao estado anterior no rollback do fim do arquivo.
+delete from public.leads;
 select plan(9);
 
 -- ---------------------------------------------------------------------------

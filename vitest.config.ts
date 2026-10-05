@@ -11,14 +11,29 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./", import.meta.url)),
       // O pacote `server-only` lança erro fora do bundle de servidor do Next.
       // Nos testes rodamos o código de servidor direto no Node, então ele vira um módulo vazio.
-      "server-only": fileURLToPath(
-        new URL("./testes/stubs/server-only.ts", import.meta.url),
-      ),
+      "server-only": fileURLToPath(new URL("./testes/stubs/server-only.ts", import.meta.url)),
     },
   },
   test: {
     environment: "node",
-    include: ["**/*.test.ts", "**/*.test.tsx"],
-    exclude: ["node_modules/**", ".next/**", "e2e/**"],
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: "unit",
+          include: ["**/*.test.ts", "**/*.test.tsx"],
+          exclude: ["node_modules/**", ".next/**", "e2e/**", "testes/integracao/**"],
+        },
+      },
+      {
+        // Precisa do Supabase local rodando (npm run db:start).
+        extends: true,
+        test: {
+          name: "integracao",
+          include: ["testes/integracao/**/*.test.ts"],
+          setupFiles: ["testes/integracao/ambiente.ts"],
+        },
+      },
+    ],
   },
 });
