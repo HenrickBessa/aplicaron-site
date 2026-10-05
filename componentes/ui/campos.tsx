@@ -138,13 +138,16 @@ type GrupoOpcoesProps = {
   legenda: string;
   opcoes: readonly Opcao[];
   valorPadrao?: string;
+  // Modo controlado (formulário com estado em React): passe `valor` e `aoMudar`.
+  valor?: string;
+  aoMudar?: (valor: string) => void;
   erro?: string;
   dica?: string;
 };
 
 // Grupo de rádios em cartões. fieldset + legend: o leitor de tela anuncia a pergunta
 // ("Qual serviço você procura?") antes de cada opção.
-export function GrupoOpcoes({ id, name, legenda, opcoes, valorPadrao, erro, dica }: GrupoOpcoesProps) {
+export function GrupoOpcoes({ id, name, legenda, opcoes, valorPadrao, valor, aoMudar, erro, dica }: GrupoOpcoesProps) {
   return (
     <fieldset id={id} aria-describedby={idsDescricao(id, dica, erro)} className="space-y-3">
       <legend className="font-medium text-gelo">{legenda}</legend>
@@ -167,7 +170,9 @@ export function GrupoOpcoes({ id, name, legenda, opcoes, valorPadrao, erro, dica
                 type="radio"
                 name={name}
                 value={opcao.valor}
-                defaultChecked={valorPadrao === opcao.valor}
+                {...(aoMudar
+                  ? { checked: valor === opcao.valor, onChange: () => aoMudar(opcao.valor) }
+                  : { defaultChecked: valorPadrao === opcao.valor })}
                 // Sem aria-invalid: não é suportado em radio. O erro chega pelo aria-describedby do fieldset.
                 // O foco é desenhado no cartão inteiro (has-focus-visible acima).
                 className="mt-1 size-4 shrink-0 accent-ciano focus-visible:outline-none"

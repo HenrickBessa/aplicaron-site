@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { BotaoLink } from "@/componentes/ui/Botao";
 import { linkWhatsapp } from "@/conteudo/site";
+import { LimparRascunho } from "./LimparRascunho";
 
 // noindex: a página só faz sentido depois de enviar o formulário. Não bloqueamos no
 // robots.txt de propósito: se bloqueasse, o Google não leria o noindex e poderia
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
 export default function PaginaObrigado() {
   return (
     <section className="container-site py-20 text-center sm:py-28">
+      <LimparRascunho />
       <h1 className="text-3xl font-bold sm:text-4xl">Recebemos seu pedido</h1>
       <p className="mx-auto mt-4 max-w-md text-cinza-azulado">
         Obrigado por contar sobre o seu projeto. Vamos analisar e responder em até um dia útil pelo contato que você
