@@ -1,7 +1,10 @@
 import { fileURLToPath } from "node:url";
+import mdx from "@mdx-js/rollup";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
+  // No app quem compila .mdx é o Next (@next/mdx); nos testes, o plugin oficial do MDX.
+  plugins: [mdx()],
   resolve: {
     alias: {
       // Mesmo alias do tsconfig.json.
