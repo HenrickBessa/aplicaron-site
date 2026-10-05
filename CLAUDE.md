@@ -29,8 +29,9 @@ npm run dev             # servidor de desenvolvimento (localhost:3000)
 npm run build           # build de produção
 npm run typecheck       # tsc --noEmit
 npm run lint            # ESLint
-npm test                # Vitest (unit + integração)
-npm run test:e2e        # Playwright (sobe build de produção)
+npm test                # Vitest: testes unitários (não precisa de banco)
+npm run test:integracao # Vitest contra o Supabase local (precisa de db:start)
+npm run test:e2e        # Playwright no build de produção, com Supabase local (precisa de db:start)
 npm run db:start        # Supabase local (Docker)
 npm run db:stop         # para o Supabase local
 npm run db:reset        # recria o banco local aplicando as migrações  ⚠ apaga dados locais
