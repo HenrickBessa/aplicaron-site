@@ -37,12 +37,13 @@ test.describe("layout", () => {
     await expect(page.locator("main#conteudo")).toBeFocused();
   });
 
-  test("campo focado não fica escondido atrás do cabeçalho fixo", async ({ page }) => {
+  test("elemento focado não fica escondido atrás do cabeçalho fixo", async ({ page }) => {
     await page.goto("/");
-    const campo = page.getByLabel("Conte sobre o projeto");
-    await campo.focus();
-    const cabecalho = await page.locator("header").boundingBox();
-    const caixa = await campo.boundingBox();
+    // Um link no meio da página: o navegador rola até ele ao receber o foco.
+    const alvo = page.locator("#cases a").first();
+    await alvo.focus();
+    const cabecalho = await page.locator("body > header").boundingBox();
+    const caixa = await alvo.boundingBox();
     expect(cabecalho && caixa).toBeTruthy();
     expect(caixa!.y).toBeGreaterThanOrEqual(cabecalho!.y + cabecalho!.height);
   });
