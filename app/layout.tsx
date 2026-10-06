@@ -46,9 +46,18 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
+// Aplica a preferência "Pausar animações" (BotaoAnimacoes) ANTES da primeira pintura, para as
+// animações não rodarem por um instante ao recarregar. Mesmo padrão usado para modo escuro.
+const SCRIPT_PREFERENCIAS = `try{if(localStorage.getItem("aplicaron:animacoes")==="pausadas")document.documentElement.dataset.animacoes="pausadas"}catch(e){}`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${sora.variable}`}>
+    // suppressHydrationWarning: o script acima adiciona data-animacoes no <html> antes do React;
+    // vale só para os atributos deste elemento, não para a página.
+    <html lang="pt-BR" className={`${inter.variable} ${sora.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_PREFERENCIAS }} />
+      </head>
       <body className="isolate flex min-h-dvh flex-col">{children}</body>
     </html>
   );

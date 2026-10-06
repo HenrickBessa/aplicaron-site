@@ -24,14 +24,7 @@ function definir(pausar: boolean) {
   ouvintes.forEach((avisar) => avisar());
 }
 
-// Aplica a preferência salva assim que este módulo carrega no navegador.
-if (typeof window !== "undefined") {
-  try {
-    if (localStorage.getItem(CHAVE) === "pausadas") document.documentElement.dataset.animacoes = "pausadas";
-  } catch {
-    // sem armazenamento: animações seguem ativas
-  }
-}
+// A preferência salva é aplicada antes da primeira pintura por um script no <head> (app/layout.tsx).
 
 function assinar(avisar: () => void) {
   ouvintes.add(avisar);
