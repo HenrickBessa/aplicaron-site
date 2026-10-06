@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { chamadaPrincipal, navegacao } from "@/conteudo/site";
 import { BotaoLink } from "@/componentes/ui/Botao";
+import { Logotipo } from "./Logotipo";
 import { MenuMovel } from "./MenuMovel";
 
 // Cabeçalho fixo no topo (sticky). Server Component; só o MenuMovel roda no navegador.
@@ -8,9 +9,9 @@ export function Cabecalho() {
   return (
     <header className="sticky top-0 z-50 border-b border-linha bg-azul-noite/95 backdrop-blur">
       <div className="container-site relative flex h-cabecalho items-center justify-between gap-4">
-        <Link href="/" className="font-titulo text-xl font-bold tracking-tight text-gelo">
-          Aplicar<span className="text-ciano">On</span>
-          <span className="sr-only"> — página inicial</span>
+        {/* Primeira imagem da página: carrega com prioridade (melhora o LCP). */}
+        <Link href="/" className="flex shrink-0 items-center rounded-sm" aria-label="AplicarOn, página inicial">
+          <Logotipo altura={30} prioridade />
         </Link>
 
         <nav aria-label="Principal" className="hidden md:block">

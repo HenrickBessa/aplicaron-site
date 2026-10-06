@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { linkWhatsapp, navegacao, site } from "@/conteudo/site";
+import { BotaoAnimacoes } from "./BotaoAnimacoes";
+import { Logotipo } from "./Logotipo";
 
 export function Rodape() {
   // Páginas estáticas: o ano é fixado no build. Um novo deploy por ano basta.
@@ -9,9 +11,7 @@ export function Rodape() {
     <footer className="mt-auto border-t border-linha bg-azul-profundo">
       <div className="container-site grid gap-8 py-10 sm:grid-cols-3">
         <div className="space-y-2">
-          <p className="font-titulo text-lg font-bold text-gelo">
-            Aplicar<span className="text-ciano">On</span>
-          </p>
+          <Logotipo altura={28} />
           <p className="text-sm text-cinza-azulado">{site.slogan}</p>
         </div>
 
@@ -53,9 +53,13 @@ export function Rodape() {
       </div>
 
       <div className="border-t border-linha">
-        <p className="container-site py-4 text-xs text-cinza-azulado">
-          © {ano} {site.nome}. Todos os direitos reservados.
-        </p>
+        {/* pb extra: o botão flutuante do WhatsApp não cobre esta linha. */}
+        <div className="container-site flex flex-wrap items-center justify-between gap-3 pt-4 pb-24 sm:pb-6 sm:pr-28">
+          <p className="text-xs text-cinza-azulado">
+            © {ano} {site.nome}. Todos os direitos reservados.
+          </p>
+          <BotaoAnimacoes />
+        </div>
       </div>
     </footer>
   );

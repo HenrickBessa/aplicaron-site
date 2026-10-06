@@ -46,6 +46,8 @@
     color-scheme: dark;
     /* Ao navegar por âncora ou pelo Tab, o alvo não fica escondido atrás do cabeçalho fixo (WCAG 2.4.11). */
     scroll-padding-top: calc(var(--spacing-cabecalho) + 1rem);
+    /* Idem embaixo: o botão flutuante do WhatsApp não esconde o elemento focado. */
+    scroll-padding-bottom: 6rem;
   }
 
   body {
@@ -66,6 +68,186 @@
   ::selection {
     @apply bg-ciano text-azul-noite;
   }
+}
+
+/* ---------------------------------------------------------------------------
+ * Animações. Todas usam só transform/opacity (baratas para a GPU) e ficam
+ * dentro de "prefers-reduced-motion: no-preference": quem pede menos movimento
+ * no sistema operacional vê tudo parado.
+ * ------------------------------------------------------------------------- */
+
+/* Surgir ao rolar (componente Revelar). Sem suporte ao recurso, o conteúdo aparece normal. */
+@keyframes revelar {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .revelar {
+      animation: revelar linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+  }
+}
+
+/* Cartões clicáveis: borda e brilho ciano no hover/foco; sobem 4px se movimento for permitido. */
+.cartao-interativo {
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.cartao-interativo:hover,
+.cartao-interativo:focus-visible {
+  border-color: var(--color-ciano);
+  box-shadow: 0 24px 48px -24px color-mix(in srgb, var(--color-ciano) 55%, transparent);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .cartao-interativo:hover {
+    transform: translateY(-4px);
+  }
+}
+
+/* Código passando no fundo do site (componente FundoCodigo). */
+@keyframes rolar-codigo {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+.coluna-codigo {
+  will-change: transform;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .coluna-codigo {
+    animation: rolar-codigo var(--duracao, 90s) linear infinite;
+  }
+}
+
+/* Faixa de tecnologias rolando na horizontal (componente CarrosselTecnologias). */
+@keyframes rolar-faixa {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .faixa-rolante {
+    animation: rolar-faixa 45s linear infinite;
+  }
+  /* Pausa quando o visitante quer ler ou navega por teclado dentro da faixa. */
+  .faixa-rolante:hover,
+  .faixa-rolante:focus-within {
+    animation-play-state: paused;
+  }
+}
+
+/* Ilustração da home flutuando suavemente. */
+@keyframes flutuar {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-12px);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .flutuar {
+    animation: flutuar 6s ease-in-out infinite alternate;
+  }
+}
+
+/* Botão flutuante do WhatsApp e balão de boas-vindas. */
+@keyframes whatsapp-entrar {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes whatsapp-pulsar {
+  from {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.8);
+  }
+}
+@keyframes whatsapp-balancar {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(-14deg);
+  }
+  75% {
+    transform: rotate(14deg);
+  }
+}
+@keyframes balao-surgir {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.whatsapp-pulso {
+  opacity: 0;
+}
+.whatsapp-flutuante {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.whatsapp-flutuante:hover,
+.whatsapp-flutuante:focus-visible {
+  box-shadow: 0 12px 32px -8px #25d366;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .whatsapp-flutuante {
+    animation: whatsapp-entrar 0.5s ease-out 0.8s both;
+  }
+  .whatsapp-flutuante:hover {
+    transform: scale(1.08);
+  }
+  /* 4 pulsos e para: nada fica piscando sem parar. */
+  .whatsapp-pulso {
+    animation: whatsapp-pulsar 1.6s ease-out 1.3s 4;
+  }
+  .whatsapp-flutuante:hover .whatsapp-icone {
+    animation: whatsapp-balancar 0.5s ease-in-out;
+  }
+  .balao-entrada {
+    animation: balao-surgir 0.35s ease-out both;
+    transform-origin: bottom right;
+  }
+}
+
+/* Botão "Pausar animações" do rodapé (WCAG 2.2.2): congela tudo que se move sozinho. */
+html[data-animacoes="pausadas"] .coluna-codigo,
+html[data-animacoes="pausadas"] .faixa-rolante,
+html[data-animacoes="pausadas"] .flutuar {
+  animation-play-state: paused;
 }
 
 /* Quem pede menos movimento no sistema operacional não recebe animações nem rolagem suave. */

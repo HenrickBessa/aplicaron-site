@@ -1,13 +1,27 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { JsonLd } from "@/componentes/seo/JsonLd";
+import { urlAbsoluta } from "@/lib/seo";
 
 export type ItemTrilha = { href?: string; rotulo: string };
 
-// Trilha de navegação visível ("Início › Serviços › Sites").
-// O JSON-LD BreadcrumbList equivalente entra na fatia 6.
-function Trilha({ itens }: { itens: ItemTrilha[] }) {
+// Trilha de navegação visível ("Início › Serviços › Sites") + o mesmo caminho em JSON-LD
+// (BreadcrumbList), gerados dos mesmos dados para nunca divergirem.
+function Trilha({ itens, caminho }: { itens: ItemTrilha[]; caminho: string }) {
+  const breadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: itens.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.rotulo,
+      // O item atual (sem href) aponta para a própria página.
+      item: urlAbsoluta(item.href ?? caminho),
+    })),
+  };
   return (
     <nav aria-label="Trilha de navegação" className="text-sm">
+      <JsonLd dados={breadcrumb} />
       <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-cinza-azulado">
         {itens.map((item, i) => (
           <li key={item.rotulo} className="flex items-center gap-2">
@@ -42,15 +56,16 @@ type Props = {
   descricao?: string;
   rascunho?: boolean;
   trilha?: ItemTrilha[];
+  caminho?: string; // URL da página atual, para o último item do BreadcrumbList
   children?: ReactNode;
 };
 
 // Topo padrão das páginas de conteúdo: trilha, selo, o único h1 da página e a descrição.
-export function CabecalhoPagina({ titulo, descricao, rascunho, trilha, children }: Props) {
+export function CabecalhoPagina({ titulo, descricao, rascunho, trilha, caminho = "/", children }: Props) {
   return (
     <header className="border-b border-linha">
       <div className="container-site space-y-5 py-12 sm:py-16">
-        {trilha && <Trilha itens={trilha} />}
+        {trilha && <Trilha itens={trilha} caminho={caminho} />}
         {rascunho && <SeloRascunho />}
         <h1 className="max-w-3xl text-3xl font-bold sm:text-5xl">{titulo}</h1>
         {descricao && <p className="max-w-2xl text-lg text-cinza-azulado">{descricao}</p>}
