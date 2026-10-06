@@ -59,3 +59,14 @@ test("formulário de diagnóstico até a etapa 3 sem violações da CSP", async 
   await expect(page.getByRole("heading", { level: 2, name: /Etapa 3 de 3/ })).toBeVisible();
   expect(await violacoes()).toEqual([]);
 });
+
+test("security.txt publicado com contato e validade (RFC 9116)", async ({ request }) => {
+  const r = await request.get("/.well-known/security.txt");
+  expect(r.status()).toBe(200);
+  const texto = await r.text();
+  expect(texto).toContain("Contact: mailto:suporte@aplicaron.com.br");
+  // Expires precisa estar no futuro e a menos de 1 ano (recomendação da RFC).
+  const expira = new Date(texto.match(/^Expires: (.+)$/m)![1]);
+  expect(expira.getTime()).toBeGreaterThan(Date.now());
+  expect(expira.getTime() - Date.now()).toBeLessThan(366 * 24 * 60 * 60 * 1000);
+});
