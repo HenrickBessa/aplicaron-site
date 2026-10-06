@@ -1,12 +1,18 @@
 "use client"; // Error boundaries precisam ser Client Components.
 
+import * as Sentry from "@sentry/nextjs";
+import { useEffect } from "react";
 import { Botao, BotaoLink } from "@/componentes/ui/Botao";
 import { linkWhatsapp } from "@/conteudo/site";
 
 // Em produção, o Next substitui a mensagem de erros do servidor por um texto genérico
 // e um `digest` (código para achar o erro nos logs). Mostramos só o código.
-// O envio ao Sentry entra na fatia 6.
 export default function ErroSite({ error, retry }: { error: Error & { digest?: string }; retry: () => void }) {
+  // A boundary "engole" o erro: sem isto, ele não chegaria ao Sentry.
+  useEffect(() => {
+    Sentry.captureException(error);
+  }, [error]);
+
   return (
     <section className="container-site py-20 text-center sm:py-28">
       <h1 className="text-3xl font-bold sm:text-4xl">Algo deu errado</h1>

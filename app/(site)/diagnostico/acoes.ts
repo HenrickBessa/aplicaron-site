@@ -1,8 +1,10 @@
 "use server";
 
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 import { VERSAO_POLITICA_VIGENTE } from "@/conteudo/privacidade";
+import { log } from "@/lib/logger";
 import { criarLead } from "@/lib/servicos/leads";
 import * as notificacoes from "@/lib/servicos/notificacoes";
 import { diagnosticoSchema, errosPorCampo, type CampoDiagnostico, type ErrosCampos } from "@/lib/validacao/diagnostico";
@@ -27,9 +29,9 @@ const CAMPOS_VISIVEIS: readonly CampoDiagnostico[] = [
   "marketing_optin",
 ];
 
-// Log provisório só com campos permitidos (o logger definitivo entra na fatia 6).
-function registrar(evento: string, extra: Record<string, unknown> = {}) {
-  console.error(JSON.stringify({ evento, ...extra }));
+// Identificador da requisição na Vercel: liga a linha do log à requisição no painel.
+async function idRequisicao() {
+  return (await headers()).get("x-vercel-id") ?? undefined;
 }
 
 export async function enviarDiagnostico(entrada: unknown): Promise<ResultadoEnvio> {
@@ -54,7 +56,7 @@ export async function enviarDiagnostico(entrada: unknown): Promise<ResultadoEnvi
       Object.entries(todos).filter(([campo]) => CAMPOS_VISIVEIS.includes(campo as CampoDiagnostico)),
     ) as ErrosCampos;
     // Só os NOMES dos campos inválidos; nunca os valores digitados.
-    registrar("diagnostico_invalido", { campos: Object.keys(todos) });
+    log.aviso("diagnostico_invalido", { request_id: await idRequisicao(), codigo: `invalido:${Object.keys(todos).join(",")}` });
     // Erro só em campo que o visitante não vê (ex.: submission_id adulterado): mensagem genérica.
     if (Object.keys(erros).length === 0) return { ok: false, erroGeral: "indisponivel" };
     return { ok: false, erros };
@@ -65,7 +67,11 @@ export async function enviarDiagnostico(entrada: unknown): Promise<ResultadoEnvi
   try {
     resultado = await criarLead({ ...validacao.data, politica_versao: VERSAO_POLITICA_VIGENTE });
   } catch (erro) {
-    registrar("criar_lead_falhou", { codigo: erro instanceof Error ? erro.message : "desconhecido" });
+    log.erro("criar_lead_falhou", {
+      request_id: await idRequisicao(),
+      servico: validacao.data.servico,
+      codigo: erro instanceof Error ? erro.message : "desconhecido",
+    });
     return { ok: false, erroGeral: "indisponivel" };
   }
 

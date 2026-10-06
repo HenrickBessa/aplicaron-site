@@ -1,4 +1,5 @@
 import "server-only";
+import { log } from "@/lib/logger";
 import { clienteSistema } from "@/lib/supabase/sistema";
 import { ROTULOS_FAIXA, ROTULOS_SERVICO, type FaixaOrcamento, type Servico } from "@/lib/validacao/enums";
 
@@ -19,11 +20,6 @@ function configuracao() {
   const site = process.env.NEXT_PUBLIC_SITE_URL;
   if (!chave || !de || !para || !site) return null;
   return { chave, de, para, site };
-}
-
-// Log provisório só com campos permitidos (o logger definitivo entra na fatia 6).
-function registrar(evento: string, extra: Record<string, unknown> = {}) {
-  console.error(JSON.stringify({ evento, ...extra }));
 }
 
 export function montarEmail(lead: Pick<Reivindicado, "id" | "servico" | "faixa_orcamento">, site: string) {
@@ -67,7 +63,7 @@ export async function enviar(limite: number, leadId?: string): Promise<number> {
   const cfg = configuracao();
   if (!cfg) {
     // Sem configuração não reivindicamos nada: não queimamos tentativas à toa.
-    registrar("notificacao_desativada");
+    log.aviso("notificacao_desativada");
     return 0;
   }
 
@@ -81,7 +77,7 @@ export async function enviar(limite: number, leadId?: string): Promise<number> {
       p_lead_id: leadId ?? null,
     });
     if (error) {
-      registrar("reivindicar_falhou", { codigo: error.code });
+      log.erro("reivindicar_falhou", { codigo: error.code });
       break;
     }
     const lead = (data as Reivindicado[] | null)?.[0];
@@ -94,10 +90,15 @@ export async function enviar(limite: number, leadId?: string): Promise<number> {
       p_ok: codigo === null,
       p_codigo: codigo,
     });
-    if (erroConcluir) registrar("concluir_falhou", { lead_id: lead.id, codigo: erroConcluir.code });
+    if (erroConcluir) log.erro("concluir_falhou", { lead_id: lead.id, codigo: erroConcluir.code });
 
-    if (codigo === null) enviadas++;
-    else registrar("notificacao_falhou", { lead_id: lead.id, codigo });
+    if (codigo === null) {
+      enviadas++;
+    } else {
+      // Falha com nova tentativa agendada é aviso; a 5ª (última) falha é erro e vai ao Sentry.
+      const nivel = lead.tentativa >= 5 ? log.erro : log.aviso;
+      nivel("notificacao_falhou", { lead_id: lead.id, servico: lead.servico, codigo });
+    }
   }
 
   return enviadas;
