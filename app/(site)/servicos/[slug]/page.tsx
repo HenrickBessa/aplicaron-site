@@ -4,6 +4,7 @@ import { CabecalhoPagina } from "@/componentes/conteudo/CabecalhoPagina";
 import { ChamadaDiagnostico } from "@/componentes/conteudo/ChamadaDiagnostico";
 import { BotaoLink } from "@/componentes/ui/Botao";
 import { buscarServico, servicos } from "@/conteudo/servicos";
+import { metadadosPagina } from "@/lib/seo";
 
 // Gera uma página estática por serviço no build.
 export function generateStaticParams() {
@@ -17,7 +18,7 @@ export async function generateMetadata({ params }: PageProps<"/servicos/[slug]">
   const { slug } = await params;
   const servico = buscarServico(slug);
   if (!servico) return {};
-  return { title: servico.dados.titulo, description: servico.dados.descricao };
+  return metadadosPagina({ titulo: servico.dados.titulo, descricao: servico.dados.descricao, caminho: `/servicos/${slug}` });
 }
 
 export default async function PaginaServico({ params }: PageProps<"/servicos/[slug]">) {
@@ -34,6 +35,7 @@ export default async function PaginaServico({ params }: PageProps<"/servicos/[sl
         titulo={dados.titulo}
         descricao={dados.descricao}
         rascunho={dados.rascunho}
+        caminho={`/servicos/${slug}`}
         trilha={[{ href: "/", rotulo: "Início" }, { href: "/#servicos", rotulo: "Serviços" }, { rotulo: dados.titulo }]}
       >
         <BotaoLink href={linkDiagnostico}>Pedir diagnóstico gratuito</BotaoLink>

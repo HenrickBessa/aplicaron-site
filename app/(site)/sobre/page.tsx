@@ -3,13 +3,15 @@ import { CabecalhoPagina } from "@/componentes/conteudo/CabecalhoPagina";
 import { ChamadaDiagnostico } from "@/componentes/conteudo/ChamadaDiagnostico";
 import { carregar, dadosPaginaSchema } from "@/conteudo/esquemas";
 import * as sobreMdx from "@/conteudo/sobre.mdx";
+import { metadadosPagina } from "@/lib/seo";
 
 const sobre = carregar(dadosPaginaSchema, "sobre", sobreMdx);
 
-export const metadata: Metadata = {
-  title: sobre.dados.titulo,
-  description: sobre.dados.descricao,
-};
+export const metadata: Metadata = metadadosPagina({
+  titulo: sobre.dados.titulo,
+  descricao: sobre.dados.descricao,
+  caminho: "/sobre",
+});
 
 export default function PaginaSobre() {
   const { dados, Conteudo } = sobre;
@@ -19,6 +21,7 @@ export default function PaginaSobre() {
         titulo={dados.titulo}
         descricao={dados.descricao}
         rascunho={dados.rascunho}
+        caminho="/sobre"
         trilha={[{ href: "/", rotulo: "Início" }, { rotulo: "Sobre" }]}
       />
       <div className="container-site py-8 sm:py-12">

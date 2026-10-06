@@ -1,5 +1,5 @@
 import type { MDXContent } from "mdx/types";
-import { z } from "zod";
+import { z } from "@/lib/validacao/zod";
 import { servicoSchema } from "@/lib/validacao/enums";
 
 // Formato dos `dados` exportados por cada MDX. Validados no build: um campo faltando
@@ -20,14 +20,21 @@ export const dadosServicoSchema = z.object({
   ...base,
   servico: servicoSchema.exclude(["outro"]),
   resumo: z.string().min(20).max(200),
+  // Três destaques curtos exibidos no cartão do serviço na home.
+  destaques: z.array(z.string().min(5).max(60)).length(3),
 });
 
-export const dadosCaseSchema = z.object({
+export const dadosClienteSchema = z.object({
   ...base,
   cliente: z.string().min(2),
   setor: z.string().min(2),
-  servico: servicoSchema.exclude(["outro"]),
-  resultado: z.string().min(10).max(120),
+  cidade: z.string().min(2),
+  // O que a AplicarOn entregou para este cliente (um ou mais serviços).
+  servicos: z.array(servicoSchema.exclude(["outro"])).min(1),
+  // Site do cliente (link externo na página do case).
+  site: z.url(),
+  // Frase curta do cartão na home e na lista de clientes.
+  resumo: z.string().min(20).max(200),
 });
 
 export const dadosPoliticaSchema = z.object({
