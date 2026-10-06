@@ -32,6 +32,8 @@ export default defineConfig({
           name: "integracao",
           include: ["testes/integracao/**/*.test.ts"],
           setupFiles: ["testes/integracao/ambiente.ts"],
+          // Os arquivos compartilham o mesmo banco (e a mesma fila): um de cada vez.
+          fileParallelism: false,
         },
       },
     ],
