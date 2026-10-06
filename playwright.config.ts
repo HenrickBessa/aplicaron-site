@@ -35,6 +35,7 @@ export default defineConfig({
     url: `http://localhost:${PORTA}`,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
-    env: supabase,
+    // URL canônica fixa nos testes (independe do .env.local de cada máquina).
+    env: { ...supabase, NEXT_PUBLIC_SITE_URL: "https://www.aplicaron.com.br" },
   },
 });

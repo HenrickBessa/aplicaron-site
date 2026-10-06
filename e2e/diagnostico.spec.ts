@@ -25,7 +25,7 @@ async function preencherAteContato(page: Page) {
   await page.getByRole("button", { name: "Continuar" }).click();
   await page.getByLabel("Nome", { exact: true }).fill("Teste E2E");
   await page.getByLabel("E-mail", { exact: true }).fill("E2E@Exemplo.com");
-  await page.getByLabel(/WhatsApp/).fill("(47) 98880-0836");
+  await page.getByRole("textbox", { name: /WhatsApp/ }).fill("(47) 98880-0836");
 }
 
 const lerRascunho = (page: Page) =>
@@ -49,7 +49,7 @@ test("fluxo completo: 3 etapas, envio, /obrigado e lead gravado", async ({ page 
   await semViolacoes(page);
   await page.getByLabel("Nome", { exact: true }).fill("Teste E2E");
   await page.getByLabel("E-mail", { exact: true }).fill("E2E@Exemplo.com");
-  await page.getByLabel(/WhatsApp/).fill("(47) 98880-0836");
+  await page.getByRole("textbox", { name: /WhatsApp/ }).fill("(47) 98880-0836");
   await expect(page.getByRole("link", { name: /política de privacidade/ })).toHaveAttribute("href", "/privacidade");
 
   const { submission_id } = await lerRascunho(page);

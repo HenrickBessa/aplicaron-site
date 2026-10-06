@@ -40,7 +40,7 @@ test.describe("layout", () => {
   test("elemento focado não fica escondido atrás do cabeçalho fixo", async ({ page }) => {
     await page.goto("/");
     // Um link no meio da página: o navegador rola até ele ao receber o foco.
-    const alvo = page.locator("#cases a").first();
+    const alvo = page.locator("#clientes a").first();
     await alvo.focus();
     const cabecalho = await page.locator("body > header").boundingBox();
     const caixa = await alvo.boundingBox();

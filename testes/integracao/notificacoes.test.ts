@@ -69,7 +69,7 @@ describe("fila de notificação (Supabase local)", () => {
       process.env.RESEND_API_KEY = "re_teste";
       process.env.NOTIFICACAO_EMAIL_DE = "AplicarOn <avisos@exemplo.com>";
       process.env.NOTIFICACAO_EMAIL_PARA = "time@exemplo.com";
-      process.env.NEXT_PUBLIC_SITE_URL = "https://aplicar-on.vercel.app";
+      process.env.NEXT_PUBLIC_SITE_URL = "https://www.aplicaron.com.br";
       vi.spyOn(console, "error").mockImplementation(() => {});
       // Só as chamadas ao Resend são interceptadas; o Supabase usa o fetch de verdade.
       vi.stubGlobal("fetch", (url: RequestInfo | URL, init?: RequestInit) =>

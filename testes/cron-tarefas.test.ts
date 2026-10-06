@@ -6,7 +6,7 @@ vi.mock("@/lib/servicos/notificacoes", () => ({ enviar: (...a: unknown[]) => env
 const { GET } = await import("@/app/api/cron/tarefas/route");
 
 const chamar = (cabecalho?: string) =>
-  GET(new Request("https://aplicar-on.vercel.app/api/cron/tarefas", { headers: cabecalho ? { authorization: cabecalho } : {} }));
+  GET(new Request("https://www.aplicaron.com.br/api/cron/tarefas", { headers: cabecalho ? { authorization: cabecalho } : {} }));
 
 beforeEach(() => {
   enviar.mockClear();

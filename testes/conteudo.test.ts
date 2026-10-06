@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { cases } from "@/conteudo/cases";
+import { clientes } from "@/conteudo/clientes";
 import { carregar, dadosServicoSchema } from "@/conteudo/esquemas";
 import { VERSAO_POLITICA_VIGENTE, versoesPolitica } from "@/conteudo/privacidade";
 import { servicos } from "@/conteudo/servicos";
 
 describe("conteúdo MDX", () => {
-  it("slugs de serviços e cases são únicos e válidos para URL", () => {
-    for (const lista of [servicos, cases]) {
+  it("slugs de serviços e clientes são únicos e válidos para URL", () => {
+    for (const lista of [servicos, clientes]) {
       const slugs = lista.map((item) => item.slug);
       expect(new Set(slugs).size).toBe(slugs.length);
       for (const slug of slugs) expect(slug).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
@@ -16,6 +16,15 @@ describe("conteúdo MDX", () => {
   it("cada serviço do site aponta para um tipo de serviço diferente", () => {
     const tipos = servicos.map((s) => s.dados.servico);
     expect(new Set(tipos).size).toBe(tipos.length);
+  });
+
+  it("todo cliente tem logo, site e pelo menos um serviço, e nenhum conteúdo é rascunho", () => {
+    for (const c of clientes) {
+      expect(c.logo, c.slug).toBeTruthy();
+      expect(new URL(c.dados.site).protocol, c.slug).toBe("https:");
+      expect(c.dados.servicos.length, c.slug).toBeGreaterThan(0);
+    }
+    for (const item of [...servicos, ...clientes]) expect(item.dados.rascunho, item.slug).toBe(false);
   });
 
   it("política vigente é a primeira da lista e as versões não se repetem", () => {

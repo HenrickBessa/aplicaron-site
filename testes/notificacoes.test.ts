@@ -14,6 +14,7 @@ const rpc = vi.fn(async (nome: string, args: Record<string, unknown>) => {
   concluidas.push(args);
   return { data: true, error: null };
 });
+vi.mock("@sentry/nextjs", () => ({ captureMessage: vi.fn() }));
 vi.mock("@/lib/supabase/sistema", () => ({ clienteSistema: () => ({ schema: () => ({ rpc }) }) }));
 
 const { enviar, montarEmail } = await import("@/lib/servicos/notificacoes");
@@ -29,11 +30,11 @@ beforeEach(() => {
   rpc.mockClear();
   fetchFalso.mockReset().mockResolvedValue(new Response("{}", { status: 200 }));
   vi.stubGlobal("fetch", fetchFalso);
-  vi.spyOn(console, "error").mockImplementation(() => {});
+  for (const metodo of ["log", "warn", "error"] as const) vi.spyOn(console, metodo).mockImplementation(() => {});
   vi.stubEnv("RESEND_API_KEY", "re_teste");
   vi.stubEnv("NOTIFICACAO_EMAIL_DE", "AplicarOn <avisos@exemplo.com>");
   vi.stubEnv("NOTIFICACAO_EMAIL_PARA", "time@exemplo.com");
-  vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://aplicar-on.vercel.app/");
+  vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://www.aplicaron.com.br/");
 });
 
 afterEach(() => {
@@ -43,10 +44,10 @@ afterEach(() => {
 
 describe("montarEmail", () => {
   it("assunto e corpo só com serviço, faixa e link do admin", () => {
-    const email = montarEmail({ id: "abc", servico: "sites", faixa_orcamento: "5k_15k" }, "https://aplicar-on.vercel.app/");
+    const email = montarEmail({ id: "abc", servico: "sites", faixa_orcamento: "5k_15k" }, "https://www.aplicaron.com.br/");
     expect(email.subject).toBe("Novo diagnóstico: Sites, R$ 5 mil a R$ 15 mil");
-    expect(email.text).toContain("https://aplicar-on.vercel.app/admin/leads/abc");
-    expect(email.html).toContain('href="https://aplicar-on.vercel.app/admin/leads/abc"');
+    expect(email.text).toContain("https://www.aplicaron.com.br/admin/leads/abc");
+    expect(email.html).toContain('href="https://www.aplicaron.com.br/admin/leads/abc"');
   });
 });
 

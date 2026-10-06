@@ -5,6 +5,8 @@ const criarLead = vi.fn();
 const after = vi.fn();
 vi.mock("@/lib/servicos/leads", () => ({ criarLead: (...a: unknown[]) => criarLead(...a) }));
 vi.mock("next/server", () => ({ after: (...a: unknown[]) => after(...a) }));
+vi.mock("next/headers", () => ({ headers: async () => new Headers({ "x-vercel-id": "gru1::teste" }) }));
+vi.mock("@sentry/nextjs", () => ({ captureMessage: vi.fn() }));
 
 const { enviarDiagnostico } = await import("@/app/(site)/diagnostico/acoes");
 const { VERSAO_POLITICA_VIGENTE } = await import("@/conteudo/privacidade");
@@ -30,7 +32,9 @@ beforeEach(() => {
   criarLead.mockReset();
   after.mockReset();
   logs = [];
-  vi.spyOn(console, "error").mockImplementation((...a) => void logs.push(a.join(" ")));
+  for (const metodo of ["log", "warn", "error"] as const) {
+    vi.spyOn(console, metodo).mockImplementation((...a) => void logs.push(a.join(" ")));
+  }
 });
 
 describe("enviarDiagnostico", () => {
@@ -60,7 +64,8 @@ describe("enviarDiagnostico", () => {
     const r = await enviarDiagnostico({ ...valido, email: "ana-sem-arroba", nome: "A" });
     expect(r).toEqual({ ok: false, erros: { email: expect.any(String), nome: expect.any(String) } });
     expect(criarLead).not.toHaveBeenCalled();
-    expect(logs.join("\n")).toContain('"campos":["nome","email"]');
+    expect(logs.join("\n")).toContain('"codigo":"invalido:nome,email"');
+    expect(logs.join("\n")).toContain('"request_id":"gru1::teste"');
     expect(logs.join("\n")).not.toContain("ana-sem-arroba");
   });
 
