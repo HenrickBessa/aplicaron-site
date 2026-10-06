@@ -32,6 +32,7 @@ npm run lint            # ESLint
 npm test                # Vitest: testes unitários (não precisa de banco)
 npm run test:integracao # Vitest contra o Supabase local (precisa de db:start)
 npm run test:e2e        # Playwright no build de produção, com Supabase local (precisa de db:start)
+npm run imagens         # regenera logos, favicon e imagens a partir de assets/ (sharp)
 npm run db:start        # Supabase local (Docker)
 npm run db:stop         # para o Supabase local
 npm run db:reset        # recria o banco local aplicando as migrações  ⚠ apaga dados locais
@@ -48,7 +49,9 @@ npm run db:test         # testes pgTAP (supabase test db)
 - `lib/supabase/servidor.ts` (publishable + cookies) · `lib/supabase/sistema.ts` (secret).
 - Todo arquivo em `lib/dal`, `lib/servicos`, `lib/supabase` começa com `import 'server-only'`. Client Components nunca importam desses módulos.
 - Páginas públicas estáticas (`generateStaticParams` em serviços/cases). Dados de lead nunca em cache compartilhado.
-- Conteúdo em MDX em `conteudo/`, não no banco.
+- Conteúdo em MDX em `conteudo/` (serviços, clientes, sobre, política), não no banco. Lista de tecnologias em `conteudo/tecnologias.ts`.
+- Imagens: originais em `assets/`, versões servidas geradas por `npm run imagens`; no código, sempre `next/image` com import estático.
+- Animações: só CSS, sempre dentro de `prefers-reduced-motion: no-preference` e pausáveis pelo botão do rodapé (`html[data-animacoes="pausadas"]`).
 - Cada segmento com `loading.tsx`, `error.tsx`, `not-found.tsx`.
 - `app/admin/` é Fase 2: não criar agora.
 - Next 16 tem mudanças incompatíveis: consulte `node_modules/next/dist/docs/` antes de usar uma API.
@@ -61,6 +64,10 @@ npm run db:test         # testes pgTAP (supabase test db)
 - Não gravar IP, user agent ou geolocalização de leads.
 - Logs e Sentry: só campos permitidos (evento, nivel, request_id, lead_id, servico, codigo). Nunca nome, email, whatsapp, empresa, descrição, IP ou tokens. Erros de validação logam só **nomes** de campos.
 - E-mails de notificação sem dados pessoais.
-- Proibido `.or(` com template string no supabase-js.
+- Proibido `.or(` com template string no supabase-js (regra de lint).
+- Logs só via `lib/logger.ts` (`log.info/aviso/erro`), que descarta campos fora da lista permitida. Nunca `console.*` com dados de lead.
+- Zod só via `@/lib/validacao/zod` (configurado sem eval por causa da CSP; regra de lint).
+- SEO: metadados de página indexável sempre por `metadadosPagina()` (`lib/seo.ts`); JSON-LD por `<JsonLd>`.
+- Cabeçalhos e CSP em `lib/cabecalhos-seguranca.ts`. Mudou a CSP? Rode `e2e/seguranca.spec.ts` (detecta violações).
 - Cookies de sessão: `httpOnly: true, secure: true, sameSite: 'lax'` explícitos.
 - Headers de segurança e CSP (Report-Only nas páginas públicas) conforme `docs/decisoes.md`.
