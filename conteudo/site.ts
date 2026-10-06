@@ -2,15 +2,24 @@
 export const site = {
   nome: "AplicarOn",
   slogan: "Sites, sistemas, aplicativos e automação com IA.",
-  email: "contato@aplicaron.com.br", // RASCUNHO: confirmar o e-mail real antes do lançamento
+  email: "bessa2002henrick@gmail.com",
   whatsapp: "+5547988800836", // formato E.164
 } as const;
 
+// URL pública canônica, sem barra no fim. Base de canonical, Open Graph, sitemap e JSON-LD.
+// Em Preview também aponta para a produção: cópias em URLs de preview se declaram duplicatas dela.
+export const URL_SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.aplicaron.com.br").replace(/\/$/, "");
+
 export const linkWhatsapp = `https://wa.me/${site.whatsapp.replace(/\D/g, "")}`;
+
+// Usado pelo botão flutuante: abre a conversa já com uma mensagem, para a pessoa não começar do zero.
+export const linkWhatsappComMensagem = `${linkWhatsapp}?text=${encodeURIComponent(
+  "Olá, AplicarOn! Vim pelo site e quero conversar sobre um projeto.",
+)}`;
 
 export const navegacao = [
   { href: "/#servicos", rotulo: "Serviços" },
-  { href: "/#cases", rotulo: "Cases" },
+  { href: "/clientes", rotulo: "Clientes" },
   { href: "/sobre", rotulo: "Sobre" },
 ] as const;
 

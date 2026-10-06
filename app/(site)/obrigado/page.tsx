@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: "Recebemos seu pedido",
   description: "Recebemos seu pedido de diagnóstico. Em breve entraremos em contato.",
   robots: { index: false, follow: true },
+  alternates: { canonical: "/obrigado" },
 };
 
 export default function PaginaObrigado() {
