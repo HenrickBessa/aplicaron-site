@@ -1,10 +1,104 @@
 import "server-only";
+import { clienteSistema } from "@/lib/supabase/sistema";
+import { ROTULOS_FAIXA, ROTULOS_SERVICO, type FaixaOrcamento, type Servico } from "@/lib/validacao/enums";
 
-// Envio do e-mail interno de "novo diagnóstico". Implementado na fatia 5
-// (reivindicar_notificacoes -> Resend -> concluir_notificacao).
-// Já existe agora para a Action do diagnóstico chamar via after().
+// Aviso interno de "novo diagnóstico" por e-mail (Resend).
+// Fluxo por lead: reivindicar (trava de 2 min no banco) -> enviar -> concluir (backoff se falhar).
+// O e-mail NÃO contém dados pessoais: só serviço, faixa e o link do admin.
+
+const TIMEOUT_RESEND_MS = 10_000;
+// Para de pegar novos leads depois deste tempo, bem antes de a função da Vercel ser encerrada.
+const PRAZO_LOTE_MS = 40_000;
+
+type Reivindicado = { id: string; tentativa: number; servico: Servico; faixa_orcamento: FaixaOrcamento };
+
+function configuracao() {
+  const chave = process.env.RESEND_API_KEY;
+  const de = process.env.NOTIFICACAO_EMAIL_DE;
+  const para = process.env.NOTIFICACAO_EMAIL_PARA;
+  const site = process.env.NEXT_PUBLIC_SITE_URL;
+  if (!chave || !de || !para || !site) return null;
+  return { chave, de, para, site };
+}
+
+// Log provisório só com campos permitidos (o logger definitivo entra na fatia 6).
+function registrar(evento: string, extra: Record<string, unknown> = {}) {
+  console.error(JSON.stringify({ evento, ...extra }));
+}
+
+export function montarEmail(lead: Pick<Reivindicado, "id" | "servico" | "faixa_orcamento">, site: string) {
+  const servico = ROTULOS_SERVICO[lead.servico];
+  const faixa = ROTULOS_FAIXA[lead.faixa_orcamento];
+  const link = `${site.replace(/\/$/, "")}/admin/leads/${lead.id}`;
+  return {
+    subject: `Novo diagnóstico: ${servico}, ${faixa}`,
+    text: `Novo diagnóstico recebido.\n\nServiço: ${servico}\nOrçamento: ${faixa}\n\nVer detalhes: ${link}\n`,
+    html:
+      `<p>Novo diagnóstico recebido.</p>` +
+      `<p><strong>Serviço:</strong> ${servico}<br><strong>Orçamento:</strong> ${faixa}</p>` +
+      `<p><a href="${link}">Ver detalhes no painel</a></p>`,
+  };
+}
+
+// Devolve null em caso de sucesso, ou um código curto de erro (vai para o banco e o log; nunca dados do lead).
+async function enviarEmail(lead: Reivindicado, cfg: NonNullable<ReturnType<typeof configuracao>>): Promise<string | null> {
+  try {
+    const resposta = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${cfg.chave}`,
+        "Content-Type": "application/json",
+        // Mesmo lead = mesma chave: se este envio for repetido em até 24 h (ex.: o resultado se
+        // perdeu e a trava venceu), o Resend não manda um segundo e-mail.
+        "Idempotency-Key": `lead-${lead.id}`,
+      },
+      body: JSON.stringify({ from: cfg.de, to: [cfg.para], ...montarEmail(lead, cfg.site) }),
+      signal: AbortSignal.timeout(TIMEOUT_RESEND_MS),
+    });
+    return resposta.ok ? null : `http_${resposta.status}`;
+  } catch (erro) {
+    return erro instanceof Error && erro.name === "TimeoutError" ? "timeout" : "rede";
+  }
+}
+
+// Processa até `limite` notificações pendentes, uma por vez. Com `leadId`, só aquele lead
+// (usado logo após o envio do formulário). Devolve quantas foram enviadas com sucesso.
 export async function enviar(limite: number, leadId?: string): Promise<number> {
-  void limite;
-  void leadId;
-  return 0;
+  const cfg = configuracao();
+  if (!cfg) {
+    // Sem configuração não reivindicamos nada: não queimamos tentativas à toa.
+    registrar("notificacao_desativada");
+    return 0;
+  }
+
+  const sistema = clienteSistema().schema("sistema");
+  const inicio = Date.now();
+  let enviadas = 0;
+
+  for (let i = 0; i < limite && Date.now() - inicio < PRAZO_LOTE_MS; i++) {
+    const { data, error } = await sistema.rpc("reivindicar_notificacoes", {
+      p_limite: 1,
+      p_lead_id: leadId ?? null,
+    });
+    if (error) {
+      registrar("reivindicar_falhou", { codigo: error.code });
+      break;
+    }
+    const lead = (data as Reivindicado[] | null)?.[0];
+    if (!lead) break; // fila vazia
+
+    const codigo = await enviarEmail(lead, cfg);
+    const { error: erroConcluir } = await sistema.rpc("concluir_notificacao", {
+      p_id: lead.id,
+      p_tentativa: lead.tentativa,
+      p_ok: codigo === null,
+      p_codigo: codigo,
+    });
+    if (erroConcluir) registrar("concluir_falhou", { lead_id: lead.id, codigo: erroConcluir.code });
+
+    if (codigo === null) enviadas++;
+    else registrar("notificacao_falhou", { lead_id: lead.id, codigo });
+  }
+
+  return enviadas;
 }
