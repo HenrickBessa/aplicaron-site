@@ -38,7 +38,8 @@ export const dadosClienteSchema = z.object({
 });
 
 export const dadosPoliticaSchema = z.object({
-  versao: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "use a data de vigência, AAAA-MM-DD"),
+  // Data de vigência; mais de uma versão no mesmo dia ganha sufixo: 2026-10-06-2.
+  versao: z.string().regex(/^\d{4}-\d{2}-\d{2}(-\d+)?$/, "use a data de vigência, AAAA-MM-DD (ou AAAA-MM-DD-N)"),
   rascunho: z.boolean(),
 });
 

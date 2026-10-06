@@ -2,7 +2,7 @@
 export const site = {
   nome: "AplicarOn",
   slogan: "Sites, sistemas, aplicativos e automação com IA.",
-  email: "bessa2002henrick@gmail.com",
+  email: "suporte@aplicaron.com.br",
   whatsapp: "+5547988800836", // formato E.164
 } as const;
 

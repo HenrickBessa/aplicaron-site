@@ -104,7 +104,7 @@ test("home: JSON-LD Organization e WebSite", async ({ page }) => {
   const tipos = dados["@graph"].map((n: { "@type": string }) => n["@type"]);
   expect(tipos).toEqual(["Organization", "WebSite"]);
   const org = dados["@graph"][0];
-  expect(org).toMatchObject({ name: "AplicarOn", url: `${BASE}/`, logo: `${BASE}/icon.png`, email: "bessa2002henrick@gmail.com" });
+  expect(org).toMatchObject({ name: "AplicarOn", url: `${BASE}/`, logo: `${BASE}/icon.png`, email: "suporte@aplicaron.com.br" });
 });
 
 test("serviço: JSON-LD BreadcrumbList igual à trilha visível", async ({ page }) => {

@@ -16,6 +16,8 @@ function formatarData(iso: string) {
 
 export default function PaginaPrivacidade() {
   const { dados, Conteudo } = politicaVigente;
+  // "2026-10-06-2" -> "2026-10-06": o sufixo só diferencia versões do mesmo dia.
+  const dataVigencia = dados.versao.slice(0, 10);
   return (
     <>
       <CabecalhoPagina
@@ -25,7 +27,7 @@ export default function PaginaPrivacidade() {
         trilha={[{ href: "/", rotulo: "Início" }, { rotulo: "Privacidade" }]}
       >
         <p className="text-sm text-cinza-azulado">
-          Versão vigente desde <time dateTime={dados.versao}>{formatarData(dados.versao)}</time>
+          Versão vigente desde <time dateTime={dataVigencia}>{formatarData(dataVigencia)}</time>
         </p>
       </CabecalhoPagina>
       <div className="container-site py-8 sm:py-12">
