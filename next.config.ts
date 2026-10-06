@@ -13,6 +13,15 @@ const nextConfig: NextConfig = {
   // Os cases antigos eram exemplos e não têm equivalente: vão para a lista de clientes.
   async redirects() {
     return [
+      // Domínio antigo da Vercel -> domínio da empresa (evita dois sites iguais no Google).
+      // Só o endereço exato: os previews (aplicar-on-git-...vercel.app) continuam funcionando.
+      // /api/ fica de fora: o cron da Vercel pode chamar a produção pelo endereço .vercel.app.
+      {
+        source: "/:caminho((?!api/).*)",
+        has: [{ type: "host", value: "aplicar-on.vercel.app" }],
+        destination: "https://www.aplicaron.com.br/:caminho",
+        permanent: true,
+      },
       { source: "/cases", destination: "/clientes", permanent: true },
       { source: "/cases/:slug", destination: "/clientes", permanent: true },
     ];
