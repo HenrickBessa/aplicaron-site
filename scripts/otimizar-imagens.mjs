@@ -63,6 +63,7 @@ await sharp({ create: { width: 1200, height: 630, channels: 4, background: FUNDO
 for (const [origem, destino] of [
   ["assets/logoemer.png", "emer.png"],
   ["assets/armazemlogo.png", "atacado-das-cestas.png"],
+  ["assets/logokavana.png", "kavana.png"],
 ]) {
   await sharp(origem).trim().resize({ height: 200 }).png({ compressionLevel: 9 }).toFile(`public/imagens/clientes/${destino}`);
 }

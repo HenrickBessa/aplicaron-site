@@ -15,6 +15,7 @@ const indexaveis = [
   "/clientes",
   "/clientes/emer",
   "/clientes/atacado-das-cestas",
+  "/clientes/kavana",
 ];
 
 const meta = (page: Page, seletor: string) => page.locator(seletor).first().getAttribute("content");
