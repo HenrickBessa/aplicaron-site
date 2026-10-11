@@ -1,27 +1,32 @@
 export const dados = {
-  titulo: "Emer: telemedicina no app, no site e no painel",
-  descricao: "A AplicarOn desenvolveu o aplicativo, o site e o painel da Emer, plataforma de consultas médicas online por vídeo com receita digital.",
+  titulo: "Emer: plataforma web de teleconsulta e site",
+  descricao: "A AplicarOn desenvolveu a plataforma web de teleconsulta e o site da Emer, com vídeo no navegador, agendamento e prontuário eletrônico.",
   cliente: "Emer",
   setor: "Saúde e telemedicina",
   cidade: "Joinville, SC",
-  servicos: ["aplicativos", "sites", "sistemas"],
+  servicos: ["sistemas", "sites"],
   site: "https://www.emermedicosonline.com.br/",
-  resumo: "Aplicativo para Android e iOS, site e painel de gestão para uma plataforma de consultas médicas online.",
+  resumo: "Plataforma web de teleconsulta com prontuário eletrônico e site, com consulta por vídeo direto no navegador.",
   ordem: 1,
   rascunho: false,
 }
 
 ## Sobre a Emer
 
-A Emer é uma plataforma de telemedicina de Joinville (SC) que conecta pacientes a médicos por videochamada, 12 horas por dia, com atendimento também para brasileiros que vivem nos Estados Unidos.
+A Emer é uma plataforma de telemedicina de Joinville (SC) que conecta pacientes a médicos por vídeo.
 
 ## O que desenvolvemos
 
-- **Aplicativo para Android e iOS**, publicado na Google Play e na App Store, com consultas por vídeo em tempo real.
-- **Receita digital**: a prescrição chega ao paciente com QR Code e pode ser apresentada em farmácias parceiras.
-- **Site institucional**, que apresenta o serviço e leva o visitante ao download do aplicativo.
-- **Painel de gestão**, que dá à equipe da Emer o controle da operação por trás das consultas.
+Em produção desde outubro de 2026, a plataforma web leva a consulta para o navegador.
+
+- **Teleconsulta por vídeo no navegador**, em uma sala privada para cada consulta. O paciente entra por um link que expira, sem instalar nada nem criar conta, e a consulta não é gravada.
+- **Agendamento pelas unidades de saúde parceiras**, com o médico designado pela Emer. Ao remarcar, os links antigos deixam de valer, e o médico vê o aviso de "paciente na sala".
+- **Prontuário eletrônico completo**: seções clínicas, alergias em destaque, CID-10 da tabela oficial, salvamento automático, adendos e selo de integridade. O médico consulta o histórico do paciente e exporta o prontuário em PDF.
+- **Painéis para as unidades de saúde e para a administração**, sem dados de pacientes, com relatório de produção.
+- **Novo site no domínio próprio**, com contato pelo WhatsApp, no lugar do site anterior.
 
 ## Como trabalhamos
 
-Aplicativo, site e painel foram pensados como um único produto: a mesma identidade, os mesmos dados e uma experiência contínua para o paciente, do primeiro acesso ao site até a receita na farmácia.
+Tudo foi pensado para o paciente não precisar de nada além do navegador: sem instalar aplicativo e sem criar conta, só o link da consulta.
+
+Privacidade e segurança entraram desde o desenho, e não depois: auditoria de acessos, backups criptografados, proteção contra tentativas de login e adequações à LGPD.

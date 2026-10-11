@@ -1,12 +1,18 @@
+import { Tela } from "@/componentes/conteudo/Tela";
+import telaSiteAgendamento from "@/public/imagens/clientes/kavana/site-agendamento.webp";
+import telaAgenda from "@/public/imagens/clientes/kavana/agenda-dia.webp";
+import telaSolicitacoes from "@/public/imagens/clientes/kavana/solicitacoes.webp";
+import telaProntuario from "@/public/imagens/clientes/kavana/prontuario-finalizado.webp";
+
 export const dados = {
-  titulo: "Clínica Kavaná: site com agendamento pelo WhatsApp",
-  descricao: "A AplicarOn desenvolveu o site da Clínica Kavaná, de Joinville, com especialidades, equipe e pedido de agendamento de consultas pelo WhatsApp.",
+  titulo: "Clínica Kavaná: site e sistema com prontuário eletrônico",
+  descricao: "A AplicarOn desenvolveu o site e o sistema da Clínica Kavaná, de Joinville: agenda, prontuário eletrônico, documentos e área do paciente.",
   cliente: "Clínica Kavaná",
   setor: "Saúde e saúde mental",
   cidade: "Joinville, SC",
-  servicos: ["sites"],
+  servicos: ["sites", "sistemas"],
   site: "https://kavana-phi.vercel.app/",
-  resumo: "Site institucional com especialidades, equipe e pedido de agendamento pelo WhatsApp para uma clínica médica e de saúde mental.",
+  resumo: "Site com agendamento pelo WhatsApp e sistema sob medida, com agenda, prontuário eletrônico e área do paciente.",
   ordem: 3,
   rascunho: false,
 }
@@ -17,10 +23,51 @@ A Clínica Kavaná é uma clínica de Joinville (SC) que reúne atendimento méd
 
 ## O que desenvolvemos
 
+### Site
+
 - **Site institucional** que apresenta a clínica, as especialidades e os profissionais da equipe.
 - **Pedido de agendamento** em etapas: o paciente escolhe a especialidade e o horário, e a solicitação chega à clínica pelo WhatsApp.
 - **Botão de WhatsApp** sempre à mão, para quem prefere conversar antes de marcar.
 
+<Tela
+  src={telaSiteAgendamento}
+  alt="Etapa 4 de 6 do pedido de agendamento no site: grade de horários disponíveis, com 10:30 selecionado e os botões Voltar e Continuar."
+  legenda="Pedido de agendamento no site: o paciente escolhe o horário em etapas."
+/>
+
+### Sistema da clínica
+
+Um sistema sob medida para a rotina da clínica, hoje em implantação. As telas abaixo são do próprio sistema, preenchidas com pacientes de exemplo, sem nenhum dado real.
+
+- **Agenda por profissional**, por dia e por semana, com horários de atendimento, bloqueios, encaixes e confirmação pelo WhatsApp.
+- **Pedidos do site ligados à agenda**: os pedidos de agendamento podem usar as vagas reais de cada profissional, quando a clínica decidir ativar.
+- **Prontuário eletrônico médico** com CID-10 da tabela oficial, finalização com selo de integridade, adendos e impressão.
+- **Psicologia e terapias**: registro de psicologia restrito ao psicólogo, e atendimentos de fisioterapia, terapia ocupacional, fonoaudiologia e terapias integrativas.
+- **Documentos numerados** (declarações, atestados, receitas e relatórios), com cópia arquivada e selada.
+- **Financeiro com convênios** e painel de indicadores sem dados de pacientes.
+- **Perfis de acesso** para recepção, profissionais e administração, com auditoria de quem acessou o quê.
+- **Área do paciente**, com os atendimentos, documentos para imprimir e pedidos de remarcação ou cancelamento. O responsável legal acompanha os filhos menores.
+
+<Tela
+  src={telaAgenda}
+  alt="Agenda do dia de uma profissional, com filtros de profissional, data e visão, os botões Novo agendamento e Horários e bloqueios, e a lista de horários: consultas agendadas, uma confirmada e horários livres."
+  legenda="Agenda por profissional, com horários livres, consultas agendadas e confirmadas."
+/>
+
+<Tela
+  src={telaSolicitacoes}
+  alt="Tela de solicitações da recepção: um pedido de remarcação feito na área do paciente pelo responsável de uma criança e dois pedidos de agendamento vindos do site, cada um com horário pedido, atendimento, contato e botões para agendar ou responder pelo WhatsApp."
+  legenda="Solicitações: pedidos da área do paciente e do site chegam à recepção, que confirma com a pessoa."
+/>
+
+<Tela
+  src={telaProntuario}
+  alt="Prontuário de consulta médica finalizado, com selo de integridade conferido, seções de anamnese, exame físico, diagnóstico com CID-10 e conduta, anotação restrita e um adendo registrado depois da finalização."
+  legenda="Prontuário finalizado com selo de integridade: correções entram como adendos, sem alterar o registro original."
+/>
+
 ## Como trabalhamos
 
-O objetivo era um só: levar o visitante até a consulta. Identidade visual, textos e caminho de navegação foram pensados para passar a mesma calma que a clínica oferece no atendimento, sem atrito entre a primeira visita e o agendamento.
+No site, o objetivo era um só: levar o visitante até a consulta. Identidade visual, textos e caminho de navegação foram pensados para passar a mesma calma que a clínica oferece no atendimento, sem atrito entre a primeira visita e o agendamento.
+
+No sistema, a privacidade veio primeiro, com a LGPD em mente desde o desenho: cada perfil tem o seu acesso, o registro de psicologia fica com quem atende, e todo acesso fica registrado.

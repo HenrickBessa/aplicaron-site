@@ -68,4 +68,18 @@ for (const [origem, destino] of [
   await sharp(origem).trim().resize({ height: 200 }).png({ compressionLevel: 9 }).toFile(`public/imagens/clientes/${destino}`);
 }
 
+// 6. Telas do sistema da Kavaná (dados fictícios), vindas da apresentação do sistema.
+//    As telas compridas são cortadas na parte que a página comenta (altura em px do original).
+await mkdir("public/imagens/clientes/kavana", { recursive: true });
+for (const [nome, altura] of [
+  ["site-agendamento", null],
+  ["agenda-dia", 1240],
+  ["solicitacoes", 1400],
+  ["prontuario-finalizado", 1570],
+]) {
+  let img = sharp(`assets/telas/kavana/${nome}.webp`);
+  if (altura) img = img.extract({ left: 0, top: 0, width: (await img.metadata()).width, height: altura });
+  await img.resize({ width: 1280, withoutEnlargement: true }).webp({ quality: 80, effort: 6 }).toFile(`public/imagens/clientes/kavana/${nome}.webp`);
+}
+
 console.log("Imagens geradas.");
