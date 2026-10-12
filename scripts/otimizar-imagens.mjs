@@ -68,18 +68,25 @@ for (const [origem, destino] of [
   await sharp(origem).trim().resize({ height: 200 }).png({ compressionLevel: 9 }).toFile(`public/imagens/clientes/${destino}`);
 }
 
-// 6. Telas do sistema da Kavaná (dados fictícios), vindas da apresentação do sistema.
-//    As telas compridas são cortadas na parte que a página comenta (altura em px do original).
-await mkdir("public/imagens/clientes/kavana", { recursive: true });
-for (const [nome, altura] of [
-  ["site-agendamento", null],
-  ["agenda-dia", 1240],
-  ["solicitacoes", 1400],
-  ["prontuario-finalizado", 1570],
+// 6. Telas dos sistemas dos clientes (dados fictícios), vindas das apresentações de cada sistema.
+//    O recorte (px do original) fica só com a parte que a página comenta e deixa de fora
+//    o que não pode aparecer no site (nomes de parceiros, contratos, números).
+for (const [cliente, nome, recorte] of [
+  ["kavana", "site-agendamento", null],
+  ["kavana", "agenda-dia", { left: 0, top: 0, width: 1280, height: 1240 }],
+  ["kavana", "solicitacoes", { left: 0, top: 0, width: 1280, height: 1400 }],
+  ["kavana", "prontuario-finalizado", { left: 0, top: 0, width: 1280, height: 1570 }],
+  ["emer", "paciente-chamada", null],
+  // Sem o cabeçalho, que traz o nome da unidade de saúde.
+  ["emer", "agenda", { left: 320, top: 80, width: 1280, height: 520 }],
+  ["emer", "atendimento", null],
+  // Só o selo: o aviso logo abaixo cita o edital do contrato.
+  ["emer", "prontuario-selado", { left: 976, top: 140, width: 584, height: 465 }],
 ]) {
-  let img = sharp(`assets/telas/kavana/${nome}.webp`);
-  if (altura) img = img.extract({ left: 0, top: 0, width: (await img.metadata()).width, height: altura });
-  await img.resize({ width: 1280, withoutEnlargement: true }).webp({ quality: 80, effort: 6 }).toFile(`public/imagens/clientes/kavana/${nome}.webp`);
+  await mkdir(`public/imagens/clientes/${cliente}`, { recursive: true });
+  let img = sharp(`assets/telas/${cliente}/${nome}.webp`);
+  if (recorte) img = img.extract(recorte);
+  await img.resize({ width: 1280, withoutEnlargement: true }).webp({ quality: 80, effort: 6 }).toFile(`public/imagens/clientes/${cliente}/${nome}.webp`);
 }
 
 console.log("Imagens geradas.");

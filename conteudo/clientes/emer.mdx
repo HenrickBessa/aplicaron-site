@@ -1,3 +1,9 @@
+import { Tela } from "@/componentes/conteudo/Tela";
+import telaPaciente from "@/public/imagens/clientes/emer/paciente-chamada.webp";
+import telaAgenda from "@/public/imagens/clientes/emer/agenda.webp";
+import telaAtendimento from "@/public/imagens/clientes/emer/atendimento.webp";
+import telaSelo from "@/public/imagens/clientes/emer/prontuario-selado.webp";
+
 export const dados = {
   titulo: "Emer: plataforma web de teleconsulta e site",
   descricao: "A AplicarOn desenvolveu a plataforma web de teleconsulta e o site da Emer, com vídeo no navegador, agendamento e prontuário eletrônico.",
@@ -24,6 +30,34 @@ Em produção desde outubro de 2026, a plataforma web leva a consulta para o nav
 - **Prontuário eletrônico completo**: seções clínicas, alergias em destaque, CID-10 da tabela oficial, salvamento automático, adendos e selo de integridade. O médico consulta o histórico do paciente e exporta o prontuário em PDF.
 - **Painéis para as unidades de saúde e para a administração**, sem dados de pacientes, com relatório de produção.
 - **Novo site no domínio próprio**, com contato pelo WhatsApp, no lugar do site anterior.
+
+As telas abaixo são da própria plataforma, preenchidas com pacientes de exemplo, sem nenhum dado real.
+
+<Tela
+  largura="celular"
+  src={telaPaciente}
+  alt="Tela de teleconsulta no celular do paciente: orientações sobre câmera, microfone e fones antes de entrar e a chamada de vídeo com a médica."
+  legenda="O paciente entra na consulta pelo navegador do celular, sem instalar nada."
+/>
+
+<Tela
+  src={telaAgenda}
+  alt="Agenda com filtros de data e status, botão Nova consulta e uma tabela de pacientes de exemplo com especialidade, guia, horário, médico e status: uma consulta solicitada e duas agendadas."
+  legenda="Agenda da unidade de saúde: a consulta solicitada ganha o médico designado pela Emer."
+/>
+
+<Tela
+  src={telaAtendimento}
+  alt="Tela do médico durante o atendimento: a videochamada com o paciente à esquerda, com o botão Copiar link do paciente, e o prontuário à direita, com a indicação de salvo automaticamente."
+  legenda="O médico atende por vídeo e preenche o prontuário na mesma tela, com salvamento automático."
+/>
+
+<Tela
+  largura="media"
+  src={telaSelo}
+  alt="Fim do prontuário com os botões Salvar e Finalizar consulta e o aviso de prontuário selado, com a integridade verificada."
+  legenda="Ao finalizar, o prontuário recebe o selo de integridade."
+/>
 
 ## Como trabalhamos
 
