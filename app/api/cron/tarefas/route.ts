@@ -1,8 +1,8 @@
 import { createHash, timingSafeEqual } from "node:crypto";
 import * as notificacoes from "@/lib/servicos/notificacoes";
 
-// Chamado a cada 15 min pelo GitHub Actions (.github/workflows/tarefas.yml) e 1x por dia
-// pelo cron da Vercel (vercel.json, reserva). Os dois mandam "Authorization: Bearer <CRON_SECRET>".
+// Chamado a cada 15 min pelo cron da Vercel (vercel.json), que manda
+// "Authorization: Bearer <CRON_SECRET>" sozinho quando a variável existe no projeto.
 
 export const maxDuration = 60;
 
