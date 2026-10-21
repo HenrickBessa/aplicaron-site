@@ -27,6 +27,14 @@ jobs:
             echo "::error::Chave secret do Supabase encontrada no repositório. Remova e rotacione a chave."
             exit 1
           fi
+      # Chaves de API do Asaas: $aact_prod_ (produção), $aact_hmlg_ (sandbox) ou $aact_ (formato antigo).
+      # Exige 20+ caracteres depois de $aact_, para não pegar o prefixo citado em documentação.
+      - name: Nenhuma chave de API do Asaas no repositório
+        run: |
+          if git grep -nE '\$aact_[A-Za-z0-9_+/=-]{20,}'; then
+            echo "::error::Chave de API do Asaas encontrada no repositório. Remova e gere outra no painel do Asaas."
+            exit 1
+          fi
 
   app:
     name: Typecheck, lint e testes

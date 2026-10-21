@@ -60,7 +60,7 @@ npm run db:test         # testes pgTAP (supabase test db)
 
 - Banco: RLS em todas as tabelas; `anon` sem nada; `service_role` sem grant em tabela (só EXECUTE em `sistema.*`); nenhum DELETE para ninguém; políticas com `(select privado.admin_mfa())`; `SECURITY DEFINER` sempre com `SET search_path = ''` e nomes qualificados; default privileges revogados.
 - Toda migração vem com testes pgTAP em `supabase/tests/`.
-- Nunca commitar segredos. O CI falha se encontrar `sb_secret_` no repositório. Valores reais só em `.env.local` (ignorado) e no painel da Vercel.
+- Nunca commitar segredos. O CI falha se encontrar `sb_secret_` (Supabase) ou chave de API do Asaas (`$aact_…`) no repositório. Valores reais só em `.env.local` (ignorado) e no painel da Vercel.
 - Não gravar IP, user agent ou geolocalização de leads.
 - Logs e Sentry: só campos permitidos (evento, nivel, request_id, lead_id, servico, codigo). Nunca nome, email, whatsapp, empresa, descrição, IP ou tokens. Erros de validação logam só **nomes** de campos.
 - E-mails de notificação sem dados pessoais.
