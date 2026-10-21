@@ -58,8 +58,9 @@ select set_eq(
   $$ select p.proname::text from pg_proc p
       where p.pronamespace in ('public'::regnamespace, 'privado'::regnamespace, 'sistema'::regnamespace)
         and has_function_privilege('service_role', p.oid, 'EXECUTE') $$,
-  array['criar_lead', 'reivindicar_notificacoes', 'concluir_notificacao', 'anonimizar_vencidos'],
-  'service_role executa exatamente as 4 funções de sistema'
+  array['criar_lead', 'reivindicar_notificacoes', 'concluir_notificacao', 'anonimizar_vencidos',
+        'registrar_evento_asaas'],
+  'service_role executa exatamente as 5 funções de sistema'
 );
 
 select schema_privs_are('sistema', 'service_role', array['USAGE'], 'service_role tem USAGE em sistema');
