@@ -1,8 +1,10 @@
 import type { StaticImageData } from "next/image";
 import { carregar, dadosClienteSchema } from "@/conteudo/esquemas";
+import logoAgi from "@/public/imagens/clientes/agi.png";
 import logoAtacado from "@/public/imagens/clientes/atacado-das-cestas.png";
 import logoEmer from "@/public/imagens/clientes/emer.png";
 import logoKavana from "@/public/imagens/clientes/kavana.png";
+import * as agi from "./agi.mdx";
 import * as atacado from "./atacado-das-cestas.mdx";
 import * as emer from "./emer.mdx";
 import * as kavana from "./kavana.mdx";
@@ -15,6 +17,7 @@ export const clientes = [
   comLogo(carregar(dadosClienteSchema, "emer", emer), logoEmer),
   comLogo(carregar(dadosClienteSchema, "atacado-das-cestas", atacado), logoAtacado),
   comLogo(carregar(dadosClienteSchema, "kavana", kavana), logoKavana),
+  comLogo(carregar(dadosClienteSchema, "agi", agi), logoAgi),
 ].sort((a, b) => a.dados.ordem - b.dados.ordem);
 
 export type Cliente = (typeof clientes)[number];

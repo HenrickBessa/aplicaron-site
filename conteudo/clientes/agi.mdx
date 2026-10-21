@@ -1,0 +1,80 @@
+import { Tela } from "@/componentes/conteudo/Tela";
+import telaSite from "@/public/imagens/clientes/agi/site-home.webp";
+import telaFachada from "@/public/imagens/clientes/agi/hub-fachada-noite.webp";
+import telaPlanta from "@/public/imagens/clientes/agi/hub-planta-final-01.webp";
+import telaCelular from "@/public/imagens/clientes/agi/m-hub-inicio.webp";
+import telaLeads from "@/public/imagens/clientes/agi/painel-leads.webp";
+
+export const dados = {
+  titulo: "AGI Incorporações: site interativo e painel de leads",
+  descricao: "A AplicarOn desenvolveu o site da AGI Incorporações, a experiência interativa do San Remo e o painel de leads e unidades da incorporadora.",
+  cliente: "AGI Incorporações",
+  setor: "Mercado imobiliário",
+  cidade: "Barra Velha, SC",
+  servicos: ["sites", "sistemas"],
+  site: "https://incorporaagi.app/",
+  resumo: "Site da incorporadora com o San Remo em fachada e planta interativas, e painel com a origem de cada contato.",
+  ordem: 4,
+  rascunho: false,
+}
+
+## Sobre a AGI Incorporações
+
+A AGI é uma incorporadora de Barra Velha (SC) que se apresenta como construtora boutique: poucas unidades, arquitetura com identidade e áreas comuns que as pessoas de fato usam. O primeiro empreendimento é o San Remo, um edifício de nove apartamentos com arquitetura clássica, o primeiro de uma coleção.
+
+## O que desenvolvemos
+
+A AGI tinha o book de vendas em PDF e nada na web. Site, empreendimento e painel são um só sistema: o que a equipe muda no painel aparece no site na hora, sem nova publicação.
+
+### Site e San Remo
+
+- **Site da incorporadora**, com quem constrói, a coleção de empreendimentos e o contato.
+- **Experiência do San Remo** em capítulos, com navegação de uma página para a seguinte.
+- **Fachada interativa**, com os detalhes da arquitetura apontados na imagem e um controle para ver o prédio de dia e de noite.
+- **Planta interativa** dos apartamentos, ambiente por ambiente, com a ficha técnica, além do térreo e das áreas comuns.
+- **Mapa do entorno** e galeria de imagens.
+- **Contato em cada página**: formulários para pedir informações, receber o book ou agendar visita, e WhatsApp com mensagem pronta.
+
+<Tela
+  src={telaSite}
+  alt="Página inicial do site da AGI Incorporações: o título Menos número e mais qualidade, os botões Conhecer o San Remo e Falar com a AGI, e a imagem ilustrativa do edifício iluminado ao anoitecer."
+  legenda="Página inicial do site da AGI, que leva ao primeiro empreendimento da coleção."
+/>
+
+<Tela
+  src={telaFachada}
+  alt="Fachada do San Remo à noite, com pontos numerados sobre a imagem, o seletor de dia e noite e a lista dos detalhes: cornija, frontão, telhado aparente, frisos horizontais, sacadas, hall recuado e iluminação cênica."
+  legenda="Fachada interativa: cada número mostra um detalhe da arquitetura, e o controle passa do dia para a noite."
+/>
+
+<Tela
+  src={telaPlanta}
+  alt="Planta do apartamento final 01 com dez ambientes numerados, do hall de entrada ao banheiro da suíte, e as abas Ambientes, Planta e Ficha."
+  legenda="Planta interativa: o visitante explora o apartamento ambiente por ambiente."
+/>
+
+<Tela
+  largura="celular"
+  src={telaCelular}
+  alt="Início do San Remo no celular: imagem ilustrativa do edifício, o nome San Remo e o botão Conhecer o San Remo."
+  legenda="Pensado para quem chega pelo celular, vindo de um anúncio ou de um QR code."
+/>
+
+### Painel da AGI
+
+- **Leads com a origem de cada contato**: book impresso, placa da obra, redes sociais ou anúncio, cada canal com o próprio link e QR code.
+- **Status, anotações e exportação** da lista de contatos.
+- **Disponibilidade das unidades** (disponível, reservada ou vendida) refletida no site.
+- **Textos, imagens e novos empreendimentos** cadastrados pela própria equipe.
+
+<Tela
+  src={telaLeads}
+  alt="Lista de leads do painel da AGI com filtros por nome, empreendimento, origem, status e período, o botão Exportar CSV e três contatos de exemplo vindos do book impresso, com status novo, perdido e fechado."
+  legenda="Painel da AGI: cada contato chega com a origem, e a equipe acompanha o status. Contatos de exemplo."
+/>
+
+## Como trabalhamos
+
+O desafio era passar na tela o mesmo padrão que a AGI entrega na obra. Tipografia, ritmo das páginas e movimento seguem a identidade da incorporadora, e as partes interativas convidam o visitante a explorar o empreendimento com as próprias mãos antes de falar com a equipe.
+
+Os dados de quem entra em contato ficam protegidos desde o desenho, com a LGPD em mente: só a equipe da AGI vê os leads, e cada acesso ao painel exige login.

@@ -13,6 +13,7 @@ const paginas = [
   "/clientes/emer",
   "/clientes/atacado-das-cestas",
   "/clientes/kavana",
+  "/clientes/agi",
   "/sobre",
   "/privacidade",
   "/obrigado",
@@ -72,7 +73,7 @@ test("página de serviço leva ao diagnóstico com o serviço pré-selecionado",
 test("home lista todos os serviços e clientes do MDX", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#servicos > div > ul > li")).toHaveCount(4);
-  await expect(page.locator("#clientes > div > ul > li")).toHaveCount(3);
+  await expect(page.locator("#clientes > div > ul > li")).toHaveCount(4);
 });
 
 test("nenhuma página mostra textos de rascunho", async ({ page }) => {

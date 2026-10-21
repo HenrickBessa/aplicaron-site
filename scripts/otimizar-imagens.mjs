@@ -67,6 +67,12 @@ for (const [origem, destino] of [
 ]) {
   await sharp(origem).trim().resize({ height: 200 }).png({ compressionLevel: 9 }).toFile(`public/imagens/clientes/${destino}`);
 }
+// A logo da AGI vem sobre fundo verde opaco: o trim colaria o fundo no texto, então o recorte deixa margem.
+await sharp("assets/logoagi.png")
+  .extract({ left: 96, top: 216, width: 2208, height: 684 })
+  .resize({ height: 200 })
+  .png({ compressionLevel: 9 })
+  .toFile("public/imagens/clientes/agi.png");
 
 // 6. Telas dos sistemas dos clientes (dados fictícios), vindas das apresentações de cada sistema.
 //    O recorte (px do original) fica só com a parte que a página comenta e deixa de fora
@@ -82,6 +88,13 @@ for (const [cliente, nome, recorte] of [
   ["emer", "atendimento", null],
   // Só o selo: o aviso logo abaixo cita o edital do contrato.
   ["emer", "prontuario-selado", { left: 976, top: 140, width: 584, height: 465 }],
+  // Só o topo da home: abaixo começa outra seção.
+  ["agi", "site-home", { left: 0, top: 0, width: 1600, height: 850 }],
+  ["agi", "hub-fachada-noite", { left: 0, top: 0, width: 1600, height: 880 }],
+  ["agi", "hub-planta-final-01", null],
+  ["agi", "m-hub-inicio", null],
+  // Só a lista, sem a área vazia abaixo (leads de exemplo, telefones 90000-00xx).
+  ["agi", "painel-leads", { left: 160, top: 0, width: 1280, height: 650 }],
 ]) {
   await mkdir(`public/imagens/clientes/${cliente}`, { recursive: true });
   let img = sharp(`assets/telas/${cliente}/${nome}.webp`);
