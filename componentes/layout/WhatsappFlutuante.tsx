@@ -43,9 +43,10 @@ export function WhatsappFlutuante() {
   }, [balaoAberto]);
 
   return (
-    <div className="fixed right-4 bottom-4 z-40 flex flex-col items-end gap-3 sm:right-6 sm:bottom-6">
-      {/* Região anunciada pelo leitor de tela quando o balão aparece (sem mover o foco). */}
-      <div aria-live="polite">
+    <div className="fixed right-4 bottom-4 z-40 flex flex-col items-end sm:right-6 sm:bottom-6">
+      {/* Região anunciada pelo leitor de tela quando o balão aparece (sem mover o foco).
+          Absoluta, acima do botão: o balão não muda o tamanho da caixa fixa, então não conta como layout shift (CLS). */}
+      <div aria-live="polite" className="absolute right-0 bottom-full mb-3">
         {balaoAberto && (
           <div
             role="dialog"

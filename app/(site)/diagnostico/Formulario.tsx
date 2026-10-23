@@ -128,9 +128,9 @@ export function Formulario() {
   const noNavegador = useSyncExternalStore(semAssinatura, () => true, () => false);
   if (!noNavegador) {
     return (
-      <div className="space-y-4 rounded-xl bg-azul-profundo p-5 sm:p-8">
+      <div className="rounded-xl bg-azul-profundo p-5 sm:p-8">
         <noscript>
-          <p className="text-gelo">
+          <p className="mb-8 text-gelo">
             O formulário precisa de JavaScript. Se preferir, fale com a gente pelo{" "}
             <a href={linkWhatsapp} className="text-ciano underline">
               WhatsApp
@@ -138,8 +138,25 @@ export function Formulario() {
             .
           </p>
         </noscript>
-        <div aria-hidden className="h-8 w-2/3 rounded bg-azul-noite motion-safe:animate-pulse" />
-        <div aria-hidden className="h-40 rounded bg-azul-noite motion-safe:animate-pulse" />
+        {/* Esqueleto = cópia inerte da etapa 1 (mesma marcação do formulário abaixo): ocupa a mesma
+            altura, então o formulário real monta sem empurrar o rodapé (CLS). e2e/desempenho.spec.ts confere. */}
+        <div inert className="space-y-8 motion-safe:animate-pulse">
+          <div className="flex gap-2">
+            {[1, 2, 3].map((n) => (
+              <div key={n} className={`h-1.5 flex-1 rounded-full ${n === 1 ? "bg-ciano" : "bg-linha"}`} />
+            ))}
+          </div>
+          <h2 className="text-2xl font-bold sm:text-3xl">
+            <span className="block text-sm font-semibold tracking-wide text-ciano uppercase">Etapa 1 de 3</span>
+            {ETAPAS[1].titulo}
+          </h2>
+          <GrupoOpcoes id="esqueleto-servico" name="esqueleto-servico" legenda="Tipo de serviço" opcoes={OPCOES_SERVICO} />
+          {/* mb-8: no formulário os botões não são o último filho (vêm o honeypot e o aviso sr-only), então levam o espaço do space-y-8. */}
+          <div className="mb-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
+            <span />
+            <Botao>Continuar</Botao>
+          </div>
+        </div>
       </div>
     );
   }

@@ -4,8 +4,6 @@ import type { Addon, Plano, Servico } from "@/lib/validacao/enums";
 // Mudar preço = editar uma linha. Valores em reais, inteiros.
 // Preço só vai ao ar com o ok do Henrick: o PR fica como rascunho no GitHub até lá.
 
-export const SELO_LANCAMENTO = "Preço de lançamento para os 5 primeiros clientes";
-
 export type DadosPlano = {
   slug: Plano;
   nome: string;
