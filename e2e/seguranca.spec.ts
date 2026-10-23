@@ -1,18 +1,7 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "@playwright/test";
+import { coletarViolacoes } from "./csp";
 
 const paginas = ["/", "/servicos/sites", "/clientes/emer", "/sobre", "/privacidade", "/diagnostico", "/obrigado", "/planos", "/produtos/agenda-cobranca", "/admin/entrar"];
-
-// A CSP está em Report-Only: nada é bloqueado, mas o navegador dispara "securitypolicyviolation"
-// para tudo que SERIA bloqueado. Coletamos esses eventos para saber se a política está pronta.
-async function coletarViolacoes(page: Page) {
-  await page.addInitScript(() => {
-    (window as unknown as { __violacoes: string[] }).__violacoes = [];
-    document.addEventListener("securitypolicyviolation", (e) => {
-      (window as unknown as { __violacoes: string[] }).__violacoes.push(`${e.violatedDirective} ← ${e.blockedURI || "inline"}`);
-    });
-  });
-  return () => page.evaluate(() => (window as unknown as { __violacoes: string[] }).__violacoes);
-}
 
 test("cabeçalhos de segurança presentes", async ({ request }) => {
   const r = await request.get("/");
@@ -38,6 +27,22 @@ test("cabeçalhos de segurança presentes", async ({ request }) => {
   ]) {
     expect(csp).toContain(diretiva);
   }
+});
+
+test("/admin: CSP com nonce novo a cada requisição, sem 'unsafe-inline'", async ({ request }) => {
+  const nonces: string[] = [];
+  for (let i = 0; i < 2; i++) {
+    const h = (await request.get("/admin/entrar")).headers();
+    expect(h["content-security-policy"]).toBe("frame-ancestors 'none'");
+    expect(h["x-frame-options"]).toBe("DENY");
+    expect(h["strict-transport-security"]).toContain("max-age=63072000");
+    const csp = h["content-security-policy-report-only"];
+    expect(csp).toMatch(/script-src 'self' 'nonce-[A-Za-z0-9+/=]+' 'sha256-[A-Za-z0-9+/=]+' 'strict-dynamic'/);
+    expect(csp).not.toContain("unsafe-inline");
+    expect(csp).toContain("frame-ancestors 'none'");
+    nonces.push(csp.match(/'nonce-([^']+)'/)![1]);
+  }
+  expect(nonces[0]).not.toBe(nonces[1]);
 });
 
 for (const caminho of paginas) {

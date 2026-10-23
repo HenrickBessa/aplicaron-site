@@ -24,7 +24,20 @@ export const ADDONS = ["crm", "cobranca_whatsapp", "manutencao_4h"] as const;
 export const addonSchema = z.enum(ADDONS);
 export type Addon = z.infer<typeof addonSchema>;
 
-export const FAIXAS_ORCAMENTO = ["ate_5k", "5k_15k", "15k_50k", "acima_50k", "nao_sei"] as const;
+// Etapas do lead no CRM (/admin).
+export const STATUS_LEAD = ["novo", "em_contato", "proposta_enviada", "fechado", "perdido"] as const;
+export const statusLeadSchema = z.enum(STATUS_LEAD);
+export type StatusLead = z.infer<typeof statusLeadSchema>;
+
+export const ROTULOS_STATUS: Record<StatusLead, string> = {
+  novo: "Novo",
+  em_contato: "Em contato",
+  proposta_enviada: "Proposta enviada",
+  fechado: "Fechado",
+  perdido: "Perdido",
+};
+
+export const FAIXAS_ORCAMENTO =["ate_5k", "5k_15k", "15k_50k", "acima_50k", "nao_sei"] as const;
 export const faixaOrcamentoSchema = z.enum(FAIXAS_ORCAMENTO);
 export type FaixaOrcamento = z.infer<typeof faixaOrcamentoSchema>;
 

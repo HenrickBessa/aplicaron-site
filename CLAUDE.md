@@ -42,7 +42,7 @@ npm run db:test         # testes pgTAP (supabase test db)
 ## Regras de arquitetura
 
 - O navegador **nunca** fala com o Supabase. Toda leitura/escrita passa pelo servidor.
-- `proxy.ts` (Next 16, substitui `middleware.ts`): matcher só `/admin/:path*`. Só renova sessão e faz redirect otimista. Nunca lê tabela nem decide acesso a dado.
+- `proxy.ts` (Next 16, substitui `middleware.ts`): matcher só `/admin/:path*`. Só renova sessão, faz redirect otimista e gera o nonce da CSP do admin. Nunca lê tabela nem decide acesso a dado.
 - Server Actions validam com Zod e delegam. Trate toda Action como endpoint público.
 - `lib/dal/*`: autorização + dados do admin; toda função começa com `exigirAdmin()`.
 - `lib/servicos/*`: orquestração sem sessão (sem cookies, sem request).
