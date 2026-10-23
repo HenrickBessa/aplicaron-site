@@ -23,3 +23,9 @@ export const mudarStatusSchema = z.object({
   status: statusLeadSchema,
   versao: z.coerce.number().int().positive(),
 });
+
+// Nota no lead: mesmo limite do banco (lead_notas_texto_tamanho, 1 a 5000).
+export const novaNotaSchema = z.object({
+  lead_id: z.guid(),
+  texto: z.string().trim().min(1).max(5000),
+});

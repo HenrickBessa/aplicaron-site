@@ -72,3 +72,13 @@ export async function mudarStatusLead(id: string, status: StatusLead, versao: nu
   if (error) throw new Error(`mudar_status falhou: ${error.code ?? "sem_codigo"}`);
   return data.length > 0;
 }
+
+// Só INSERT (lead_id, texto): o autor vem de auth.uid() no banco. Notas não são editadas nem
+// apagadas. false = lead inexistente (23503) ou sem permissão pelo RLS (42501).
+export async function adicionarNotaLead(id: string, texto: string): Promise<boolean> {
+  const supabase = await exigirAdmin();
+  const { error } = await supabase.from("lead_notas").insert({ lead_id: id, texto });
+  if (error?.code === "23503" || error?.code === "42501") return false;
+  if (error) throw new Error(`adicionar_nota falhou: ${error.code ?? "sem_codigo"}`);
+  return true;
+}

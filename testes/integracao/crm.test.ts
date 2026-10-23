@@ -12,7 +12,7 @@ let sessao: SupabaseClient;
 vi.mock("@/lib/supabase/servidor", () => ({ clienteServidor: async () => sessao }));
 vi.mock("next/cache", () => ({ refresh: vi.fn() }));
 
-const { mudarStatus } = await import("@/app/admin/leads/[id]/acoes");
+const { adicionarNota, mudarStatus } = await import("@/app/admin/leads/[id]/acoes");
 const { buscarLead } = await import("@/lib/dal/leads");
 
 const paraMfa = { digest: expect.stringContaining(";/admin/mfa;") };
@@ -104,5 +104,44 @@ describe("CRM: mudar status", () => {
 
     sessao = aal2;
     expect((await buscarLead(id))!.status).toBe("novo");
+  });
+});
+
+describe("CRM: notas", () => {
+  it("admin com MFA adiciona notas; a mais nova aparece primeiro", async () => {
+    sessao = aal2;
+    const id = await novoLead();
+    expect(await adicionarNota(null, formulario({ lead_id: id, texto: "  Liguei, pediu proposta.  " }))).toEqual({ ok: "Nota salva." });
+    expect(await adicionarNota(null, formulario({ lead_id: id, texto: "Proposta enviada." }))).toEqual({ ok: "Nota salva." });
+    expect((await buscarLead(id))!.lead_notas.map((n) => n.texto)).toEqual(["Proposta enviada.", "Liguei, pediu proposta."]);
+  });
+
+  it("vazia, longa demais ou lead inexistente: erro e o texto digitado volta", async () => {
+    sessao = aal2;
+    const id = await novoLead();
+    expect(await adicionarNota(null, formulario({ lead_id: id, texto: "   " }))).toMatchObject({ erro: expect.any(String) });
+    const longa = "x".repeat(5001);
+    expect(await adicionarNota(null, formulario({ lead_id: id, texto: longa }))).toMatchObject({ texto: longa });
+    expect(await adicionarNota(null, formulario({ lead_id: randomUUID(), texto: "Nota perdida" }))).toMatchObject({
+      erro: expect.any(String),
+      texto: "Nota perdida",
+    });
+    expect((await buscarLead(id))!.lead_notas).toEqual([]);
+  });
+
+  it("só com a senha (aal1): a Action manda para o MFA e o banco não deixa ler nem gravar", async () => {
+    sessao = aal2;
+    const id = await novoLead();
+    await adicionarNota(null, formulario({ lead_id: id, texto: "Nota do admin" }));
+
+    sessao = aal1;
+    await expect(adicionarNota(null, formulario({ lead_id: id, texto: "Intrusa" }))).rejects.toMatchObject(paraMfa);
+    const { data: notas } = await aal1.from("lead_notas").select("id").eq("lead_id", id);
+    expect(notas).toEqual([]);
+    const { error } = await aal1.from("lead_notas").insert({ lead_id: id, texto: "Intrusa" });
+    expect(error?.code).toBe("42501");
+
+    sessao = aal2;
+    expect((await buscarLead(id))!.lead_notas.map((n) => n.texto)).toEqual(["Nota do admin"]);
   });
 });

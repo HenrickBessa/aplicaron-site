@@ -7,6 +7,7 @@ import { exigirAdmin } from "@/lib/dal/admin";
 import { buscarLead } from "@/lib/dal/leads";
 import { ROTULOS_FAIXA, ROTULOS_SERVICO, ROTULOS_STATUS } from "@/lib/validacao/enums";
 import { dataHora } from "../../formatos";
+import { FormularioNota } from "./FormularioNota";
 import { FormularioStatus } from "./FormularioStatus";
 
 // Título genérico: o nome do lead não vai para a aba nem para o histórico do navegador.
@@ -47,28 +48,6 @@ export default async function PaginaLead({ params }: PageProps<"/admin/leads/[id
           <p className="mt-2 text-cinza-azulado">Dados pessoais removidos em {data(lead.anonimizado_em)} (LGPD).</p>
         )}
       </div>
-
-      <section aria-labelledby="titulo-status">
-        <h2 id="titulo-status" className="text-lg font-semibold">
-          Andamento
-        </h2>
-        <div className="mt-4">
-          <FormularioStatus leadId={lead.id} status={lead.status} versao={lead.versao} />
-        </div>
-        <h3 className="mt-6 font-medium">Histórico de status</h3>
-        {lead.lead_status_historico.length === 0 ? (
-          <p className="mt-2 text-cinza-azulado">O status ainda não mudou.</p>
-        ) : (
-          <ol className="mt-2 space-y-1">
-            {lead.lead_status_historico.map((h) => (
-              <li key={h.id}>
-                <span className="text-cinza-azulado">{data(h.alterado_em)}:</span> {ROTULOS_STATUS[h.status_anterior]} →{" "}
-                {ROTULOS_STATUS[h.status_novo]}
-              </li>
-            ))}
-          </ol>
-        )}
-      </section>
 
       <section aria-labelledby="titulo-pedido">
         <h2 id="titulo-pedido" className="text-lg font-semibold">
@@ -116,6 +95,49 @@ export default async function PaginaLead({ params }: PageProps<"/admin/leads/[id
           </Item>
           <Item termo="Aceita receber novidades">{lead.marketing_optin ? "Sim" : "Não"}</Item>
         </dl>
+      </section>
+
+      <section aria-labelledby="titulo-status">
+        <h2 id="titulo-status" className="text-lg font-semibold">
+          Andamento
+        </h2>
+        <div className="mt-4">
+          <FormularioStatus leadId={lead.id} status={lead.status} versao={lead.versao} />
+        </div>
+        <h3 className="mt-6 font-medium">Histórico de status</h3>
+        {lead.lead_status_historico.length === 0 ? (
+          <p className="mt-2 text-cinza-azulado">O status ainda não mudou.</p>
+        ) : (
+          <ol className="mt-2 space-y-1">
+            {lead.lead_status_historico.map((h) => (
+              <li key={h.id}>
+                <span className="text-cinza-azulado">{data(h.alterado_em)}:</span> {ROTULOS_STATUS[h.status_anterior]} →{" "}
+                {ROTULOS_STATUS[h.status_novo]}
+              </li>
+            ))}
+          </ol>
+        )}
+      </section>
+
+      <section aria-labelledby="titulo-notas">
+        <h2 id="titulo-notas" className="text-lg font-semibold">
+          Notas
+        </h2>
+        <div className="mt-4">
+          <FormularioNota leadId={lead.id} />
+        </div>
+        {lead.lead_notas.length === 0 ? (
+          <p className="mt-6 text-cinza-azulado">Nenhuma nota ainda.</p>
+        ) : (
+          <ol className="mt-6 space-y-4">
+            {lead.lead_notas.map((n) => (
+              <li key={n.id} className="rounded-lg border border-linha bg-azul-profundo p-4">
+                <p className="text-sm text-cinza-azulado">{data(n.created_at)}</p>
+                <p className="mt-1 whitespace-pre-line break-words">{n.texto}</p>
+              </li>
+            ))}
+          </ol>
+        )}
       </section>
 
       <section aria-labelledby="titulo-origem">

@@ -55,7 +55,6 @@ export default async function PaginaAdmin() {
           </table>
         </div>
       )}
-      <p className="mt-6 text-sm text-cinza-azulado">Detalhe, notas e mudança de status chegam na próxima fatia (CRM).</p>
     </section>
   );
 }
