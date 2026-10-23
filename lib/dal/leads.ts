@@ -1,10 +1,45 @@
 import "server-only";
 import { z } from "@/lib/validacao/zod";
+import type { FiltrosLeads } from "@/lib/validacao/admin";
 import type { Addon, FaixaOrcamento, Plano, Servico, StatusLead } from "@/lib/validacao/enums";
 import { exigirAdmin } from "./admin";
 
 // Dados do CRM. Toda função começa com exigirAdmin(); quem decide quais linhas aparecem é o
 // RLS (admin + MFA). Nada aqui é cacheado entre requisições: as páginas do admin são dinâmicas.
+
+export const LEADS_POR_PAGINA = 20;
+
+export type LeadResumo = {
+  id: string;
+  created_at: string;
+  nome: string;
+  servico: Servico;
+  plano_interesse: Plano | null;
+  status: StatusLead;
+};
+
+// A busca (nome, e-mail ou empresa) é feita pela função public.listar_leads, com o texto como
+// parâmetro (nada de .or() montado com o valor digitado). Status, serviço, plano, ordem e página
+// são filtros encadeados sobre o resultado; o RLS vale igual (a função é SECURITY INVOKER).
+export async function listarLeads(filtros: FiltrosLeads): Promise<{ leads: LeadResumo[]; total: number }> {
+  const supabase = await exigirAdmin();
+  let consulta = supabase
+    .rpc("listar_leads", { p_busca: filtros.busca ?? null }, { count: "exact" })
+    .select("id, created_at, nome, servico, plano_interesse, status");
+  if (filtros.status) consulta = consulta.eq("status", filtros.status);
+  if (filtros.servico) consulta = consulta.eq("servico", filtros.servico);
+  if (filtros.plano) consulta = consulta.eq("plano_interesse", filtros.plano);
+
+  const inicio = (filtros.pagina - 1) * LEADS_POR_PAGINA;
+  const { data, count, error } = await consulta
+    .order("created_at", { ascending: false })
+    .order("id")
+    .range(inicio, inicio + LEADS_POR_PAGINA - 1);
+  // Página depois da última (URL editada à mão): o PostgREST responde 416; vira lista vazia.
+  if (error?.code === "PGRST103") return { leads: [], total: 0 };
+  if (error) throw new Error(`listar_leads falhou: ${error.code ?? "sem_codigo"}`);
+  return { leads: data as LeadResumo[], total: count ?? 0 };
+}
 
 export type NotaLead = { id: string; texto: string; created_at: string };
 export type MudancaStatus = { id: number; status_anterior: StatusLead; status_novo: StatusLead; alterado_em: string };

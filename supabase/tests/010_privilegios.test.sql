@@ -73,8 +73,8 @@ select set_eq(
   $$ select p.oid::regprocedure::text from pg_proc p
       where p.pronamespace in ('public'::regnamespace, 'privado'::regnamespace, 'sistema'::regnamespace)
         and has_function_privilege('authenticated', p.oid, 'EXECUTE') $$,
-  array['privado.admin_mfa()'],
-  'authenticated executa só privado.admin_mfa()'
+  array['privado.admin_mfa()', 'listar_leads(text)'],  -- regprocedure omite o schema public
+  'authenticated executa só privado.admin_mfa() e public.listar_leads(text)'
 );
 
 select schema_privs_are('privado', 'authenticated', array['USAGE'], 'authenticated tem USAGE em privado');

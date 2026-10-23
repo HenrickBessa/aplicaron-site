@@ -48,23 +48,3 @@ async function lerSessao() {
   const { data } = await supabase.auth.getClaims();
   return { supabase, estado: estadoSessao(data?.claims, Date.now()) };
 }
-
-export type LeadResumo = {
-  id: string;
-  created_at: string;
-  nome: string;
-  servico: string;
-  plano_interesse: string | null;
-  status: string;
-};
-
-export async function listarLeadsRecentes(): Promise<LeadResumo[]> {
-  const supabase = await exigirAdmin();
-  const { data, error } = await supabase
-    .from("leads")
-    .select("id, created_at, nome, servico, plano_interesse, status")
-    .order("created_at", { ascending: false })
-    .limit(20);
-  if (error) throw new Error(`listar_leads falhou: ${error.code ?? "sem_codigo"}`);
-  return data;
-}
