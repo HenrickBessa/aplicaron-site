@@ -27,14 +27,13 @@ const nextConfig: NextConfig = {
     ];
   },
   async headers() {
+    const producao = process.env.NODE_ENV === "production";
+    const urlRelatorioCsp = process.env.SENTRY_CSP_REPORT_URI;
     return [
-      {
-        source: "/:path*",
-        headers: cabecalhosSeguranca({
-          producao: process.env.NODE_ENV === "production",
-          urlRelatorioCsp: process.env.SENTRY_CSP_REPORT_URI,
-        }),
-      },
+      // Tudo menos o /admin: CSP pública (sem nonce).
+      { source: "/:caminho((?!admin(?:/|$)).*)", headers: cabecalhosSeguranca({ producao, urlRelatorioCsp }) },
+      // /admin: os mesmos cabeçalhos, mas a CSP vem do proxy.ts, com nonce (cspAdmin).
+      { source: "/admin/:caminho*", headers: cabecalhosSeguranca({ producao, cspPublica: false }) },
     ];
   },
 };

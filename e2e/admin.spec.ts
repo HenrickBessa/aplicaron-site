@@ -4,6 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import { expect, test, type Page } from "@playwright/test";
 import { criarAdminTeste } from "../testes/apoio/admin";
 import { codigoTotp } from "../testes/apoio/totp";
+import { coletarViolacoes } from "./csp";
 
 const WCAG = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 
@@ -34,6 +35,7 @@ test("senha errada: mensagem genérica e continua na tela de entrar", async ({ p
 });
 
 test("primeiro acesso: senha, cadastro do app autenticador, leads e sair", async ({ page }) => {
+  const violacoes = await coletarViolacoes(page);
   const admin = await criarAdminTeste();
   const nomeLead = `Lead E2E ${randomUUID().slice(0, 8)}`;
   const { error } = await createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SECRET_KEY!)
@@ -78,6 +80,8 @@ test("primeiro acesso: senha, cadastro do app autenticador, leads e sair", async
   await expect(page).toHaveURL(/\/admin$/);
   await expect(page.getByRole("cell", { name: nomeLead })).toBeVisible();
   await semViolacoes(page);
+  // Login, QR code (data: URI) e lista: nada que a CSP com nonce do admin bloquearia.
+  expect(await violacoes()).toEqual([]);
 
   await page.getByRole("button", { name: "Sair" }).click();
   await expect(page).toHaveURL(/\/admin\/entrar$/);
@@ -123,7 +127,8 @@ async function criarLeadTeste(nome: string) {
   return (data as { id: string }[])[0].id;
 }
 
-test("CRM: busca, detalhe, status, nota e filtro (acessível)", async ({ page }) => {
+test("CRM: busca, detalhe, status, nota e filtro (acessível e sem violar a CSP com nonce)", async ({ page }) => {
+  const violacoes = await coletarViolacoes(page);
   const marca = randomUUID().slice(0, 8);
   const nome = `Lead CRM ${marca}`;
   const id = await criarLeadTeste(nome);
@@ -160,6 +165,7 @@ test("CRM: busca, detalhe, status, nota e filtro (acessível)", async ({ page })
   await page.getByRole("button", { name: "Filtrar" }).click();
   await expect(page.getByRole("status").filter({ hasText: "0 leads com estes filtros" })).toBeVisible();
   await expect(page.getByRole("link", { name: nome })).toHaveCount(0);
+  expect(await violacoes()).toEqual([]);
 });
 
 test("link do e-mail: sem login vai para entrar; logado abre o detalhe; id inexistente mostra não encontrado", async ({ page }) => {
