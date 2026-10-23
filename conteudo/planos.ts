@@ -99,6 +99,21 @@ export const addons: DadosAddon[] = [
   { slug: "manutencao_4h", nome: "Manutenção evolutiva: pacote de 4 horas", preco: "R$ 400" },
 ];
 
+// "Como funciona a contratação": vale para todos os planos (briefing, item 5). Bloco em /planos#como-funciona.
+export const regrasContratacao: { titulo: string; texto: string }[] = [
+  {
+    titulo: "O que nenhum plano inclui",
+    texto: "Criação de logo, redação de textos (você envia ou contrata à parte), fotos e tráfego pago.",
+  },
+  { titulo: "Ajustes", texto: "Até 2 rodadas de ajuste por entrega. A partir daí, cobrado por hora." },
+  {
+    titulo: "Pagamento",
+    texto: "50% da implantação na assinatura e 50% na entrega. A mensalidade começa no mês seguinte à publicação.",
+  },
+  { titulo: "Atraso", texto: "Com a mensalidade 30 dias em atraso, o site ou o painel fica suspenso até regularizar." },
+  { titulo: "O que é seu", texto: "O código, os dados e o conhecimento ficam com você." },
+];
+
 export function buscarPlano(slug: string) {
   return planos.find((p) => p.slug === slug);
 }
