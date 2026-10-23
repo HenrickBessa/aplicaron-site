@@ -101,6 +101,17 @@ test("home: posicionamento de pacotes e cartões de serviço que levam aos plano
   await expect(page).toHaveURL(/\/servicos\/sites$/);
 });
 
+test("case mostra o que mudou na nossa voz; depoimento em rascunho não vai para o HTML", async ({ page }) => {
+  await page.goto("/clientes/agi");
+  const resultado = page.getByRole("region", { name: "O que mudou" });
+  await expect(resultado).toContainText("vê de onde veio cada contato");
+  await expect(page.locator("blockquote")).toHaveCount(0);
+  // HTML bruto, com o payload do React: o rascunho não pode estar em lugar nenhum.
+  const html = await (await page.request.get("/clientes/agi")).text();
+  expect(html).toContain("vê de onde veio cada contato");
+  expect(html).not.toContain("Agora sabemos de onde vem cada contato");
+});
+
 test("nenhuma página mostra textos de rascunho", async ({ page }) => {
   for (const caminho of paginas) {
     await page.goto(caminho);
