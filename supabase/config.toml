@@ -176,7 +176,8 @@ enable_refresh_token_rotation = true
 # Requires enable_refresh_token_rotation = true.
 refresh_token_reuse_interval = 10
 # Allow/disallow new user signups to your project.
-enable_signup = true
+# Desligado, como em produção: o único jeito de criar usuário é pelo painel (ou API admin).
+enable_signup = false
 # Allow/disallow anonymous sign-ins to your project.
 enable_anonymous_sign_ins = false
 # Allow/disallow testing manual linking of accounts
@@ -221,6 +222,7 @@ web3 = 30
 
 [auth.email]
 # Allow/disallow new user signups via email to your project.
+# Fica true: aqui false desliga o LOGIN por e-mail inteiro. Quem bloqueia o cadastro é [auth] enable_signup.
 enable_signup = true
 # If enabled, a user will be required to confirm any email change on both the old, and new email
 # addresses. If disabled, only the new email is required to confirm.
@@ -303,8 +305,9 @@ max_enrolled_factors = 10
 
 # Control MFA via App Authenticator (TOTP)
 [auth.mfa.totp]
-enroll_enabled = false
-verify_enabled = false
+# Ligado: o admin exige app autenticador (privado.admin_mfa() pede aal2).
+enroll_enabled = true
+verify_enabled = true
 
 # Configure MFA via Phone Messaging
 [auth.mfa.phone]
