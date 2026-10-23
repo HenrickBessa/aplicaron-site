@@ -17,9 +17,9 @@ import { metadadosPagina, urlAbsoluta } from "@/lib/seo";
 import ilustracao from "@/public/imagens/marca/ilustracao.webp";
 
 export const metadata: Metadata = metadadosPagina({
-  titulo: `${site.nome} · Sites, sistemas, apps e automação com IA`,
+  titulo: `Sites, agenda e cobrança no WhatsApp · ${site.nome}`,
   descricao:
-    "A AplicarOn desenvolve sites, sistemas, aplicativos e automações com IA sob medida. Peça um diagnóstico gratuito em 3 etapas.",
+    "Pacotes com implantação e mensalidade: site, agendamento com lembrete no WhatsApp e cobrança automática. Sob medida quando o seu negócio precisa.",
   caminho: "/",
   tituloCompleto: true,
 });

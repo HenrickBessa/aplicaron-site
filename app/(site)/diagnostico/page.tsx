@@ -5,8 +5,8 @@ import { Formulario } from "./Formulario";
 
 // canonical "/diagnostico": as variações ?servico=... são a mesma página para o Google.
 export const metadata: Metadata = metadadosPagina({
-  titulo: "Diagnóstico gratuito",
-  descricao: "Conte sobre o seu projeto em 3 etapas rápidas e receba um diagnóstico gratuito da AplicarOn, sem compromisso.",
+  titulo: "Orçamento de projeto sob medida, grátis",
+  descricao: "Conte o que precisa em 3 etapas e receba um diagnóstico gratuito para site, sistema, aplicativo ou automação, sem compromisso.",
   caminho: "/diagnostico",
 });
 

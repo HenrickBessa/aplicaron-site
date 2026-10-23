@@ -8,7 +8,7 @@ import { metadadosPagina } from "@/lib/seo";
 const sobre = carregar(dadosPaginaSchema, "sobre", sobreMdx);
 
 export const metadata: Metadata = metadadosPagina({
-  titulo: sobre.dados.titulo,
+  titulo: sobre.dados.tituloSeo ?? sobre.dados.titulo,
   descricao: sobre.dados.descricao,
   caminho: "/sobre",
 });
