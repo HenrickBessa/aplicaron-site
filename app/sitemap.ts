@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { clientes } from "@/conteudo/clientes";
+import { produtos } from "@/conteudo/produtos";
 import { servicos } from "@/conteudo/servicos";
 import { urlAbsoluta } from "@/lib/seo";
 
@@ -10,6 +11,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const caminhos = [
     "/",
     "/planos",
+    "/produtos",
+    ...produtos.map((p) => `/produtos/${p.slug}`),
     "/diagnostico",
     "/sobre",
     "/privacidade",

@@ -20,6 +20,7 @@ export const linkWhatsappComMensagem = linkWhatsappCom("Olá, AplicarOn! Vim pel
 
 export const navegacao = [
   { href: "/planos", rotulo: "Planos" },
+  { href: "/produtos", rotulo: "Produtos" },
   { href: "/#servicos", rotulo: "Serviços" },
   { href: "/clientes", rotulo: "Clientes" },
   { href: "/sobre", rotulo: "Sobre" },

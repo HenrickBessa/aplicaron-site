@@ -6,6 +6,8 @@ const WCAG = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 const paginas = [
   "/",
   "/planos",
+  "/produtos",
+  "/produtos/agenda-cobranca",
   "/servicos/automacao-ia",
   "/servicos/sites",
   "/servicos/sistemas",

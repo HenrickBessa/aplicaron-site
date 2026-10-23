@@ -1,6 +1,6 @@
 import type { MDXContent } from "mdx/types";
 import { z } from "@/lib/validacao/zod";
-import { servicoSchema } from "@/lib/validacao/enums";
+import { planoSchema, servicoSchema } from "@/lib/validacao/enums";
 
 // Formato dos `dados` exportados por cada MDX. Validados no build: um campo faltando
 // ou com tipo errado quebra o `next build`, em vez de virar uma página com "undefined".
@@ -35,6 +35,19 @@ export const dadosClienteSchema = z.object({
   site: z.url(),
   // Frase curta do cartão na home e na lista de clientes.
   resumo: z.string().min(20).max(200),
+});
+
+export const dadosProdutoSchema = z.object({
+  ...base,
+  // Nome curto (trilha, cartões, menu). O `titulo` é a chamada principal, que vira o h1.
+  nome: z.string().min(2).max(40),
+  // <title> da página: o que o cliente digita no Google, não a chamada de venda.
+  tituloSeo: z.string().min(10).max(60),
+  resumo: z.string().min(20).max(200),
+  // Plano de /planos vendido nesta página (preço e formulário vêm de conteudo/planos.ts).
+  plano: planoSchema.optional(),
+  // em_desenvolvimento: sem preço, com lista de interesse.
+  situacao: z.enum(["disponivel", "em_desenvolvimento"]),
 });
 
 export const dadosPoliticaSchema = z.object({

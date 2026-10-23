@@ -6,6 +6,8 @@ const BASE = "https://www.aplicaron.com.br";
 const indexaveis = [
   "/",
   "/planos",
+  "/produtos",
+  "/produtos/agenda-cobranca",
   "/diagnostico",
   "/sobre",
   "/privacidade",

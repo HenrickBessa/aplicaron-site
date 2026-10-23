@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { BotaoLink, classesBotao } from "@/componentes/ui/Botao";
 import { emReais, SELO_LANCAMENTO, textoPrazo, type DadosPlano } from "@/conteudo/planos";
 
@@ -7,9 +8,11 @@ type Props = {
   hrefAcao?: string;
   // Na home: sem as listas de inclui / não inclui.
   resumido?: boolean;
+  // false na própria página do produto.
+  mostrarPagina?: boolean;
 };
 
-export function CartaoPlano({ plano, hrefAcao = `#quero-${plano.slug}`, resumido = false }: Props) {
+export function CartaoPlano({ plano, hrefAcao = `#quero-${plano.slug}`, resumido = false, mostrarPagina = true }: Props) {
   const idTitulo = `plano-${plano.slug}-titulo`;
   const rotuloAcao = `Quero este plano: ${plano.nome}`;
   const variante = plano.destaque ? "primario" : "secundario";
@@ -30,6 +33,11 @@ export function CartaoPlano({ plano, hrefAcao = `#quero-${plano.slug}`, resumido
           {plano.nome}
         </h3>
         <p className="text-cinza-azulado">{plano.resumo}</p>
+        {plano.pagina && mostrarPagina && (
+          <Link href={plano.pagina} className="inline-flex min-h-6 items-center text-sm font-medium text-ciano underline underline-offset-4">
+            Conhecer o {plano.nome}
+          </Link>
+        )}
       </div>
 
       <dl className="space-y-3">
