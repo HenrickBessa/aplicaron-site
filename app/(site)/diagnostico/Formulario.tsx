@@ -139,7 +139,7 @@ export function Formulario() {
           </p>
         </noscript>
         {/* Esqueleto = cópia inerte da etapa 1 (mesma marcação do formulário abaixo): ocupa a mesma
-            altura, então o formulário real monta sem empurrar o rodapé (CLS). e2e/diagnostico.spec.ts confere. */}
+            altura, então o formulário real monta sem empurrar o rodapé (CLS). e2e/desempenho.spec.ts confere. */}
         <div inert className="space-y-8 motion-safe:animate-pulse">
           <div className="flex gap-2">
             {[1, 2, 3].map((n) => (
