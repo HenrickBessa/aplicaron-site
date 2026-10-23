@@ -251,9 +251,10 @@ export default function Inicio() {
               <h2 id="titulo-clientes" className="text-3xl font-bold sm:text-4xl">
                 Empresas que confiam na AplicarOn
               </h2>
+              <p className="text-cinza-azulado">Uma seleção dos projetos que entregamos.</p>
             </div>
             <Link href="/clientes" className="font-medium text-ciano underline-offset-4 hover:underline">
-              Ver todos os clientes →
+              Conhecer os projetos →
             </Link>
           </Revelar>
           <ul className="mt-10 grid gap-6 sm:grid-cols-2">

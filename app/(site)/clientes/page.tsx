@@ -8,7 +8,7 @@ import { metadadosPagina } from "@/lib/seo";
 
 export const metadata: Metadata = metadadosPagina({
   titulo: "Portfólio: sites e sistemas entregues",
-  descricao: "Projetos reais da AplicarOn: telemedicina, clínica com prontuário eletrônico, incorporadora e atacado B2B, com telas e o que entregamos.",
+  descricao: "Uma seleção de projetos da AplicarOn: telemedicina, clínica com prontuário eletrônico, incorporadora e atacado B2B, com telas e o que mudou.",
   caminho: "/clientes",
 });
 
@@ -17,7 +17,7 @@ export default function PaginaClientes() {
     <>
       <CabecalhoPagina
         titulo="Clientes"
-        descricao="Empresas que confiam na AplicarOn e o que construímos juntos."
+        descricao="Uma seleção dos projetos que entregamos e do que mudou para cada cliente."
         caminho="/clientes"
         trilha={[{ href: "/", rotulo: "Início" }, { rotulo: "Clientes" }]}
       />
