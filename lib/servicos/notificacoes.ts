@@ -1,17 +1,25 @@
 import "server-only";
 import { log } from "@/lib/logger";
 import { clienteSistema } from "@/lib/supabase/sistema";
-import { ROTULOS_FAIXA, ROTULOS_SERVICO, type FaixaOrcamento, type Servico } from "@/lib/validacao/enums";
+import { buscarPlano } from "@/conteudo/planos";
+import { ROTULOS_FAIXA, ROTULOS_SERVICO, type FaixaOrcamento, type Plano, type Servico } from "@/lib/validacao/enums";
 
 // Aviso interno de "novo diagnóstico" por e-mail (Resend).
 // Fluxo por lead: reivindicar (trava de 2 min no banco) -> enviar -> concluir (backoff se falhar).
-// O e-mail NÃO contém dados pessoais: só serviço, faixa e o link do admin.
+// O e-mail NÃO contém dados pessoais: só serviço, faixa, plano e o link do admin.
 
 const TIMEOUT_RESEND_MS = 10_000;
 // Para de pegar novos leads depois deste tempo, bem antes de a função da Vercel ser encerrada.
 const PRAZO_LOTE_MS = 40_000;
 
-type Reivindicado = { id: string; tentativa: number; servico: Servico; faixa_orcamento: FaixaOrcamento };
+type Reivindicado = {
+  id: string;
+  tentativa: number;
+  servico: Servico;
+  // Lead de plano vem sem faixa e com plano; lead de diagnóstico, com faixa (e plano opcional).
+  faixa_orcamento: FaixaOrcamento | null;
+  plano_interesse?: Plano | null;
+};
 
 function configuracao() {
   const chave = process.env.RESEND_API_KEY;
@@ -22,17 +30,33 @@ function configuracao() {
   return { chave, de, para, site };
 }
 
-export function montarEmail(lead: Pick<Reivindicado, "id" | "servico" | "faixa_orcamento">, site: string) {
+export function montarEmail(lead: Pick<Reivindicado, "id" | "servico" | "faixa_orcamento" | "plano_interesse">, site: string) {
+  const link = `${site.replace(/\/$/, "")}/admin/leads/${lead.id}`;
+  const plano = lead.plano_interesse ? buscarPlano(lead.plano_interesse)?.nome : undefined;
+
+  // Sem faixa = veio da página /planos.
+  if (!lead.faixa_orcamento) {
+    return {
+      subject: `Novo interesse: plano ${plano}`,
+      text: `Novo interesse em plano pelo site.\n\nPlano: ${plano}\n\nVer detalhes: ${link}\n`,
+      html:
+        `<p>Novo interesse em plano pelo site.</p>` +
+        `<p><strong>Plano:</strong> ${plano}</p>` +
+        `<p><a href="${link}">Ver detalhes no painel</a></p>`,
+    };
+  }
+
   const servico = ROTULOS_SERVICO[lead.servico];
   const faixa = ROTULOS_FAIXA[lead.faixa_orcamento];
-  const link = `${site.replace(/\/$/, "")}/admin/leads/${lead.id}`;
+  const linhaPlano = plano ? `\nPlano de interesse: ${plano}` : "";
   return {
     subject: `Novo diagnóstico: ${servico}, ${faixa}`,
-    text: `Novo diagnóstico recebido.\n\nServiço: ${servico}\nOrçamento: ${faixa}\n\nVer detalhes: ${link}\n`,
+    text: `Novo diagnóstico recebido.\n\nServiço: ${servico}\nOrçamento: ${faixa}${linhaPlano}\n\nVer detalhes: ${link}\n`,
     html:
       `<p>Novo diagnóstico recebido.</p>` +
-      `<p><strong>Serviço:</strong> ${servico}<br><strong>Orçamento:</strong> ${faixa}</p>` +
-      `<p><a href="${link}">Ver detalhes no painel</a></p>`,
+      `<p><strong>Serviço:</strong> ${servico}<br><strong>Orçamento:</strong> ${faixa}` +
+      (plano ? `<br><strong>Plano de interesse:</strong> ${plano}` : "") +
+      `</p><p><a href="${link}">Ver detalhes no painel</a></p>`,
   };
 }
 

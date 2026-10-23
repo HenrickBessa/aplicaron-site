@@ -2,12 +2,14 @@ import { carregar, dadosPoliticaSchema } from "@/conteudo/esquemas";
 import * as v20261005 from "./2026-10-05.mdx";
 import * as v20261006 from "./2026-10-06.mdx";
 import * as v20261006b from "./2026-10-06-2.mdx";
+import * as v20261023 from "./2026-10-23.mdx";
 
 // Versões da política, da mais nova para a mais antiga. Versões antigas NUNCA são apagadas:
 // cada lead grava `politica_versao`, e precisamos saber exatamente o que ele viu.
 // Para publicar uma nova versão: crie AAAA-MM-DD.mdx e coloque-a no topo da lista.
 // Duas versões no mesmo dia: a segunda recebe o sufixo "-2" (AAAA-MM-DD-N).
 export const versoesPolitica = [
+  carregar(dadosPoliticaSchema, "2026-10-23", v20261023), // formulário de planos, WhatsApp, cidade e segmento
   carregar(dadosPoliticaSchema, "2026-10-06-2", v20261006b), // contato: suporte@aplicaron.com.br
   carregar(dadosPoliticaSchema, "2026-10-06", v20261006), // contato: e-mail pessoal (publicada por poucas horas)
   carregar(dadosPoliticaSchema, "2026-10-05", v20261005),

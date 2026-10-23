@@ -5,6 +5,7 @@ const BASE = "https://www.aplicaron.com.br";
 
 const indexaveis = [
   "/",
+  "/planos",
   "/diagnostico",
   "/sobre",
   "/privacidade",
