@@ -63,6 +63,21 @@ export default async function PaginaCliente({ params }: PageProps<"/clientes/[sl
         </ul>
       </CabecalhoPagina>
       <div className="container-site py-8 sm:py-12">
+        <section aria-labelledby="titulo-resultado" className="mb-10 max-w-3xl rounded-xl border border-ciano/40 bg-azul-profundo p-6">
+          <h2 id="titulo-resultado" className="text-sm font-semibold tracking-widest text-ciano uppercase">
+            O que mudou
+          </h2>
+          <p className="mt-3 text-lg text-gelo">{dados.resultado}</p>
+          {/* Citação só com o ok do cliente: em rascunho, nem chega ao HTML. */}
+          {dados.depoimento?.status === "aprovado" && (
+            <figure className="mt-5 border-l-2 border-ciano pl-4">
+              <blockquote className="text-gelo italic">
+                <p>“{dados.depoimento.texto}”</p>
+              </blockquote>
+              <figcaption className="mt-2 text-sm text-cinza-azulado">{dados.cliente}</figcaption>
+            </figure>
+          )}
+        </section>
         <article className="max-w-3xl [&>:first-child]:mt-0">
           <Conteudo />
           <p className="mt-10">

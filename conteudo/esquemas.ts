@@ -37,6 +37,10 @@ export const dadosClienteSchema = z.object({
   site: z.url(),
   // Frase curta do cartão na home e na lista de clientes.
   resumo: z.string().min(20).max(200),
+  // O que mudou na operação do cliente, na nossa voz. Aparece no topo do case.
+  resultado: z.string().min(40).max(280),
+  // A mesma ideia na voz do cliente. Só vai ao ar com status "aprovado", depois do ok do cliente.
+  depoimento: z.object({ texto: z.string().min(20).max(200), status: z.enum(["rascunho", "aprovado"]) }).optional(),
 });
 
 export const dadosProdutoSchema = z.object({
