@@ -1,8 +1,6 @@
-import * as Sentry from "@sentry/nextjs";
-import { opcoesPrivacidade } from "@/lib/sentry-filtro";
+import { iniciarSentry } from "@/lib/sentry-cliente";
 
-// Sentry no navegador. Sem Session Replay (não adicionamos replayIntegration): nada da tela
-// ou do que o visitante digita é gravado. Envio pelo túnel /monitoring (ver next.config.ts).
-Sentry.init({ ...opcoesPrivacidade });
+// Sentry no navegador: só com DSN, e baixado depois do load (ver lib/sentry-cliente.ts).
+iniciarSentry();
 
-export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
+export { onRouterTransitionStart } from "@/lib/sentry-cliente";
