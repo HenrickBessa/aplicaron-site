@@ -2,6 +2,12 @@ import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 
+// Todo esquema precisa nascer com a configuração de lib/validacao/zod.ts (jitless, sem eval).
+const zodSoPeloModulo = {
+  name: "zod",
+  message: "Use `import * as z from '@/lib/validacao/zod'` (configura o Zod sem eval, por causa da CSP).",
+};
+
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
@@ -17,10 +23,24 @@ const eslintConfig = defineConfig([
           message: "Proibido .or() com template string (injeção no filtro do PostgREST). Use filtros encadeados.",
         },
       ],
-      // Todo esquema precisa nascer com a configuração de lib/validacao/zod.ts (jitless, sem eval).
+      "no-restricted-imports": ["error", { paths: [zodSoPeloModulo] }],
+    },
+  },
+  {
+    // O SDK do Sentry no navegador pesa ~33 KB gzip: só lib/sentry-cliente.ts o carrega, sob demanda.
+    files: ["app/**/*.tsx", "componentes/**", "instrumentation-client.ts"],
+    rules: {
       "no-restricted-imports": [
         "error",
-        { paths: [{ name: "zod", message: "Importe de '@/lib/validacao/zod' (configura o Zod sem eval, por causa da CSP)." }] },
+        {
+          paths: [
+            zodSoPeloModulo,
+            {
+              name: "@sentry/nextjs",
+              message: "No navegador use '@/lib/sentry-cliente' (carrega o SDK só quando precisa). No servidor, lib/logger.ts.",
+            },
+          ],
+        },
       ],
     },
   },

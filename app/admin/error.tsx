@@ -1,13 +1,13 @@
 "use client"; // Error boundaries precisam ser Client Components.
 
-import * as Sentry from "@sentry/nextjs";
+import { capturarErro } from "@/lib/sentry-cliente";
 import { useEffect } from "react";
 import { Botao } from "@/componentes/ui/Botao";
 
 // Mostra só o código do erro (digest), que liga a tela ao log na Vercel e no Sentry.
 export default function ErroAdmin({ error, retry }: { error: Error & { digest?: string }; retry: () => void }) {
   useEffect(() => {
-    Sentry.captureException(error);
+    capturarErro(error);
   }, [error]);
 
   return (

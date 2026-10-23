@@ -1,6 +1,6 @@
 "use client"; // Error boundaries precisam ser Client Components.
 
-import * as Sentry from "@sentry/nextjs";
+import { capturarErro } from "@/lib/sentry-cliente";
 import { useEffect } from "react";
 import "./globals.css";
 
@@ -9,7 +9,7 @@ import "./globals.css";
 export default function ErroGlobal({ error, retry }: { error: Error & { digest?: string }; retry: () => void }) {
   // A boundary "engole" o erro: sem isto, ele não chegaria ao Sentry.
   useEffect(() => {
-    Sentry.captureException(error);
+    capturarErro(error);
   }, [error]);
 
   return (

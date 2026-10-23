@@ -1,4 +1,4 @@
-import { z } from "./zod";
+import * as z from "./zod";
 import { etapaContatoSchema, MENSAGENS, origem } from "./diagnostico";
 import { addonSchema, planoSchema } from "./enums";
 

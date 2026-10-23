@@ -1,4 +1,4 @@
-import { z } from "./zod";
+import * as z from "./zod";
 import { faixaOrcamentoSchema, planoSchema, servicoSchema } from "./enums";
 
 // Esquema ÚNICO do formulário de diagnóstico, usado no navegador (para dar erro na hora)

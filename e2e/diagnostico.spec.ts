@@ -153,10 +153,14 @@ test("servidor fora do ar: mensagem com WhatsApp, dados preservados", async ({ p
 });
 
 test("envio rápido demais (robô) cai no sucesso falso e não grava", async ({ page }) => {
-  await abrir(page);
+  // Relógio parado (Date.now() não anda, os timers sim): abertura e envio no mesmo instante,
+  // por mais lenta que a máquina esteja. Com o relógio só instalado, o tempo real passava e,
+  // sob carga, o preenchimento passava de 3 s e o "robô" era gravado.
+  await page.clock.setFixedTime(new Date("2026-10-23T12:00:00-03:00"));
+  await page.goto("/diagnostico");
+  await expect(page.getByRole("heading", { level: 2, name: /Etapa 1 de 3/ })).toBeVisible();
   await preencherAteContato(page);
   const { submission_id } = await lerRascunho(page);
-  // Sem avançar o relógio: menos de 3 s desde a abertura.
   await page.getByRole("button", { name: "Enviar diagnóstico" }).click();
   await expect(page).toHaveURL("/obrigado");
 

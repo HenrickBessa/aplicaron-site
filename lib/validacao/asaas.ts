@@ -1,4 +1,4 @@
-import { z } from "@/lib/validacao/zod";
+import * as z from "@/lib/validacao/zod";
 
 // Corpo do webhook do Asaas: só o que gravamos. O resto (nome e CPF do pagador, valores...)
 // é descartado aqui e nunca chega ao banco nem aos logs.
