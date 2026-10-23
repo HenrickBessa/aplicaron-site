@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { CabecalhoPagina } from "@/componentes/conteudo/CabecalhoPagina";
 import { CartaoPlano } from "@/componentes/conteudo/CartaoPlano";
 import { addons, planos } from "@/conteudo/planos";
-import { metadadosPagina } from "@/lib/seo";
+import { JsonLd } from "@/componentes/seo/JsonLd";
+import { catalogoPlanos, metadadosPagina } from "@/lib/seo";
 import { FormularioPlano } from "./FormularioPlano";
 
 export const metadata: Metadata = metadadosPagina({
@@ -16,6 +17,7 @@ export const metadata: Metadata = metadadosPagina({
 export default function PaginaPlanos() {
   return (
     <>
+      <JsonLd dados={catalogoPlanos(planos)} />
       <CabecalhoPagina
         titulo="Planos prontos para começar em dias"
         descricao="Implantação com preço fechado e mensalidade fixa. Precisa de algo diferente? O diagnóstico gratuito continua aberto para projetos sob medida."

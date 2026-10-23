@@ -7,8 +7,8 @@ import { clientes } from "@/conteudo/clientes";
 import { metadadosPagina } from "@/lib/seo";
 
 export const metadata: Metadata = metadadosPagina({
-  titulo: "Clientes",
-  descricao: "Conheça empresas que confiam na AplicarOn e os aplicativos, sites e sistemas que desenvolvemos para cada uma delas.",
+  titulo: "Portfólio: sites e sistemas entregues",
+  descricao: "Projetos reais da AplicarOn: telemedicina, clínica com prontuário eletrônico, incorporadora e atacado B2B, com telas e o que entregamos.",
   caminho: "/clientes",
 });
 

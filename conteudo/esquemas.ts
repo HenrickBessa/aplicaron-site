@@ -7,6 +7,8 @@ import { planoSchema, servicoSchema } from "@/lib/validacao/enums";
 
 const base = {
   titulo: z.string().min(3).max(80),
+  // <title> quando o h1 não é o que o cliente digita no Google. 48 + " · AplicarOn" = 60, sem corte no Google.
+  tituloSeo: z.string().min(10).max(48).optional(),
   // Vira a meta description: até ~160 caracteres para não ser cortada no Google.
   descricao: z.string().min(50).max(160),
   ordem: z.number().int(),
@@ -41,8 +43,8 @@ export const dadosProdutoSchema = z.object({
   ...base,
   // Nome curto (trilha, cartões, menu). O `titulo` é a chamada principal, que vira o h1.
   nome: z.string().min(2).max(40),
-  // <title> da página: o que o cliente digita no Google, não a chamada de venda.
-  tituloSeo: z.string().min(10).max(60),
+  // Obrigatório aqui: o h1 do produto é a chamada de venda.
+  tituloSeo: z.string().min(10).max(48),
   resumo: z.string().min(20).max(200),
   // Plano de /planos vendido nesta página (preço e formulário vêm de conteudo/planos.ts).
   plano: planoSchema.optional(),

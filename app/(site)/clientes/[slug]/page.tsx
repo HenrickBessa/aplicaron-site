@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: PageProps<"/clientes/[slug]">
   const { slug } = await params;
   const cliente = buscarCliente(slug);
   if (!cliente) return {};
-  return metadadosPagina({ titulo: cliente.dados.titulo, descricao: cliente.dados.descricao, caminho: `/clientes/${slug}` });
+  return metadadosPagina({ titulo: cliente.dados.tituloSeo ?? cliente.dados.titulo, descricao: cliente.dados.descricao, caminho: `/clientes/${slug}` });
 }
 
 export default async function PaginaCliente({ params }: PageProps<"/clientes/[slug]">) {

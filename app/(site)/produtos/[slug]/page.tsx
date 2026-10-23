@@ -5,7 +5,8 @@ import { CabecalhoPagina } from "@/componentes/conteudo/CabecalhoPagina";
 import { CartaoPlano } from "@/componentes/conteudo/CartaoPlano";
 import { buscarPlano } from "@/conteudo/planos";
 import { buscarProduto, produtos } from "@/conteudo/produtos";
-import { metadadosPagina } from "@/lib/seo";
+import { JsonLd } from "@/componentes/seo/JsonLd";
+import { dadosProduto, metadadosPagina } from "@/lib/seo";
 
 export function generateStaticParams() {
   return produtos.map((p) => ({ slug: p.slug }));
@@ -30,6 +31,7 @@ export default async function PaginaProduto({ params }: PageProps<"/produtos/[sl
 
   return (
     <>
+      <JsonLd dados={dadosProduto({ nome: dados.nome, descricao: dados.descricao, caminho: `/produtos/${slug}`, plano })} />
       <CabecalhoPagina
         titulo={dados.titulo}
         descricao={dados.resumo}

@@ -35,7 +35,8 @@ for (const caminho of indexaveis) {
 
     const titulo = await page.title();
     expect(titulo).toContain("AplicarOn");
-    expect(titulo.length).toBeLessThanOrEqual(70);
+    // Acima de ~60 o Google corta o título no resultado.
+    expect(titulo.length).toBeLessThanOrEqual(60);
 
     const descricao = (await meta(page, 'meta[name="description"]')) ?? "";
     expect(descricao.length).toBeGreaterThanOrEqual(50);
@@ -130,4 +131,31 @@ test("imagem de compartilhamento, ícones e manifest", async ({ request }) => {
   }
   const manifest = await (await request.get("/manifest.webmanifest")).json();
   expect(manifest).toMatchObject({ name: "AplicarOn", lang: "pt-BR" });
+});
+
+test("/planos: JSON-LD OfferCatalog com os mesmos preços dos cartões", async ({ page }) => {
+  await page.goto("/planos");
+  const catalogo = (await jsonLd(page)).find((d) => d["@type"] === "OfferCatalog");
+  const vende = catalogo.itemListElement.find((o: { itemOffered: { name: string } }) => o.itemOffered.name === "Vende");
+  expect(vende.priceSpecification).toEqual([
+    { "@type": "PriceSpecification", name: "Implantação", minPrice: 1800, priceCurrency: "BRL" },
+    expect.objectContaining({ "@type": "UnitPriceSpecification", price: 150, referenceQuantity: expect.objectContaining({ unitCode: "MON" }) }),
+  ]);
+  const cartao = page.getByRole("article", { name: "Vende" });
+  await expect(cartao).toContainText("R$ 150");
+  await expect(cartao).toContainText("a partir de R$ 1.800");
+  expect(vende.seller).toEqual({ "@id": `${BASE}/#organizacao` });
+});
+
+test("produto: JSON-LD SoftwareApplication com a oferta do plano", async ({ page }) => {
+  await page.goto("/produtos/agenda-cobranca");
+  const app = (await jsonLd(page)).find((d) => d["@type"] === "SoftwareApplication");
+  expect(app).toMatchObject({ name: "Agenda + Cobrança", operatingSystem: "Web", url: `${BASE}/produtos/agenda-cobranca` });
+  expect(app.offers.priceSpecification[1]).toMatchObject({ price: 220 });
+});
+
+test("serviço: JSON-LD Service ligado à organização", async ({ page }) => {
+  await page.goto("/servicos/sistemas");
+  const servico = (await jsonLd(page)).find((d) => d["@type"] === "Service");
+  expect(servico).toMatchObject({ name: "Desenvolvimento de sistema web sob medida", provider: { "@id": `${BASE}/#organizacao` } });
 });

@@ -4,7 +4,8 @@ import { CabecalhoPagina } from "@/componentes/conteudo/CabecalhoPagina";
 import { ChamadaDiagnostico } from "@/componentes/conteudo/ChamadaDiagnostico";
 import { BotaoLink } from "@/componentes/ui/Botao";
 import { buscarServico, servicos } from "@/conteudo/servicos";
-import { metadadosPagina } from "@/lib/seo";
+import { JsonLd } from "@/componentes/seo/JsonLd";
+import { dadosServico, metadadosPagina } from "@/lib/seo";
 
 // Gera uma página estática por serviço no build.
 export function generateStaticParams() {
@@ -18,7 +19,7 @@ export async function generateMetadata({ params }: PageProps<"/servicos/[slug]">
   const { slug } = await params;
   const servico = buscarServico(slug);
   if (!servico) return {};
-  return metadadosPagina({ titulo: servico.dados.titulo, descricao: servico.dados.descricao, caminho: `/servicos/${slug}` });
+  return metadadosPagina({ titulo: servico.dados.tituloSeo ?? servico.dados.titulo, descricao: servico.dados.descricao, caminho: `/servicos/${slug}` });
 }
 
 export default async function PaginaServico({ params }: PageProps<"/servicos/[slug]">) {
@@ -31,6 +32,9 @@ export default async function PaginaServico({ params }: PageProps<"/servicos/[sl
 
   return (
     <>
+      <JsonLd
+        dados={dadosServico({ nome: dados.tituloSeo ?? dados.titulo, descricao: dados.descricao, caminho: `/servicos/${slug}` })}
+      />
       <CabecalhoPagina
         titulo={dados.titulo}
         descricao={dados.descricao}
