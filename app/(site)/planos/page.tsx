@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { CabecalhoPagina } from "@/componentes/conteudo/CabecalhoPagina";
 import { CartaoPlano } from "@/componentes/conteudo/CartaoPlano";
-import { addons, planos } from "@/conteudo/planos";
+import { addons, planos, regrasContratacao } from "@/conteudo/planos";
 import { JsonLd } from "@/componentes/seo/JsonLd";
 import { catalogoPlanos, metadadosPagina } from "@/lib/seo";
 import { FormularioPlano } from "./FormularioPlano";
@@ -52,6 +52,23 @@ export default function PaginaPlanos() {
               </li>
             ))}
           </ul>
+        </div>
+      </section>
+
+      <section id="como-funciona" aria-labelledby="titulo-como-funciona" className="border-t border-linha">
+        <div className="container-site py-12 sm:py-16">
+          <h2 id="titulo-como-funciona" className="text-2xl font-bold sm:text-3xl">
+            Como funciona a contratação
+          </h2>
+          <p className="mt-2 max-w-2xl text-cinza-azulado">Regras que valem para todos os planos, combinadas antes de começar.</p>
+          <dl className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {regrasContratacao.map((regra) => (
+              <div key={regra.titulo} className="rounded-xl border border-linha bg-azul-profundo p-5">
+                <dt className="font-semibold text-gelo">{regra.titulo}</dt>
+                <dd className="mt-2 text-sm text-cinza-azulado">{regra.texto}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </section>
 
