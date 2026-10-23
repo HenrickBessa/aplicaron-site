@@ -146,6 +146,20 @@ test.describe("com 'reduzir movimento' no sistema", () => {
   });
 });
 
+// Um loading.tsx no grupo (site) faz o React esconder o conteúdo no fim do HTML e
+// revelá-lo por script: sem JavaScript, a página ficava só no "Carregando…".
+test.describe("sem JavaScript", () => {
+  test.use({ javaScriptEnabled: false });
+
+  for (const caminho of ["/", "/planos", "/diagnostico", "/servicos/sites", "/clientes/agi", "/produtos/agenda-cobranca"]) {
+    test(`${caminho}: o conteúdo já vem no HTML`, async ({ page }) => {
+      await page.goto(caminho);
+      await expect(page.locator("h1")).toBeVisible();
+      await expect(page.getByText("Carregando…")).toHaveCount(0);
+    });
+  }
+});
+
 test("/obrigado tem noindex", async ({ page }) => {
   await page.goto("/obrigado");
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);

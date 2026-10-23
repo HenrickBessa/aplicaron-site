@@ -52,7 +52,7 @@ npm run db:test         # testes pgTAP (supabase test db)
 - Conteúdo em MDX em `conteudo/` (serviços, clientes, sobre, política), não no banco. Lista de tecnologias em `conteudo/tecnologias.ts`.
 - Imagens: originais em `assets/`, versões servidas geradas por `npm run imagens`; no código, sempre `next/image` com import estático.
 - Animações: só CSS, sempre dentro de `prefers-reduced-motion: no-preference` e pausáveis pelo botão do rodapé (`html[data-animacoes="pausadas"]`).
-- Cada segmento com `loading.tsx`, `error.tsx`, `not-found.tsx`.
+- Cada segmento com `error.tsx` e `not-found.tsx`. `loading.tsx` só onde há espera real por dado (o `/admin`), **nunca** nas páginas públicas estáticas: ele faz o React esconder o conteúdo no fim do HTML e revelá-lo por script (sem JavaScript, a página fica só no "Carregando…"; o rodapé pode pular).
 - `app/admin/` (Fase 2): login + MFA obrigatório. Toda página/Action de dado começa com `exigirAdmin()` (`lib/dal/admin.ts`); sessão de no máximo 8 h; cookies de sessão só em `path: /admin`.
 - Next 16 tem mudanças incompatíveis: consulte `node_modules/next/dist/docs/` antes de usar uma API.
 
