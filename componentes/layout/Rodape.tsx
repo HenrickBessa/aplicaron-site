@@ -18,15 +18,18 @@ export function Rodape() {
         <nav aria-label="Rodapé">
           <h2 className="mb-3 text-sm font-semibold text-gelo">Navegação</h2>
           <ul className="space-y-1 text-sm">
-            {[...navegacao, { href: "/diagnostico", rotulo: "Diagnóstico" }, { href: "/privacidade", rotulo: "Privacidade" }].map(
-              (item) => (
+            {[
+              ...navegacao,
+              { href: "/diagnostico", rotulo: "Diagnóstico" },
+              { href: "/planos#como-funciona", rotulo: "Como funciona a contratação" },
+              { href: "/privacidade", rotulo: "Privacidade" },
+            ].map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className="inline-flex min-h-6 items-center text-cinza-azulado hover:text-ciano">
                     {item.rotulo}
                   </Link>
                 </li>
-              ),
-            )}
+            ))}
           </ul>
         </nav>
 
