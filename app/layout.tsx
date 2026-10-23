@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Sora } from "next/font/google";
 import { site, URL_SITE } from "@/conteudo/site";
+import { SCRIPT_PREFERENCIAS } from "@/lib/cabecalhos-seguranca";
 import { IMAGEM_SOCIAL } from "@/lib/seo";
 import "./globals.css";
 
@@ -45,10 +46,6 @@ export const viewport: Viewport = {
   themeColor: "#0b1a2e",
   colorScheme: "dark",
 };
-
-// Aplica a preferência "Pausar animações" (BotaoAnimacoes) ANTES da primeira pintura, para as
-// animações não rodarem por um instante ao recarregar. Mesmo padrão usado para modo escuro.
-const SCRIPT_PREFERENCIAS = `try{if(localStorage.getItem("aplicaron:animacoes")==="pausadas")document.documentElement.dataset.animacoes="pausadas"}catch(e){}`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

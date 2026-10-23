@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from "react";
+import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
 import { IconeErro } from "./icones";
 
 // Regras de acessibilidade aplicadas em todos os campos (WCAG 2.2 AA):
@@ -94,6 +94,34 @@ export function CampoAreaTexto({ id, rotulo, dica, erro, opcional, className, ..
         className={`${estiloCampo} resize-y ${className ?? ""}`}
         {...props}
       />
+      {erro && <MensagemErro id={`${id}-erro`}>{erro}</MensagemErro>}
+    </div>
+  );
+}
+
+type CampoSelecaoProps = CampoBase & { opcoes: readonly Opcao[] } & Omit<SelectHTMLAttributes<HTMLSelectElement>, "id">;
+
+export function CampoSelecao({ id, rotulo, dica, erro, opcional, opcoes, className, ...props }: CampoSelecaoProps) {
+  return (
+    <div className="space-y-1.5">
+      <Rotulo htmlFor={id} opcional={opcional}>
+        {rotulo}
+      </Rotulo>
+      {dica && <Dica id={`${id}-dica`}>{dica}</Dica>}
+      <select
+        id={id}
+        required={!opcional}
+        aria-invalid={erro ? true : undefined}
+        aria-describedby={idsDescricao(id, dica, erro)}
+        className={`${estiloCampo} min-h-11 ${className ?? ""}`}
+        {...props}
+      >
+        {opcoes.map((o) => (
+          <option key={o.valor} value={o.valor}>
+            {o.rotulo}
+          </option>
+        ))}
+      </select>
       {erro && <MensagemErro id={`${id}-erro`}>{erro}</MensagemErro>}
     </div>
   );
