@@ -53,7 +53,7 @@ npm run db:test         # testes pgTAP (supabase test db)
 - Imagens: originais em `assets/`, versões servidas geradas por `npm run imagens`; no código, sempre `next/image` com import estático.
 - Animações: só CSS, sempre dentro de `prefers-reduced-motion: no-preference` e pausáveis pelo botão do rodapé (`html[data-animacoes="pausadas"]`).
 - Cada segmento com `loading.tsx`, `error.tsx`, `not-found.tsx`.
-- `app/admin/` é Fase 2: não criar agora.
+- `app/admin/` (Fase 2): login + MFA obrigatório. Toda página/Action de dado começa com `exigirAdmin()` (`lib/dal/admin.ts`); sessão de no máximo 8 h; cookies de sessão só em `path: /admin`.
 - Next 16 tem mudanças incompatíveis: consulte `node_modules/next/dist/docs/` antes de usar uma API.
 
 ## Regras de segurança

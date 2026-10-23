@@ -1,5 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "regions": ["gru1"],
-  "crons": [{ "path": "/api/cron/tarefas", "schedule": "*/15 * * * *" }]
+  "crons": [{ "path": "/api/cron/tarefas", "schedule": "*/15 * * * *" }],
+  "ignoreCommand": "git diff --quiet \"${VERCEL_GIT_PREVIOUS_SHA:-HEAD^}\" HEAD -- . ':(exclude)docs' ':(exclude)*.md'"
 }
