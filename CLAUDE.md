@@ -66,7 +66,8 @@ npm run db:test         # testes pgTAP (supabase test db)
 - E-mails de notificação sem dados pessoais.
 - Proibido `.or(` com template string no supabase-js (regra de lint).
 - Logs só via `lib/logger.ts` (`log.info/aviso/erro`), que descarta campos fora da lista permitida. Nunca `console.*` com dados de lead.
-- Zod só via `@/lib/validacao/zod` (configurado sem eval por causa da CSP; regra de lint).
+- Zod só via `import * as z from "@/lib/validacao/zod"` (configurado sem eval por causa da CSP; exporta só as funções usadas, para o navegador não levar as traduções; regra de lint).
+- Sentry no navegador só via `@/lib/sentry-cliente` (carrega o SDK sob demanda, só com DSN); nunca `@sentry/nextjs` em `app/**/*.tsx` ou `componentes/` (regra de lint).
 - SEO: metadados de página indexável sempre por `metadadosPagina()` (`lib/seo.ts`); JSON-LD por `<JsonLd>`.
 - Cabeçalhos e CSP em `lib/cabecalhos-seguranca.ts`. Mudou a CSP? Rode `e2e/seguranca.spec.ts` (detecta violações).
 - Cookies de sessão: `httpOnly: true, secure: true, sameSite: 'lax'` explícitos.
