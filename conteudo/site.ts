@@ -12,12 +12,14 @@ export const URL_SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.aplica
 
 export const linkWhatsapp = `https://wa.me/${site.whatsapp.replace(/\D/g, "")}`;
 
-// Usado pelo botão flutuante: abre a conversa já com uma mensagem, para a pessoa não começar do zero.
-export const linkWhatsappComMensagem = `${linkWhatsapp}?text=${encodeURIComponent(
-  "Olá, AplicarOn! Vim pelo site e quero conversar sobre um projeto.",
-)}`;
+// Abre a conversa já com uma mensagem, para a pessoa não começar do zero.
+export const linkWhatsappCom = (texto: string) => `${linkWhatsapp}?text=${encodeURIComponent(texto)}`;
+
+// Usado pelo botão flutuante.
+export const linkWhatsappComMensagem = linkWhatsappCom("Olá, AplicarOn! Vim pelo site e quero conversar sobre um projeto.");
 
 export const navegacao = [
+  { href: "/planos", rotulo: "Planos" },
   { href: "/#servicos", rotulo: "Serviços" },
   { href: "/clientes", rotulo: "Clientes" },
   { href: "/sobre", rotulo: "Sobre" },

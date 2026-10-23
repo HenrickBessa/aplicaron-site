@@ -22,6 +22,7 @@ const CAMPOS_VISIVEIS: readonly CampoDiagnostico[] = [
   "servico",
   "faixa_orcamento",
   "descricao",
+  "plano_interesse",
   "nome",
   "email",
   "whatsapp",

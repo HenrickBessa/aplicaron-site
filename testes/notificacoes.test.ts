@@ -49,6 +49,21 @@ describe("montarEmail", () => {
     expect(email.text).toContain("https://www.aplicaron.com.br/admin/leads/abc");
     expect(email.html).toContain('href="https://www.aplicaron.com.br/admin/leads/abc"');
   });
+
+  it("lead da página de planos (sem faixa): assunto com o plano", () => {
+    const email = montarEmail({ id: "abc", servico: "sites", faixa_orcamento: null, plano_interesse: "vende" }, "https://www.aplicaron.com.br");
+    expect(email.subject).toBe("Novo interesse: plano Vende");
+    expect(email.text).toContain("/admin/leads/abc");
+  });
+
+  it("diagnóstico com plano de interesse: mantém o assunto e cita o plano no corpo", () => {
+    const email = montarEmail(
+      { id: "abc", servico: "sistemas", faixa_orcamento: "nao_sei", plano_interesse: "agenda_cobranca" },
+      "https://www.aplicaron.com.br",
+    );
+    expect(email.subject).toBe("Novo diagnóstico: Sistemas, Ainda não sei");
+    expect(email.text).toContain("Plano de interesse: Agenda + Cobrança");
+  });
 });
 
 describe("enviar", () => {

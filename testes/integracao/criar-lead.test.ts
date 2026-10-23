@@ -38,7 +38,18 @@ describe("criarLead (Supabase local)", () => {
       .schema("sistema")
       .rpc("reivindicar_notificacoes", { p_limite: 1, p_lead_id: leadId });
     expect(error).toBeNull();
-    expect(data).toEqual([{ id: leadId, tentativa: 1, servico: "sistemas", faixa_orcamento: "15k_50k" }]);
+    expect(data).toEqual([{ id: leadId, tentativa: 1, servico: "sistemas", faixa_orcamento: "15k_50k", plano_interesse: null }]);
+  });
+
+  it("lead da página de planos: sem faixa, com plano e add-ons", async () => {
+    const { leadId } = await criarLead(
+      dados({ faixa_orcamento: undefined, plano_interesse: "vende", addons: ["crm"], cidade: "Rio Branco/AC", segmento: "saúde" }),
+    );
+    const { data, error } = await clienteSistema()
+      .schema("sistema")
+      .rpc("reivindicar_notificacoes", { p_limite: 1, p_lead_id: leadId });
+    expect(error).toBeNull();
+    expect(data).toEqual([{ id: leadId, tentativa: 1, servico: "sistemas", faixa_orcamento: null, plano_interesse: "vende" }]);
   });
 
   it("o banco rejeita o que escapar da validação (e-mail com maiúsculas)", async () => {

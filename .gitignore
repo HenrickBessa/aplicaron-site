@@ -23,6 +23,10 @@
 # misc
 .DS_Store
 *.pem
+# metadado do Windows ao baixar arquivos
+*:Zone.Identifier
+# cópias de trabalho dos agentes (git worktree)
+/.claude/worktrees/
 
 # debug
 npm-debug.log*

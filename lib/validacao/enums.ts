@@ -15,6 +15,15 @@ export const ROTULOS_SERVICO: Record<Servico, string> = {
   outro: "Outro",
 };
 
+// Planos e add-ons (migração *_leads_planos.sql). Nomes, preços e textos ficam em conteudo/planos.ts.
+export const PLANOS = ["presenca", "vende", "agenda_cobranca"] as const;
+export const planoSchema = z.enum(PLANOS);
+export type Plano = z.infer<typeof planoSchema>;
+
+export const ADDONS = ["crm", "cobranca_whatsapp", "manutencao_4h"] as const;
+export const addonSchema = z.enum(ADDONS);
+export type Addon = z.infer<typeof addonSchema>;
+
 export const FAIXAS_ORCAMENTO = ["ate_5k", "5k_15k", "15k_50k", "acima_50k", "nao_sei"] as const;
 export const faixaOrcamentoSchema = z.enum(FAIXAS_ORCAMENTO);
 export type FaixaOrcamento = z.infer<typeof faixaOrcamentoSchema>;

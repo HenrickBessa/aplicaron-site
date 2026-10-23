@@ -5,6 +5,7 @@ const WCAG = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 
 const paginas = [
   "/",
+  "/planos",
   "/servicos/automacao-ia",
   "/servicos/sites",
   "/servicos/sistemas",
@@ -117,5 +118,5 @@ test("/obrigado tem noindex", async ({ page }) => {
 
 test("/privacidade mostra a versão vigente", async ({ page }) => {
   await page.goto("/privacidade");
-  await expect(page.locator("time[datetime='2026-10-06']")).toHaveText("6 de outubro de 2026");
+  await expect(page.locator("time[datetime='2026-10-23']")).toHaveText("23 de outubro de 2026");
 });

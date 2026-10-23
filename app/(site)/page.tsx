@@ -3,12 +3,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { CarrosselTecnologias } from "@/componentes/conteudo/CarrosselTecnologias";
 import { CartaoCliente } from "@/componentes/conteudo/CartaoCliente";
+import { CartaoPlano } from "@/componentes/conteudo/CartaoPlano";
 import { ChamadaDiagnostico } from "@/componentes/conteudo/ChamadaDiagnostico";
 import { JsonLd } from "@/componentes/seo/JsonLd";
 import { BotaoLink } from "@/componentes/ui/Botao";
 import { IconeServico } from "@/componentes/ui/IconeServico";
 import { Revelar } from "@/componentes/ui/Revelar";
 import { clientes } from "@/conteudo/clientes";
+import { planos } from "@/conteudo/planos";
 import { servicos } from "@/conteudo/servicos";
 import { chamadaPrincipal, site, URL_SITE } from "@/conteudo/site";
 import { metadadosPagina, urlAbsoluta } from "@/lib/seo";
@@ -137,6 +139,33 @@ export default function Inicio() {
                       <span className="inline-block transition-transform motion-safe:group-hover:translate-x-1">→</span>
                     </span>
                   </Link>
+                </Revelar>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* Planos */}
+      <section id="planos" aria-labelledby="titulo-planos" className="border-t border-linha">
+        <div className="container-site py-16 sm:py-20">
+          <Revelar className="flex flex-wrap items-end justify-between gap-4">
+            <div className="max-w-2xl space-y-3">
+              <p className="text-sm font-semibold tracking-widest text-ciano uppercase">Planos</p>
+              <h2 id="titulo-planos" className="text-3xl font-bold sm:text-4xl">
+                Pacotes prontos, com preço e prazo na mesa
+              </h2>
+              <p className="text-cinza-azulado">Implantação com valor fechado e mensalidade fixa.</p>
+            </div>
+            <Link href="/planos" className="font-medium text-ciano underline-offset-4 hover:underline">
+              Ver todos os detalhes →
+            </Link>
+          </Revelar>
+          <ul className="mt-10 grid gap-6 lg:grid-cols-3">
+            {planos.map((plano) => (
+              <li key={plano.slug}>
+                <Revelar className="h-full">
+                  <CartaoPlano plano={plano} hrefAcao={`/planos#quero-${plano.slug}`} resumido />
                 </Revelar>
               </li>
             ))}

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Botao } from "@/componentes/ui/Botao";
+import { buscarPlano } from "@/conteudo/planos";
 import { listarLeadsRecentes } from "@/lib/dal/admin";
 import { sair } from "./acoes";
 
@@ -36,6 +37,7 @@ export default async function PaginaAdmin() {
                 <th scope="col" className="py-2 pr-4 font-medium">Recebido</th>
                 <th scope="col" className="py-2 pr-4 font-medium">Nome</th>
                 <th scope="col" className="py-2 pr-4 font-medium">Serviço</th>
+                <th scope="col" className="py-2 pr-4 font-medium">Plano</th>
                 <th scope="col" className="py-2 font-medium">Status</th>
               </tr>
             </thead>
@@ -45,6 +47,7 @@ export default async function PaginaAdmin() {
                   <td className="py-2 pr-4 whitespace-nowrap">{dataHora.format(new Date(lead.created_at))}</td>
                   <td className="py-2 pr-4">{lead.nome}</td>
                   <td className="py-2 pr-4">{lead.servico}</td>
+                  <td className="py-2 pr-4">{lead.plano_interesse ? buscarPlano(lead.plano_interesse)?.nome : "—"}</td>
                   <td className="py-2">{lead.status}</td>
                 </tr>
               ))}

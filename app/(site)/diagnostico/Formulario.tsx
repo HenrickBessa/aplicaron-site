@@ -5,6 +5,7 @@ import { unstable_isUnrecognizedActionError } from "next/navigation";
 import { useEffect, useRef, useState, useSyncExternalStore, useTransition, type FormEvent } from "react";
 import { Botao } from "@/componentes/ui/Botao";
 import { CaixaSelecao, CampoAreaTexto, CampoTexto, GrupoOpcoes } from "@/componentes/ui/campos";
+import { planos } from "@/conteudo/planos";
 import { linkWhatsapp } from "@/conteudo/site";
 import {
   errosPorCampo,
@@ -22,7 +23,7 @@ type Etapa = 1 | 2 | 3;
 
 const ETAPAS: Record<Etapa, { titulo: string; campos: CampoDiagnostico[] }> = {
   1: { titulo: "Qual serviço você procura?", campos: ["servico"] },
-  2: { titulo: "Conte sobre o projeto", campos: ["faixa_orcamento", "descricao"] },
+  2: { titulo: "Conte sobre o projeto", campos: ["faixa_orcamento", "descricao", "plano_interesse"] },
   3: { titulo: "Como falamos com você?", campos: ["nome", "email", "whatsapp", "empresa", "marketing_optin"] },
 };
 
@@ -38,10 +39,16 @@ const OPCOES_SERVICO = [
 
 const OPCOES_FAIXA = FAIXAS_ORCAMENTO.map((valor) => ({ valor, rotulo: ROTULOS_FAIXA[valor] }));
 
+const OPCOES_PLANO = [
+  ...planos.map((p) => ({ valor: p.slug, rotulo: p.nome, descricao: p.resumo })),
+  { valor: "", rotulo: "Nenhum, prefiro sob medida", descricao: "Vale também se estiver em dúvida" },
+];
+
 const ROTULOS_CAMPO: Record<CampoDiagnostico, string> = {
   servico: "Serviço",
   faixa_orcamento: "Faixa de orçamento",
   descricao: "Descrição do projeto",
+  plano_interesse: "Plano de interesse",
   nome: "Nome",
   email: "E-mail",
   whatsapp: "WhatsApp",
@@ -53,6 +60,7 @@ const ROTULOS_CAMPO: Record<CampoDiagnostico, string> = {
 function idDoCampo(campo: CampoDiagnostico) {
   if (campo === "servico") return `diag-servico-${OPCOES_SERVICO[0].valor}`;
   if (campo === "faixa_orcamento") return `diag-faixa-${OPCOES_FAIXA[0].valor}`;
+  if (campo === "plano_interesse") return `diag-plano-${OPCOES_PLANO[0].valor}`;
   return `diag-${campo}`;
 }
 
@@ -64,6 +72,7 @@ const VALORES_INICIAIS: ValoresFormulario = {
   servico: "",
   faixa_orcamento: "",
   descricao: "",
+  plano_interesse: "",
   nome: "",
   email: "",
   whatsapp: "",
@@ -338,6 +347,16 @@ function FormularioEtapas() {
               {valores.descricao.length}/2000
             </p>
           </div>
+          <GrupoOpcoes
+            id="diag-plano"
+            name="plano_interesse"
+            legenda="Algum dos nossos planos chama a sua atenção?"
+            dica="Opcional. Ajuda a gente a preparar a conversa."
+            opcoes={OPCOES_PLANO}
+            valor={valores.plano_interesse}
+            aoMudar={(v) => alterar("plano_interesse", v)}
+            erro={erros.plano_interesse}
+          />
         </div>
       )}
 

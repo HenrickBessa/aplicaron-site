@@ -1,5 +1,5 @@
 import { z } from "./zod";
-import { faixaOrcamentoSchema, servicoSchema } from "./enums";
+import { faixaOrcamentoSchema, planoSchema, servicoSchema } from "./enums";
 
 // Esquema ÚNICO do formulário de diagnóstico, usado no navegador (para dar erro na hora)
 // e na Server Action (que é a validação que vale, porque o navegador pode ser burlado).
@@ -31,6 +31,7 @@ export const MENSAGENS = {
   email: "Informe um e-mail válido, como nome@empresa.com.br.",
   whatsapp: "Informe o WhatsApp com DDD, como (47) 98880-0836.",
   empresa: "Use no máximo 120 caracteres.",
+  plano: "Escolha um plano da lista.",
 } as const;
 
 // ---------------------------------------------------------------------------
@@ -47,6 +48,11 @@ export const etapaProjetoSchema = z.object({
     .trim()
     .min(10, MENSAGENS.descricaoCurta)
     .max(2000, MENSAGENS.descricaoLonga),
+  // Opcional: "" (nenhum plano / sob medida) vira undefined.
+  plano_interesse: z
+    .union([z.enum(planoSchema.options), z.literal("")], { error: MENSAGENS.plano })
+    .optional()
+    .transform((v) => v || undefined),
 });
 
 export const etapaContatoSchema = z.object({
@@ -83,7 +89,7 @@ export const etapaContatoSchema = z.object({
 // ---------------------------------------------------------------------------
 // Envio completo (o que a Server Action recebe)
 // ---------------------------------------------------------------------------
-const origem = z
+export const origem = z
   .string()
   .optional()
   .transform((v) => (v?.trim() ? v.trim().slice(0, 200) : undefined));
@@ -106,10 +112,11 @@ export type CampoDiagnostico = keyof z.input<typeof etapaServicoSchema> | keyof 
 export type ErrosCampos = Partial<Record<CampoDiagnostico, string>>;
 
 // Converte o erro do Zod em { campo: "primeira mensagem" } para exibir ao lado de cada campo.
-export function errosPorCampo(erro: z.ZodError): ErrosCampos {
-  const erros: ErrosCampos = {};
+// Também usado pelo formulário de planos (C = campos dele).
+export function errosPorCampo<C extends string = CampoDiagnostico>(erro: z.ZodError): Partial<Record<C, string>> {
+  const erros: Partial<Record<C, string>> = {};
   for (const issue of erro.issues) {
-    const campo = issue.path[0] as CampoDiagnostico | undefined;
+    const campo = issue.path[0] as C | undefined;
     if (campo && !erros[campo]) erros[campo] = issue.message;
   }
   return erros;

@@ -11,6 +11,7 @@ export type ValoresFormulario = {
   servico: string;
   faixa_orcamento: string;
   descricao: string;
+  plano_interesse: string;
   nome: string;
   email: string;
   whatsapp: string;

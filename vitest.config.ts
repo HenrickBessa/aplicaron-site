@@ -22,7 +22,7 @@ export default defineConfig({
         test: {
           name: "unit",
           include: ["**/*.test.ts", "**/*.test.tsx"],
-          exclude: ["node_modules/**", ".next/**", "e2e/**", "testes/integracao/**"],
+          exclude: ["node_modules/**", ".next/**", ".claude/**", "e2e/**", "testes/integracao/**"],
         },
       },
       {

@@ -9,6 +9,7 @@ import { urlAbsoluta } from "@/lib/seo";
 export default function sitemap(): MetadataRoute.Sitemap {
   const caminhos = [
     "/",
+    "/planos",
     "/diagnostico",
     "/sobre",
     "/privacidade",
