@@ -105,7 +105,8 @@
     box-shadow 0.3s ease;
 }
 .cartao-interativo:hover,
-.cartao-interativo:focus-visible {
+.cartao-interativo:focus-visible,
+.cartao-interativo:has(:focus-visible) {
   border-color: var(--color-ciano);
   box-shadow: 0 24px 48px -24px color-mix(in srgb, var(--color-ciano) 55%, transparent);
 }

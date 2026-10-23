@@ -14,6 +14,7 @@ import { planos } from "@/conteudo/planos";
 import { servicos } from "@/conteudo/servicos";
 import { chamadaPrincipal, site, URL_SITE } from "@/conteudo/site";
 import { metadadosPagina, urlAbsoluta } from "@/lib/seo";
+import type { Servico } from "@/lib/validacao/enums";
 import ilustracao from "@/public/imagens/marca/ilustracao.webp";
 
 export const metadata: Metadata = metadadosPagina({
@@ -64,6 +65,36 @@ const etapas = [
   { titulo: "Entrega", texto: "Projeto publicado, testado e documentado. O código, os dados e o conhecimento ficam com você." },
 ];
 
+// Porta de entrada de cada serviço: os planos daquele serviço ou, sem plano, o diagnóstico (projeto sob medida).
+function EntradaServico({ servico }: { servico: Servico }) {
+  const doServico = planos.filter((p) => p.servico === servico);
+  const classeLink = "relative z-10 inline-flex min-h-6 items-center font-medium text-ciano underline underline-offset-4";
+  return (
+    <p className="text-sm text-cinza-azulado">
+      {doServico.length > 0 ? (
+        <>
+          {doServico.length > 1 ? "Planos: " : "Plano: "}
+          {doServico.map((plano, i) => (
+            <span key={plano.slug}>
+              {i > 0 && " e "}
+              <Link href={plano.pagina ?? "/planos"} className={classeLink}>
+                {plano.nome}
+              </Link>
+            </span>
+          ))}
+        </>
+      ) : (
+        <>
+          Sob medida:{" "}
+          <Link href={`/diagnostico?servico=${servico}`} className={classeLink}>
+            diagnóstico gratuito
+          </Link>
+        </>
+      )}
+    </p>
+  );
+}
+
 export default function Inicio() {
   return (
     <>
@@ -72,19 +103,23 @@ export default function Inicio() {
       {/* Abertura */}
       <section className="container-site grid items-center gap-10 py-14 sm:py-20 md:grid-cols-2">
         <div className="space-y-6">
-          <p className="text-sm font-semibold tracking-widest text-ciano uppercase">Tecnologia sob medida</p>
-          <h1 className="text-4xl leading-tight font-bold sm:text-5xl lg:text-6xl">
-            Transformamos ideias em{" "}
-            <span className="bg-linear-to-r from-ciano to-gelo bg-clip-text text-transparent">tecnologia que gera resultado</span>
+          <p className="text-sm font-semibold tracking-widest text-ciano uppercase">Planos prontos e projetos sob medida</p>
+          {/* Sem lg:text-6xl: a frase é longa e empurraria os botões para fora da primeira tela. */}
+          <h1 className="text-4xl leading-tight font-bold sm:text-5xl">
+            Pacotes prontos para começar em dias —{" "}
+            <span className="bg-linear-to-r from-ciano to-gelo bg-clip-text text-transparent">
+              e sob medida quando o seu negócio precisa
+            </span>
           </h1>
+          {/* SEO: os termos de busca (site, agendamento, cobrança, WhatsApp) ficam logo abaixo do H1. */}
           <p className="max-w-xl text-lg text-cinza-azulado">
-            Sites, sistemas, aplicativos e automação com IA para empresas que querem crescer com segurança, do diagnóstico à
-            entrega.
+            Site que traz contato pelo WhatsApp, agendamento com lembrete e cobrança automática, com implantação de preço
+            fechado e mensalidade fixa. Para o projeto maior, o diagnóstico gratuito é o primeiro passo.
           </p>
           <div className="flex flex-wrap gap-3 pt-2">
-            <BotaoLink href={chamadaPrincipal.href}>{chamadaPrincipal.rotulo}</BotaoLink>
-            <BotaoLink href="/#servicos" variante="secundario">
-              Conheça nossos serviços
+            <BotaoLink href="/planos">Ver os planos</BotaoLink>
+            <BotaoLink href={chamadaPrincipal.href} variante="secundario">
+              {chamadaPrincipal.rotulo}
             </BotaoLink>
           </div>
         </div>
@@ -111,18 +146,23 @@ export default function Inicio() {
             <h2 id="titulo-servicos" className="text-3xl font-bold sm:text-4xl">
               Soluções completas para o seu negócio
             </h2>
-            <p className="text-cinza-azulado">Do site que atrai clientes ao sistema que organiza a operação, tudo feito sob medida.</p>
+            <p className="text-cinza-azulado">
+              Do site que atrai clientes ao sistema que organiza a operação: comece por um plano pronto ou peça um projeto sob
+              medida.
+            </p>
           </Revelar>
           <ul className="mt-10 grid gap-6 sm:grid-cols-2">
             {servicos.map(({ slug, dados }) => (
               <li key={slug}>
                 <Revelar className="h-full">
-                  <Link
-                    href={`/servicos/${slug}`}
-                    className="cartao-interativo group flex h-full flex-col gap-4 rounded-xl border border-linha bg-azul-profundo p-6 sm:p-8"
-                  >
+                  {/* O link do título cobre o cartão (after:inset-0); os links de plano ficam por cima (z-10). Link dentro de link não vale. */}
+                  <div className="cartao-interativo group relative flex h-full flex-col gap-4 rounded-xl border border-linha bg-azul-profundo p-6 sm:p-8">
                     <IconeServico servico={dados.servico} />
-                    <h3 className="text-xl font-semibold text-gelo group-hover:text-ciano">{dados.titulo}</h3>
+                    <h3 className="text-xl font-semibold text-gelo group-hover:text-ciano">
+                      <Link href={`/servicos/${slug}`} className="after:absolute after:inset-0 after:rounded-xl">
+                        {dados.titulo}
+                      </Link>
+                    </h3>
                     <p className="text-cinza-azulado">{dados.resumo}</p>
                     <ul className="mt-auto space-y-2 pt-2 text-sm text-gelo">
                       {dados.destaques.map((d) => (
@@ -134,11 +174,12 @@ export default function Inicio() {
                         </li>
                       ))}
                     </ul>
+                    <EntradaServico servico={dados.servico} />
                     <span className="text-sm font-medium text-ciano" aria-hidden>
                       Saiba mais{" "}
                       <span className="inline-block transition-transform motion-safe:group-hover:translate-x-1">→</span>
                     </span>
-                  </Link>
+                  </div>
                 </Revelar>
               </li>
             ))}
@@ -177,7 +218,7 @@ export default function Inicio() {
       <section aria-labelledby="titulo-etapas" className="border-t border-linha">
         <div className="container-site py-16 sm:py-20">
           <Revelar className="max-w-2xl space-y-3">
-            <p className="text-sm font-semibold tracking-widest text-ciano uppercase">Como funciona</p>
+            <p className="text-sm font-semibold tracking-widest text-ciano uppercase">Projeto sob medida</p>
             <h2 id="titulo-etapas" className="text-3xl font-bold sm:text-4xl">
               Do primeiro contato à entrega
             </h2>
