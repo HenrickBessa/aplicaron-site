@@ -24,6 +24,8 @@ export type DadosPlano = {
   mensagemWhatsApp: string;
   // Tipo de serviço gravado no lead (o CRM continua filtrando por serviço).
   servico: Exclude<Servico, "outro">;
+  // Página própria do produto, quando existe.
+  pagina?: string;
 };
 
 export const planos: DadosPlano[] = [
@@ -80,6 +82,7 @@ export const planos: DadosPlano[] = [
     destaque: false,
     mensagemWhatsApp: "Olá, AplicarOn! Vim pelo site e quero o plano Agenda + Cobrança.",
     servico: "sistemas",
+    pagina: "/produtos/agenda-cobranca",
   },
 ];
 

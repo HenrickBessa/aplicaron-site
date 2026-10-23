@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 
-const paginas = ["/", "/servicos/sites", "/clientes/emer", "/sobre", "/privacidade", "/diagnostico", "/obrigado", "/planos", "/admin/entrar"];
+const paginas = ["/", "/servicos/sites", "/clientes/emer", "/sobre", "/privacidade", "/diagnostico", "/obrigado", "/planos", "/produtos/agenda-cobranca", "/admin/entrar"];
 
 // A CSP está em Report-Only: nada é bloqueado, mas o navegador dispara "securitypolicyviolation"
 // para tudo que SERIA bloqueado. Coletamos esses eventos para saber se a política está pronta.

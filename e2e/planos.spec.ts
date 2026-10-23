@@ -74,6 +74,22 @@ test("sem plano e sem e-mail: resumo de erros focado, nada enviado", async ({ pa
   await semViolacoes(page);
 });
 
+test("página do Agenda + Cobrança: chamada principal, plano já marcado e links de /planos e de Sistemas", async ({ page }) => {
+  await page.goto("/produtos/agenda-cobranca");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Pare de perder consulta por falta de lembrete e de correr atrás de atrasado.",
+  );
+  await expect(page.getByRole("radio", { name: /^Agenda \+ Cobrança/ })).toBeChecked();
+
+  await page.goto("/planos");
+  await page.getByRole("link", { name: "Conhecer o Agenda + Cobrança" }).click();
+  await expect(page).toHaveURL(/\/produtos\/agenda-cobranca$/);
+
+  await page.goto("/servicos/sistemas");
+  await page.getByRole("link", { name: "Agenda + Cobrança" }).click();
+  await expect(page).toHaveURL(/\/produtos\/agenda-cobranca$/);
+});
+
 test("home mostra os planos com link para o formulário com o plano marcado", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("link", { name: "Quero este plano: Agenda + Cobrança" }).click();
