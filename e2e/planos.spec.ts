@@ -62,6 +62,14 @@ test("cartão do plano marca o plano no formulário; envio grava o lead e abre o
   expect(lerLead(nome)).toBe("vende|sites|{crm}|Rio Branco/AC|saúde|t");
 });
 
+test("rodapé leva às regras de contratação em /planos", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("navigation", { name: "Rodapé" }).getByRole("link", { name: "Como funciona a contratação" }).click();
+  await expect(page).toHaveURL(/\/planos#como-funciona$/);
+  await expect(page.getByRole("heading", { level: 2, name: "Como funciona a contratação" })).toBeInViewport();
+  await expect(page.getByText("50% da implantação na assinatura e 50% na entrega.", { exact: false })).toBeVisible();
+});
+
 test("sem plano e sem e-mail: resumo de erros focado, nada enviado", async ({ page }) => {
   await page.goto("/planos#contratar");
   await page.getByLabel("Nome", { exact: true }).fill("Alguém");
@@ -71,6 +79,20 @@ test("sem plano e sem e-mail: resumo de erros focado, nada enviado", async ({ pa
   await expect(page.getByRole("link", { name: /^Plano:/ })).toBeVisible();
   await expect(page.getByRole("link", { name: /^E-mail:/ })).toBeVisible();
   await expect(page).toHaveURL(/\/planos/);
+  await semViolacoes(page);
+});
+
+test("AplicarAgro: em desenvolvimento, sem preço nem formulário, com lista de interesse pelo WhatsApp", async ({ page }) => {
+  await page.goto("/produtos");
+  await expect(page.getByRole("link", { name: /AplicarAgro/ })).toContainText("Em desenvolvimento");
+
+  await page.goto("/produtos/aplicaragro");
+  await expect(page.getByText("R$")).toHaveCount(0);
+  await expect(page.locator("#contratar")).toHaveCount(0);
+  const link = page.getByRole("link", { name: /Entrar na lista pelo WhatsApp/ });
+  const href = new URL((await link.getAttribute("href"))!);
+  expect(href.origin + href.pathname).toBe("https://wa.me/5547988800836");
+  expect(href.searchParams.get("text")).toBe("Olá, AplicarOn! Vim pelo site e quero entrar na lista de interesse do AplicarAgro.");
   await semViolacoes(page);
 });
 
