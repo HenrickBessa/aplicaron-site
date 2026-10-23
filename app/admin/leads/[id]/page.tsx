@@ -7,6 +7,7 @@ import { exigirAdmin } from "@/lib/dal/admin";
 import { buscarLead } from "@/lib/dal/leads";
 import { ROTULOS_FAIXA, ROTULOS_SERVICO, ROTULOS_STATUS } from "@/lib/validacao/enums";
 import { dataHora } from "../../formatos";
+import { FormularioStatus } from "./FormularioStatus";
 
 // Título genérico: o nome do lead não vai para a aba nem para o histórico do navegador.
 export const metadata: Metadata = { title: "Lead" };
@@ -46,6 +47,28 @@ export default async function PaginaLead({ params }: PageProps<"/admin/leads/[id
           <p className="mt-2 text-cinza-azulado">Dados pessoais removidos em {data(lead.anonimizado_em)} (LGPD).</p>
         )}
       </div>
+
+      <section aria-labelledby="titulo-status">
+        <h2 id="titulo-status" className="text-lg font-semibold">
+          Andamento
+        </h2>
+        <div className="mt-4">
+          <FormularioStatus leadId={lead.id} status={lead.status} versao={lead.versao} />
+        </div>
+        <h3 className="mt-6 font-medium">Histórico de status</h3>
+        {lead.lead_status_historico.length === 0 ? (
+          <p className="mt-2 text-cinza-azulado">O status ainda não mudou.</p>
+        ) : (
+          <ol className="mt-2 space-y-1">
+            {lead.lead_status_historico.map((h) => (
+              <li key={h.id}>
+                <span className="text-cinza-azulado">{data(h.alterado_em)}:</span> {ROTULOS_STATUS[h.status_anterior]} →{" "}
+                {ROTULOS_STATUS[h.status_novo]}
+              </li>
+            ))}
+          </ol>
+        )}
+      </section>
 
       <section aria-labelledby="titulo-pedido">
         <h2 id="titulo-pedido" className="text-lg font-semibold">

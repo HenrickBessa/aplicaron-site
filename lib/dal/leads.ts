@@ -58,3 +58,17 @@ export async function buscarLead(id: string): Promise<LeadDetalhe | null> {
   if (error) throw new Error(`buscar_lead falhou: ${error.code ?? "sem_codigo"}`);
   return data;
 }
+
+// Concorrência otimista: só altera se a versão ainda for a que a tela mostrava (o trigger do banco
+// incrementa `versao` e grava o histórico). false = outra aba mudou antes, ou o lead não está visível.
+export async function mudarStatusLead(id: string, status: StatusLead, versao: number): Promise<boolean> {
+  const supabase = await exigirAdmin();
+  const { data, error } = await supabase
+    .from("leads")
+    .update({ status })
+    .eq("id", id)
+    .eq("versao", versao)
+    .select("id");
+  if (error) throw new Error(`mudar_status falhou: ${error.code ?? "sem_codigo"}`);
+  return data.length > 0;
+}
