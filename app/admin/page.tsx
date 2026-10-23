@@ -1,16 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Botao } from "@/componentes/ui/Botao";
 import { buscarPlano } from "@/conteudo/planos";
 import { listarLeadsRecentes } from "@/lib/dal/admin";
 import { sair } from "./acoes";
+import { dataHora } from "./formatos";
 
 export const metadata: Metadata = { title: "Leads" };
-
-const dataHora = new Intl.DateTimeFormat("pt-BR", {
-  dateStyle: "short",
-  timeStyle: "short",
-  timeZone: "America/Sao_Paulo",
-});
 
 export default async function PaginaAdmin() {
   const leads = await listarLeadsRecentes();
@@ -45,7 +41,11 @@ export default async function PaginaAdmin() {
               {leads.map((lead) => (
                 <tr key={lead.id} className="border-b border-linha">
                   <td className="py-2 pr-4 whitespace-nowrap">{dataHora.format(new Date(lead.created_at))}</td>
-                  <td className="py-2 pr-4">{lead.nome}</td>
+                  <td className="py-2 pr-4">
+                    <Link href={`/admin/leads/${lead.id}`} className="text-ciano underline underline-offset-2">
+                      {lead.nome}
+                    </Link>
+                  </td>
                   <td className="py-2 pr-4">{lead.servico}</td>
                   <td className="py-2 pr-4">{lead.plano_interesse ? buscarPlano(lead.plano_interesse)?.nome : "—"}</td>
                   <td className="py-2">{lead.status}</td>
