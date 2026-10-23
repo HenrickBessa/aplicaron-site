@@ -79,6 +79,27 @@ test("home lista todos os serviços e clientes do MDX", async ({ page }) => {
   await expect(page.locator("#clientes > div > ul > li")).toHaveCount(4);
 });
 
+test("home: posicionamento de pacotes e cartões de serviço que levam aos planos, ao produto ou ao diagnóstico", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Pacotes prontos para começar em dias");
+  await expect(page.getByRole("link", { name: "Ver os planos" })).toHaveAttribute("href", "/planos");
+
+  const servicos = page.locator("#servicos");
+  await expect(servicos.getByRole("link", { name: "Presença" })).toHaveAttribute("href", "/planos");
+  await expect(servicos.getByRole("link", { name: "Agenda + Cobrança" })).toHaveAttribute("href", "/produtos/agenda-cobranca");
+  await expect(servicos.getByRole("link", { name: "diagnóstico gratuito" }).first()).toHaveAttribute(
+    "href",
+    /^\/diagnostico\?servico=/,
+  );
+
+  // O link de plano fica por cima do link do cartão: o clique vai para o plano, não para o serviço.
+  await servicos.getByRole("link", { name: "Agenda + Cobrança" }).click();
+  await expect(page).toHaveURL(/\/produtos\/agenda-cobranca$/);
+  await page.goBack();
+  await servicos.getByRole("link", { name: "Sites", exact: true }).click();
+  await expect(page).toHaveURL(/\/servicos\/sites$/);
+});
+
 test("nenhuma página mostra textos de rascunho", async ({ page }) => {
   for (const caminho of paginas) {
     await page.goto(caminho);
