@@ -8,6 +8,7 @@ const paginas = [
   "/planos",
   "/produtos",
   "/produtos/agenda-cobranca",
+  "/produtos/aplicaragro",
   "/servicos/automacao-ia",
   "/servicos/sites",
   "/servicos/sistemas",
