@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { BotaoLink, classesBotao } from "@/componentes/ui/Botao";
-import { emReais, SELO_LANCAMENTO, textoPrazo, type DadosPlano } from "@/conteudo/planos";
+import { emReais, textoPrazo, type DadosPlano } from "@/conteudo/planos";
 
 type Props = {
   plano: DadosPlano;
@@ -57,8 +57,6 @@ export function CartaoPlano({ plano, hrefAcao = `#quero-${plano.slug}`, resumido
           <dd className="font-medium text-gelo">{textoPrazo(plano.prazoDiasUteis)}</dd>
         </div>
       </dl>
-
-      <p className="text-sm font-medium text-ciano">{SELO_LANCAMENTO}</p>
 
       {!resumido && (
         <>
