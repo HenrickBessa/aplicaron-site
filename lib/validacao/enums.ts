@@ -1,4 +1,4 @@
-import { z } from "./zod";
+import * as z from "./zod";
 
 // Espelho dos enums do banco (supabase/migrations/*_fundacao.sql).
 // Se mudar aqui, mude lá também (e vice-versa).

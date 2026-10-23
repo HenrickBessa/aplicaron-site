@@ -1,5 +1,5 @@
 import "server-only";
-import { z } from "@/lib/validacao/zod";
+import * as z from "@/lib/validacao/zod";
 import type { FiltrosLeads } from "@/lib/validacao/admin";
 import type { Addon, FaixaOrcamento, Plano, Servico, StatusLead } from "@/lib/validacao/enums";
 import { exigirAdmin } from "./admin";

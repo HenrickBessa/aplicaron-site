@@ -1,5 +1,5 @@
 import type { MDXContent } from "mdx/types";
-import { z } from "@/lib/validacao/zod";
+import * as z from "@/lib/validacao/zod";
 import { planoSchema, servicoSchema } from "@/lib/validacao/enums";
 
 // Formato dos `dados` exportados por cada MDX. Validados no build: um campo faltando

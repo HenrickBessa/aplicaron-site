@@ -1,4 +1,4 @@
-import { z } from "@/lib/validacao/zod";
+import * as z from "@/lib/validacao/zod";
 import { planoSchema, servicoSchema, statusLeadSchema } from "./enums";
 
 // Login do admin. A senha não é validada além do tamanho: quem confere é o Supabase Auth.
