@@ -74,6 +74,20 @@ test("sem plano e sem e-mail: resumo de erros focado, nada enviado", async ({ pa
   await semViolacoes(page);
 });
 
+test("AplicarAgro: em desenvolvimento, sem preço nem formulário, com lista de interesse pelo WhatsApp", async ({ page }) => {
+  await page.goto("/produtos");
+  await expect(page.getByRole("link", { name: /AplicarAgro/ })).toContainText("Em desenvolvimento");
+
+  await page.goto("/produtos/aplicaragro");
+  await expect(page.getByText("R$")).toHaveCount(0);
+  await expect(page.locator("#contratar")).toHaveCount(0);
+  const link = page.getByRole("link", { name: /Entrar na lista pelo WhatsApp/ });
+  const href = new URL((await link.getAttribute("href"))!);
+  expect(href.origin + href.pathname).toBe("https://wa.me/5547988800836");
+  expect(href.searchParams.get("text")).toBe("Olá, AplicarOn! Vim pelo site e quero entrar na lista de interesse do AplicarAgro.");
+  await semViolacoes(page);
+});
+
 test("página do Agenda + Cobrança: chamada principal, plano já marcado e links de /planos e de Sistemas", async ({ page }) => {
   await page.goto("/produtos/agenda-cobranca");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(

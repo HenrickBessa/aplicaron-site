@@ -5,8 +5,9 @@ import { produtos } from "@/conteudo/produtos";
 import { metadadosPagina } from "@/lib/seo";
 
 export const metadata: Metadata = metadadosPagina({
-  titulo: "Produtos prontos para o seu negócio",
-  descricao: "Sistemas da AplicarOn prontos para usar, com mensalidade: agenda com lembrete no WhatsApp, cobrança automática e mais.",
+  titulo: "Produtos: agenda, cobrança e gestão de pecuária",
+  descricao:
+    "Soluções prontas da AplicarOn: Agenda + Cobrança para quem agenda e cobra clientes, e AplicarAgro para gestão de pecuária de corte a pasto.",
   caminho: "/produtos",
 });
 
@@ -15,7 +16,7 @@ export default function PaginaProdutos() {
     <>
       <CabecalhoPagina
         titulo="Produtos"
-        descricao="Sistemas nossos, prontos para usar e com mensalidade. Você começa rápido e a gente cuida da evolução."
+        descricao="Sistemas nossos, com mensalidade. Você começa rápido e a gente cuida da evolução."
         caminho="/produtos"
         trilha={[{ href: "/", rotulo: "Início" }, { rotulo: "Produtos" }]}
       />
