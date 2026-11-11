@@ -75,6 +75,13 @@ await sharp("assets/logoagi.png")
   .png({ compressionLevel: 9 })
   .toFile("public/imagens/clientes/agi.png");
 
+// Uma tela: recorte opcional (px do original), largura máxima de 1280, WebP.
+async function tela(origem, destino, recorte) {
+  let img = sharp(origem);
+  if (recorte) img = img.extract(recorte);
+  await img.resize({ width: 1280, withoutEnlargement: true }).webp({ quality: 80, effort: 6 }).toFile(destino);
+}
+
 // 6. Telas dos sistemas dos clientes (dados fictícios), vindas das apresentações de cada sistema.
 //    O recorte (px do original) fica só com a parte que a página comenta e deixa de fora
 //    o que não pode aparecer no site (nomes de parceiros, contratos, números).
@@ -105,9 +112,24 @@ for (const [cliente, nome, recorte] of [
   ["bazar-bike-motos", "m-catalogo", null],
 ]) {
   await mkdir(`public/imagens/clientes/${cliente}`, { recursive: true });
-  let img = sharp(`assets/telas/${cliente}/${nome}.webp`);
-  if (recorte) img = img.extract(recorte);
-  await img.resize({ width: 1280, withoutEnlargement: true }).webp({ quality: 80, effort: 6 }).toFile(`public/imagens/clientes/${cliente}/${nome}.webp`);
+  await tela(`assets/telas/${cliente}/${nome}.webp`, `public/imagens/clientes/${cliente}/${nome}.webp`, recorte);
+}
+
+// 7. Telas dos produtos, vindas das apresentações públicas de cada um (dados de exemplo).
+for (const [produto, nome, recorte] of [
+  ["aplicarsaude", "inicio", null],
+  ["aplicarsaude", "camera-pressao", null],
+  ["aplicarsaude", "maxima", null],
+  ["aplicarsaude", "caderno", null],
+  // Só o cabeçalho e os cartões: os gráficos abaixo mostram as faixas de aviso, ainda não validadas com a médica.
+  ["aplicarsaude", "painel", { left: 0, top: 0, width: 1600, height: 432 }],
+  ["aplicaragro", "sem-sinal", null],
+  ["aplicaragro", "contagem", null],
+  ["aplicaragro", "pesar", null],
+  ["aplicaragro", "acerto", null],
+]) {
+  await mkdir(`public/imagens/produtos/${produto}`, { recursive: true });
+  await tela(`assets/telas/produtos/${produto}/${nome}.webp`, `public/imagens/produtos/${produto}/${nome}.webp`, recorte);
 }
 
 console.log("Imagens geradas.");

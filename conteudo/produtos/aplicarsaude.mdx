@@ -1,3 +1,10 @@
+import { Tela } from "@/componentes/conteudo/Tela";
+import telaInicio from "@/public/imagens/produtos/aplicarsaude/inicio.webp";
+import telaCamera from "@/public/imagens/produtos/aplicarsaude/camera-pressao.webp";
+import telaMaxima from "@/public/imagens/produtos/aplicarsaude/maxima.webp";
+import telaCaderno from "@/public/imagens/produtos/aplicarsaude/caderno.webp";
+import telaPainel from "@/public/imagens/produtos/aplicarsaude/painel.webp";
+
 export const dados = {
   titulo: "Glicemia e pressão anotadas com uma foto, e a família acompanhando de longe.",
   nome: "AplicarSaúde",
@@ -23,6 +30,45 @@ Para a pessoa idosa que mede a **glicemia** ou a **pressão** em casa, e para a 
 - **Caderno e relatório:** o histórico fica organizado por cores, e o relatório em PDF vai para a consulta médica.
 - **Painel da família:** a pessoa cria um link só de leitura, e a família ou o cuidador acompanha as medidas, com gráficos dos últimos 14 dias. Dá para parar de compartilhar quando quiser.
 - **Roda no navegador do celular**, sem baixar aplicativo da loja.
+
+## Como é na tela
+
+{/* Telas da apresentação pública (repo aplicarsaude-landing). O painel vai cortado: os gráficos mostram as faixas, ainda não validadas. */}
+
+<div className="grid gap-x-6 sm:grid-cols-2">
+  <Tela
+    largura="celular"
+    src={telaInicio}
+    alt="Tela inicial com dois botões azuis grandes: Glicose, com uma gota, e Pressão, com um coração. Embaixo, o botão Caderno."
+    legenda="Dois botões grandes, um para cada medida."
+  />
+  <Tela
+    largura="celular"
+    src={telaCamera}
+    alt="Câmera aberta com um quadro sobre o visor do aparelho de pressão, que mostra 132, 84 e pulso 72, e o botão azul grande Foto. Abaixo, o botão Digitar."
+    legenda="A foto do visor do aparelho, que o app lê."
+  />
+  <Tela
+    largura="celular"
+    src={telaMaxima}
+    alt="Tela da máxima: uma seta para cima, a palavra Máxima e o número 132 em tamanho grande, com o botão vermelho Corrigir e o botão verde Está certo."
+    legenda="Um número por vez, grande, para confirmar ou corrigir."
+  />
+  <Tela
+    largura="celular"
+    src={telaCaderno}
+    alt="Caderno com as medidas em verde: pressões 132/84, 134/86 e 122/78 com um coração e glicemia 128 com uma gota, cada uma com a figura do momento do dia. Embaixo, os botões Para a médica e Família."
+    legenda="O Caderno, com o relatório para a médica e o link da família."
+  />
+</div>
+
+<Tela
+  src={telaPainel}
+  alt="Painel de acompanhamento no computador: o nome da pessoa, a última medição e os cartões de glicemia 128 mg/dL e pressão 132/84 mmHg na faixa, 1 alerta em 7 dias e 8 de 10 dias com registro."
+  legenda="O painel que a família abre pelo link, no computador ou no celular. Dados de exemplo."
+/>
+
+Quer ver o passo a passo completo? [Veja a apresentação do AplicarSaúde](https://henrickbessa.github.io/aplicarsaude-landing/).
 
 ## Cuidados
 
