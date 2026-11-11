@@ -1,3 +1,9 @@
+import { Tela } from "@/componentes/conteudo/Tela";
+import telaSemSinal from "@/public/imagens/produtos/aplicaragro/sem-sinal.webp";
+import telaContagem from "@/public/imagens/produtos/aplicaragro/contagem.webp";
+import telaPesar from "@/public/imagens/produtos/aplicaragro/pesar.webp";
+import telaAcerto from "@/public/imagens/produtos/aplicaragro/acerto.webp";
+
 export const dados = {
   titulo: "Saiba quantas cabeças tem, de quem é cada uma e quanto custa cada arroba.",
   nome: "AplicarAgro",
@@ -22,3 +28,36 @@ Pecuária de corte a pasto: quem cria o próprio gado e quem **recebe gado de te
 - **Brinco comum ou marca a ferro:** identifique o animal pelo número do brinco ou conte o lote pela marca do dono. A lista de brincos entra por planilha.
 - **Pesagem e custo por arroba:** pese o animal pelo brinco ou o lote inteiro e veja quanto custou cada arroba produzida, por lote e por contrato.
 - **Funciona sem sinal:** o registro é feito no celular, no meio do pasto, e sincroniza quando o sinal voltar. Roda no navegador, sem baixar aplicativo da loja.
+
+## Como é na tela
+
+{/* Telas da apresentação pública (repo aplicaragro-apresentacao), com fazenda e pessoas de exemplo. */}
+
+<div className="grid gap-x-6 sm:grid-cols-2">
+  <Tela
+    largura="celular"
+    src={telaSemSinal}
+    alt="Tela do lote Pasto da Baixada com o aviso Sem sinal no topo, o saldo de 124 cabeças por categoria e por dono, os botões Nova movimentação, Contar, Pesar, Inseminar, Diagnóstico e Animais, e no histórico uma morte aguardando envio."
+    legenda="O saldo do lote por categoria e por dono. Sem sinal, o registro espera e sobe depois."
+  />
+  <Tela
+    largura="celular"
+    src={telaContagem}
+    alt="Tela Contado × sistema: por categoria, a contagem do curral contra o sistema, separada por dono; bezerro, bezerra e touro batem, e na vaca falta 1."
+    legenda="A contagem do curral contra o sistema. A diferença fica aberta até o dono resolver."
+  />
+  <Tela
+    largura="celular"
+    src={telaPesar}
+    alt="Tela Pesar do lote Engorda: opção um animal pelo brinco ou lote inteiro, brinco 504, peso 577 kg, a data e o botão Registrar pesagem, com as pesagens recentes abaixo."
+    legenda="Pesagem pelo brinco ou do lote inteiro."
+  />
+  <Tela
+    largura="celular"
+    src={telaAcerto}
+    alt="Tela Acerto da parceria: o período, a situação aguardando o arrendador, o extrato com crias e despesas de cada parte e os botões Aceito e Contesto."
+    legenda="O acerto da parceria: as duas partes veem o mesmo extrato e aceitam ou contestam."
+  />
+</div>
+
+Quer ver tudo o que ele faz? [Veja a apresentação do AplicarAgro](https://henrickbessa.github.io/aplicaragro-apresentacao/).
