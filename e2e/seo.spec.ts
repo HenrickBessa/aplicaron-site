@@ -156,7 +156,7 @@ test("produto: JSON-LD SoftwareApplication com a oferta do plano", async ({ page
   expect(app.offers.priceSpecification[1]).toMatchObject({ price: 220 });
 });
 
-test("produto em desenvolvimento: JSON-LD sem oferta (nada de preço que não existe)", async ({ page }) => {
+test("produto sem plano (em piloto): JSON-LD sem oferta (nada de preço que não existe)", async ({ page }) => {
   await page.goto("/produtos/aplicaragro");
   const app = (await jsonLd(page)).find((d) => d["@type"] === "SoftwareApplication");
   expect(app).toMatchObject({ name: "AplicarAgro", url: `${BASE}/produtos/aplicaragro` });

@@ -9,6 +9,9 @@ export const produtos = [
   carregar(dadosProdutoSchema, "aplicaragro", aplicaragro),
 ].sort((a, b) => a.dados.ordem - b.dados.ordem);
 
+// Selo de quem ainda não está disponível (cartão em /produtos e lista de interesse).
+export const ROTULO_SITUACAO = { em_piloto: "Em piloto", em_desenvolvimento: "Em desenvolvimento" } as const;
+
 export function buscarProduto(slug: string) {
   return produtos.find((p) => p.slug === slug);
 }

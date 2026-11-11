@@ -82,11 +82,12 @@ test("sem plano e sem e-mail: resumo de erros focado, nada enviado", async ({ pa
   await semViolacoes(page);
 });
 
-test("AplicarAgro: em desenvolvimento, sem preço nem formulário, com lista de interesse pelo WhatsApp", async ({ page }) => {
+test("AplicarAgro: em piloto, sem preço nem formulário, com lista de interesse pelo WhatsApp", async ({ page }) => {
   await page.goto("/produtos");
-  await expect(page.getByRole("link", { name: /AplicarAgro/ })).toContainText("Em desenvolvimento");
+  await expect(page.getByRole("link", { name: /AplicarAgro/ })).toContainText("Em piloto");
 
   await page.goto("/produtos/aplicaragro");
+  await expect(page.locator("#lista-de-interesse")).toContainText("O AplicarAgro está em piloto.");
   await expect(page.getByText("R$")).toHaveCount(0);
   await expect(page.locator("#contratar")).toHaveCount(0);
   const link = page.getByRole("link", { name: /Entrar na lista pelo WhatsApp/ });

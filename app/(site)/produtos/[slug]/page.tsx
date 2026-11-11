@@ -4,7 +4,7 @@ import { FormularioPlano } from "@/app/(site)/planos/FormularioPlano";
 import { CabecalhoPagina } from "@/componentes/conteudo/CabecalhoPagina";
 import { CartaoPlano } from "@/componentes/conteudo/CartaoPlano";
 import { buscarPlano } from "@/conteudo/planos";
-import { buscarProduto, produtos } from "@/conteudo/produtos";
+import { buscarProduto, produtos, ROTULO_SITUACAO } from "@/conteudo/produtos";
 import { JsonLd } from "@/componentes/seo/JsonLd";
 import { classesBotao } from "@/componentes/ui/Botao";
 import { linkWhatsappCom } from "@/conteudo/site";
@@ -51,7 +51,7 @@ export default async function PaginaProduto({ params }: PageProps<"/produtos/[sl
           </aside>
         )}
       </div>
-      {dados.situacao === "em_desenvolvimento" && (
+      {dados.situacao !== "disponivel" && (
         <section id="lista-de-interesse" aria-labelledby="titulo-lista" className="border-t border-linha">
           <div className="container-site py-12 sm:py-16">
             <div className="max-w-3xl space-y-4">
@@ -59,7 +59,8 @@ export default async function PaginaProduto({ params }: PageProps<"/produtos/[sl
                 Lista de interesse
               </h2>
               <p className="text-cinza-azulado">
-                O {dados.nome} está em desenvolvimento. Mande uma mensagem e avisamos você quando abrir.
+                O {dados.nome} está {ROTULO_SITUACAO[dados.situacao].toLowerCase()}. Mande uma mensagem e avisamos você quando
+                abrir para mais gente.
               </p>
               {/* shortcut: a lista é a conversa no WhatsApp, nada gravado no banco; virar formulário se o CRM precisar dela. */}
               <a
