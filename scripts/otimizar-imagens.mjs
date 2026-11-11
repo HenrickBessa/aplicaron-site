@@ -64,6 +64,7 @@ for (const [origem, destino] of [
   ["assets/logoemer.png", "emer.png"],
   ["assets/armazemlogo.png", "atacado-das-cestas.png"],
   ["assets/logokavana.png", "kavana.png"],
+  ["assets/logobazar.webp", "bazar-bike-motos.png"],
 ]) {
   await sharp(origem).trim().resize({ height: 200 }).png({ compressionLevel: 9 }).toFile(`public/imagens/clientes/${destino}`);
 }
@@ -95,6 +96,13 @@ for (const [cliente, nome, recorte] of [
   ["agi", "m-hub-inicio", null],
   // Só a lista, sem a área vazia abaixo (leads de exemplo, telefones 90000-00xx).
   ["agi", "painel-leads", { left: 160, top: 0, width: 1280, height: 650 }],
+  // Telas do site no ar (públicas, 10/11/2026). Sem a faixa da barra de rolagem à direita.
+  ["bazar-bike-motos", "site-home", { left: 0, top: 0, width: 1584, height: 900 }],
+  ["bazar-bike-motos", "catalogo", { left: 0, top: 0, width: 1584, height: 900 }],
+  // Só o produto, sem o começo do rodapé.
+  ["bazar-bike-motos", "produto", { left: 0, top: 0, width: 1584, height: 780 }],
+  ["bazar-bike-motos", "revisao", { left: 0, top: 0, width: 1584, height: 900 }],
+  ["bazar-bike-motos", "m-catalogo", null],
 ]) {
   await mkdir(`public/imagens/clientes/${cliente}`, { recursive: true });
   let img = sharp(`assets/telas/${cliente}/${nome}.webp`);
