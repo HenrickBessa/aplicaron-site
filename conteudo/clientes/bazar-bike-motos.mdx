@@ -1,0 +1,86 @@
+import { Tela } from "@/componentes/conteudo/Tela";
+import telaSite from "@/public/imagens/clientes/bazar-bike-motos/site-home.webp";
+import telaCatalogo from "@/public/imagens/clientes/bazar-bike-motos/catalogo.webp";
+import telaProduto from "@/public/imagens/clientes/bazar-bike-motos/produto.webp";
+import telaCelular from "@/public/imagens/clientes/bazar-bike-motos/m-catalogo.webp";
+import telaRevisao from "@/public/imagens/clientes/bazar-bike-motos/revisao.webp";
+
+export const dados = {
+  titulo: "Bazar Bike Motos: catálogo online e painel da loja",
+  tituloSeo: "Site de loja com catálogo e pedido no WhatsApp",
+  descricao: "A AplicarOn desenvolveu o site da Bazar Bike Motos, de Rio Branco: catálogo com preço, pedido pelo WhatsApp, pedido de revisão e painel da loja.",
+  cliente: "Bazar Bike Motos",
+  setor: "Bicicletas e motos",
+  cidade: "Rio Branco, AC",
+  servicos: ["sites", "sistemas"],
+  site: "https://bazarbikemotos.com.br/",
+  resumo: "Primeiro site próprio da loja: catálogo com preço, pedido pelo WhatsApp, pedido de revisão e um painel pensado para o celular.",
+  resultado: "A Bazar Bike Motos só existia no Instagram, no WhatsApp e num Linktree. Agora tem site próprio com o catálogo e o preço de cada produto, o cliente chega ao WhatsApp sabendo o que quer, e a loja cadastra produto, foto e preço pelo celular.",
+  depoimento: {
+    texto: "Agora o cliente chega no WhatsApp já sabendo o produto e o preço.",
+    status: "rascunho",
+  },
+  ordem: 5,
+  rascunho: false,
+}
+
+
+
+## Sobre a Bazar Bike Motos
+
+A Bazar Bike Motos é uma loja de Rio Branco (AC) que trabalha com bicicletas e motos: revisão, peças e acessórios. Até este projeto, a presença da loja na internet se resumia ao Instagram, ao WhatsApp e a um Linktree.
+
+## O que desenvolvemos
+
+Site e painel são um só sistema: o que a loja salva no painel aparece no site na hora, sem nova publicação.
+
+### Site da loja
+
+- **Catálogo com preço**, separado por categoria, com busca, filtro por preço e a opção de ver só o que está disponível.
+- **Página de cada produto**, com a foto ampliável e o botão que abre o WhatsApp com a mensagem pronta sobre aquele produto.
+- **Pedido de revisão** em três etapas: o cliente conta o que a bicicleta ou a moto precisa, e a loja chama no WhatsApp para combinar o dia e o valor.
+- **Eventos, campeonatos e apoiadores** da loja, e a página da loja com o mapa.
+- **WhatsApp em todas as páginas**, com a mensagem de acordo com a página em que o cliente está.
+
+<Tela
+  src={telaSite}
+  alt="Página inicial do site da Bazar Bike Motos: o título Bicicletas e motos é com a gente, os botões Pedir revisão e Chama no WhatsApp, o mascote da loja e as categorias da loja com a quantidade de produtos em cada uma."
+  legenda="Página inicial, com o mascote da loja e o atalho para cada categoria."
+/>
+
+<Tela
+  src={telaCatalogo}
+  alt="Catálogo com busca, filtro por categoria e por preço, a opção Só disponíveis, a contagem de 91 produtos e os cartões com foto, categoria, nome e preço."
+  legenda="Catálogo com preço: o cliente filtra por categoria, faixa de preço e disponibilidade."
+/>
+
+<Tela
+  src={telaProduto}
+  alt="Página de um produto: foto com o botão Ampliar, o nome, o preço, o botão Consultar no WhatsApp, a descrição e a marca."
+  legenda="Cada produto tem a própria página, e o botão leva ao WhatsApp com a mensagem pronta."
+/>
+
+<Tela
+  largura="celular"
+  src={telaCelular}
+  alt="Catálogo no celular: busca e filtros recolhidos, categorias em linha e os produtos em duas colunas com foto, nome e preço."
+  legenda="No celular, de onde chega quem vem do Instagram."
+/>
+
+<Tela
+  src={telaRevisao}
+  alt="Página de revisões: como funciona em três passos e o formulário Pedir revisão na etapa 1 de 3, com nome, WhatsApp e e-mail opcional."
+  legenda="Pedido de revisão: o cliente conta o que precisa, e a loja combina o resto pelo WhatsApp."
+/>
+
+### Painel da loja
+
+- **Produtos, fotos e preços** cadastrados pela própria loja. O painel foi pensado para o celular, para cadastrar com a foto tirada na hora, dentro da loja.
+- **Pedidos de revisão** com status e anotações, para nenhum pedido ficar sem resposta.
+- **Eventos e apoiadores** criados e publicados pela loja, sem depender de nós.
+
+## Como trabalhamos
+
+O catálogo foi montado a partir das fotos dos produtos na loja, e cada produto só foi ao ar depois de conferido. A identidade segue a da loja, com o mascote em cena, e as páginas foram pensadas para quem chega pelo celular, vindo do Instagram. Além do site, a AplicarOn faz os vídeos do Instagram da loja a partir das mesmas fotos do catálogo.
+
+Os dados de quem pede revisão ficam protegidos desde o desenho, com a LGPD em mente: só a loja vê os pedidos, e cada acesso ao painel exige login.

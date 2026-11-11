@@ -18,6 +18,7 @@ const paginas = [
   "/clientes/atacado-das-cestas",
   "/clientes/kavana",
   "/clientes/agi",
+  "/clientes/bazar-bike-motos",
   "/sobre",
   "/privacidade",
   "/obrigado",
@@ -77,7 +78,7 @@ test("página de serviço leva ao diagnóstico com o serviço pré-selecionado",
 test("home lista todos os serviços e clientes do MDX", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#servicos > div > ul > li")).toHaveCount(4);
-  await expect(page.locator("#clientes > div > ul > li")).toHaveCount(4);
+  await expect(page.locator("#clientes > div > ul > li")).toHaveCount(5);
 });
 
 test("home: posicionamento de pacotes e cartões de serviço que levam aos planos, ao produto ou ao diagnóstico", async ({ page }) => {
