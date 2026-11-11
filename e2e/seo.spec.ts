@@ -9,6 +9,7 @@ const indexaveis = [
   "/produtos",
   "/produtos/agenda-cobranca",
   "/produtos/aplicaragro",
+  "/produtos/aplicarsaude",
   "/diagnostico",
   "/sobre",
   "/privacidade",

@@ -5,9 +5,9 @@ import { produtos, ROTULO_SITUACAO } from "@/conteudo/produtos";
 import { metadadosPagina } from "@/lib/seo";
 
 export const metadata: Metadata = metadadosPagina({
-  titulo: "Produtos: agenda, cobrança e gestão de pecuária",
+  titulo: "Produtos: agenda, cobrança, pecuária e saúde",
   descricao:
-    "Soluções prontas da AplicarOn: Agenda + Cobrança para quem agenda e cobra clientes, e AplicarAgro para gestão de pecuária de corte a pasto.",
+    "Soluções prontas da AplicarOn: Agenda + Cobrança para quem agenda e cobra clientes, AplicarAgro para pecuária a pasto e AplicarSaúde para o idoso.",
   caminho: "/produtos",
 });
 

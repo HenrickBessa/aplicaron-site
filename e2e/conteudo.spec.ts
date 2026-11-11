@@ -9,6 +9,7 @@ const paginas = [
   "/produtos",
   "/produtos/agenda-cobranca",
   "/produtos/aplicaragro",
+  "/produtos/aplicarsaude",
   "/servicos/automacao-ia",
   "/servicos/sites",
   "/servicos/sistemas",
