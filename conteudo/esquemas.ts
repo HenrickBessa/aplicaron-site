@@ -52,8 +52,8 @@ export const dadosProdutoSchema = z.object({
   resumo: z.string().min(20).max(200),
   // Plano de /planos vendido nesta página (preço e formulário vêm de conteudo/planos.ts).
   plano: planoSchema.optional(),
-  // em_desenvolvimento: sem preço, com lista de interesse.
-  situacao: z.enum(["disponivel", "em_desenvolvimento"]),
+  // em_piloto (já em uso, ainda fechado) e em_desenvolvimento: sem preço, com lista de interesse.
+  situacao: z.enum(["disponivel", "em_piloto", "em_desenvolvimento"]),
 });
 
 export const dadosPoliticaSchema = z.object({
