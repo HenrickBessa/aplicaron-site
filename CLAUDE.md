@@ -16,7 +16,7 @@ Decisões completas e justificativas: `docs/decisoes.md` (fonte de verdade). Lei
 
 ## Stack
 
-Next.js 16.4.2 (App Router, versão fixa) · TypeScript estrito · Tailwind v4 · Supabase (Postgres + Auth) · Supabase CLI 2.121.0 (devDependency) · Zod · Vitest · pgTAP · Playwright + axe · Resend · Sentry · Vercel (`gru1`) · Node 22 via nvm (`.nvmrc`).
+Next.js 16.4.5 (App Router, versão fixa) · TypeScript estrito · Tailwind v4 · Supabase (Postgres + Auth) · Supabase CLI 2.121.0 (devDependency) · Zod · Vitest · pgTAP · Playwright + axe · Resend · Sentry · Vercel (`gru1`) · Node 22 via nvm (`.nvmrc`).
 
 Chaves Supabase: só **publishable** e **secret**. Nunca anon/service_role legadas.
 
