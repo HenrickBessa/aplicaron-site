@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { coletarViolacoes } from "./csp";
 
-const paginas = ["/", "/servicos/sites", "/clientes/emer", "/sobre", "/privacidade", "/diagnostico", "/obrigado", "/planos", "/produtos/agenda-cobranca", "/admin/entrar"];
+const paginas = ["/", "/servicos/sites", "/clientes/emer", "/sobre", "/henrick", "/privacidade", "/diagnostico", "/obrigado", "/planos", "/produtos/agenda-cobranca", "/admin/entrar"];
 
 test("cabeçalhos de segurança presentes", async ({ request }) => {
   const r = await request.get("/");

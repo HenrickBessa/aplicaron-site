@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { clientes } from "@/conteudo/clientes";
-import { carregar, dadosServicoSchema } from "@/conteudo/esquemas";
+import { carregar, dadosPerfilSchema, dadosServicoSchema } from "@/conteudo/esquemas";
+import * as henrickMdx from "@/conteudo/henrick.mdx";
 import { VERSAO_POLITICA_VIGENTE, versoesPolitica } from "@/conteudo/privacidade";
 import { servicos } from "@/conteudo/servicos";
 
@@ -18,13 +19,24 @@ describe("conteúdo MDX", () => {
     expect(new Set(tipos).size).toBe(tipos.length);
   });
 
-  it("todo cliente tem logo, site e pelo menos um serviço, e nenhum conteúdo é rascunho", () => {
+  it("todo cliente tem logo, site, pelo menos um serviço e stack sem repetição, e nenhum conteúdo é rascunho", () => {
     for (const c of clientes) {
       expect(c.logo, c.slug).toBeTruthy();
       expect(new URL(c.dados.site).protocol, c.slug).toBe("https:");
       expect(c.dados.servicos.length, c.slug).toBeGreaterThan(0);
+      expect(new Set(c.dados.stack).size, c.slug).toBe(c.dados.stack.length);
     }
-    for (const item of [...servicos, ...clientes]) expect(item.dados.rascunho, item.slug).toBe(false);
+    // O perfil entra aqui também: o selo de rascunho do /henrick não pode chegar à main.
+    const perfil = carregar(dadosPerfilSchema, "henrick", henrickMdx);
+    for (const item of [...servicos, ...clientes, perfil]) expect(item.dados.rascunho, item.slug).toBe(false);
+  });
+
+  it("perfil aceita só LinkedIn e GitHub por https nos domínios certos", () => {
+    const valido = carregar(dadosPerfilSchema, "henrick", henrickMdx).dados;
+    const comLinks = (links: object) => dadosPerfilSchema.safeParse({ ...valido, links: { ...valido.links, ...links } }).success;
+    expect(comLinks({})).toBe(true);
+    expect(comLinks({ linkedin: "http://www.linkedin.com/in/x" })).toBe(false);
+    expect(comLinks({ github: "https://gitlab.com/x" })).toBe(false);
   });
 
   it("política vigente é a primeira da lista e as versões não se repetem", () => {

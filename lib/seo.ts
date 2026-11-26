@@ -106,6 +106,20 @@ export function catalogoPlanos(planos: DadosPlano[]) {
   };
 }
 
+// Perfil profissional (/henrick). `worksFor` repete tipo e nome: o Google não garante seguir um @id de outra página.
+export function dadosPessoa({ nome, nomeExibido, cargo, caminho, perfis }: { nome: string; nomeExibido: string; cargo: string; caminho: string; perfis: string[] }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: nome,
+    alternateName: nomeExibido,
+    jobTitle: cargo,
+    url: urlAbsoluta(caminho),
+    sameAs: perfis,
+    worksFor: { ...ORGANIZACAO, "@type": "Organization", name: site.nome },
+  };
+}
+
 export function dadosProduto({ nome, descricao, caminho, plano }: { nome: string; descricao: string; caminho: string; plano?: DadosPlano }) {
   return {
     "@context": "https://schema.org",

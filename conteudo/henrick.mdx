@@ -1,0 +1,47 @@
+export const dados = {
+  titulo: "Henrick Bessa",
+  tituloSeo: "Henrick Bessa: Desenvolvedor Full Stack",
+  descricao: "Henrick Bessa, desenvolvedor full stack em Joinville/SC e fundador da AplicarOn: projetos no ar, stack, testes e como trabalho.",
+  nomeCompleto: "Guilherme Henrick Bessa de Andrade",
+  cargo: "Desenvolvedor Full Stack",
+  cidade: "Joinville/SC",
+  links: {
+    // Ao personalizar a URL do LinkedIn, troque só aqui.
+    linkedin: "https://www.linkedin.com/in/henrick-bessa-16788a153",
+    github: "https://github.com/HenrickBessa",
+    email: "bessa2002henrick@gmail.com",
+  },
+  ordem: 0,
+  rascunho: true,
+}
+
+{/* Texto alinhado ao LinkedIn. Projetos e produtos (acima desta parte) saem de conteudo/clientes e conteudo/produtos. */}
+
+## Como trabalho
+
+Uso agentes de IA no dia a dia (Claude Code e GitHub Copilot), sempre com revisão humana antes de cada mudança ir ao ar.
+
+- **Git com pull requests:** mudanças pequenas, em branches, revisadas antes do merge.
+- **Testes em camadas:** Vitest para regras e validações, pgTAP para as regras de acesso do banco e Playwright com axe para o fluxo no navegador e a acessibilidade.
+- **Deploy na Vercel**, com uma versão de prévia para revisar cada mudança antes da produção.
+
+Neste site, a segurança veio desde o desenho:
+
+- **RLS em todas as tabelas** do banco, com testes pgTAP que garantem as regras de acesso.
+- **CSP e cabeçalhos de segurança**, com teste automático que confere zero violações da CSP em cada página.
+- **Logs sem dados pessoais:** nome, e-mail e telefone de quem preenche um formulário nunca vão para os logs nem para o monitoramento de erros.
+- **CI com scan de segredos:** o CI falha se encontrar uma chave secreta no repositório.
+
+## Trajetória
+
+### Experiência
+
+- **Fundador e Desenvolvedor Full Stack**, AplicarOn, desde fev/2023. Sites, sistemas e aplicativos para clientes, e produtos próprios.
+- **Gestor de Projetos e Desenvolvedor**, G10 Gestão de Aplicativo, jan/2023 a jul/2024. App de telemedicina em React Native publicado nas lojas, pagamentos com Asaas e Stripe, levantamento de requisitos e coordenação entre áreas. [confirmar com Henrick: número de usuários ou de consultas pelo app] Esse app é a versão original da Emer. A plataforma web do case da Emer, nesta página, é a versão nova, feita pela AplicarOn.
+- **Estágio em desenvolvimento web**, Emer Soluções, set a dez/2022.
+- **Analista de dados**, Martinelli Auditores, mar a mai/2022.
+
+### Formação
+
+- **Engenharia de Software**, Católica SC, 2022–2025.
+- **Técnico em Redes**, IFAC, 2018–2020. Medalha de bronze na OBR 2019 (Olimpíada Brasileira de Robótica), etapa estadual do Acre.

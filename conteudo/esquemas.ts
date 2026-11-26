@@ -33,6 +33,8 @@ export const dadosClienteSchema = z.object({
   cidade: z.string().min(2),
   // O que a AplicarOn entregou para este cliente (um ou mais serviços).
   servicos: z.array(servicoSchema.exclude(["outro"])).min(1),
+  // Tecnologias que o projeto usa de verdade (conferidas no repositório dele). Aparecem no case e em /henrick.
+  stack: z.array(z.string().min(2).max(30)).min(1).max(6),
   // Site do cliente (link externo na página do case).
   site: z.url(),
   // Frase curta do cartão na home e na lista de clientes.
@@ -54,6 +56,20 @@ export const dadosProdutoSchema = z.object({
   plano: planoSchema.optional(),
   // em_piloto (já em uso, ainda fechado) e em_desenvolvimento: sem preço, com lista de interesse.
   situacao: z.enum(["disponivel", "em_piloto", "em_desenvolvimento"]),
+});
+
+// Perfil profissional (/henrick). O `titulo` é o nome exibido; `nomeCompleto` vai para o JSON-LD.
+export const dadosPerfilSchema = z.object({
+  ...base,
+  nomeCompleto: z.string().min(3).max(80),
+  cargo: z.string().min(2).max(60),
+  cidade: z.string().min(2).max(40),
+  // Domínio conferido no build: um link trocado por engano não chega ao ar.
+  links: z.object({
+    linkedin: z.url({ protocol: /^https$/, hostname: /^www\.linkedin\.com$/ }),
+    github: z.url({ protocol: /^https$/, hostname: /^github\.com$/ }),
+    email: z.email(),
+  }),
 });
 
 export const dadosPoliticaSchema = z.object({

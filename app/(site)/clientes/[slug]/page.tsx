@@ -61,6 +61,9 @@ export default async function PaginaCliente({ params }: PageProps<"/clientes/[sl
             </li>
           ))}
         </ul>
+        <p className="text-sm text-cinza-azulado">
+          <span className="text-gelo">Tecnologias:</span> {dados.stack.join(" · ")}
+        </p>
       </CabecalhoPagina>
       <div className="container-site py-8 sm:py-12">
         <section aria-labelledby="titulo-resultado" className="mb-10 max-w-3xl rounded-xl border border-ciano/40 bg-azul-profundo p-6">

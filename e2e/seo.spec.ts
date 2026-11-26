@@ -12,6 +12,7 @@ const indexaveis = [
   "/produtos/aplicarsaude",
   "/diagnostico",
   "/sobre",
+  "/henrick",
   "/privacidade",
   "/servicos/automacao-ia",
   "/servicos/sites",
@@ -162,6 +163,19 @@ test("produto sem plano (em piloto): JSON-LD sem oferta (nada de preço que não
   const app = (await jsonLd(page)).find((d) => d["@type"] === "SoftwareApplication");
   expect(app).toMatchObject({ name: "AplicarAgro", url: `${BASE}/produtos/aplicaragro` });
   expect(app).not.toHaveProperty("offers");
+});
+
+test("/henrick: JSON-LD Person com nome completo, perfis e a AplicarOn", async ({ page }) => {
+  await page.goto("/henrick");
+  const pessoa = (await jsonLd(page)).find((d) => d["@type"] === "Person");
+  expect(pessoa).toMatchObject({
+    name: "Guilherme Henrick Bessa de Andrade",
+    alternateName: "Henrick Bessa",
+    jobTitle: "Desenvolvedor Full Stack",
+    url: `${BASE}/henrick`,
+    worksFor: { "@id": `${BASE}/#organizacao`, "@type": "Organization", name: "AplicarOn" },
+  });
+  expect(pessoa.sameAs).toEqual([expect.stringMatching(/^https:\/\/www\.linkedin\.com\/in\//), "https://github.com/HenrickBessa"]);
 });
 
 test("serviço: JSON-LD Service ligado à organização", async ({ page }) => {

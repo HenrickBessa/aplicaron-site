@@ -21,6 +21,7 @@ const paginas = [
   "/clientes/agi",
   "/clientes/bazar-bike-motos",
   "/sobre",
+  "/henrick",
   "/privacidade",
   "/obrigado",
 ];
@@ -108,6 +109,7 @@ test("case mostra o que mudou na nossa voz; depoimento em rascunho não vai para
   const resultado = page.getByRole("region", { name: "O que mudou" });
   await expect(resultado).toContainText("vê de onde veio cada contato");
   await expect(page.locator("blockquote")).toHaveCount(0);
+  await expect(page.getByText("Tecnologias:").locator("..")).toContainText("Supabase");
   // HTML bruto, com o payload do React: o rascunho não pode estar em lugar nenhum.
   const html = await (await page.request.get("/clientes/agi")).text();
   expect(html).toContain("vê de onde veio cada contato");
@@ -117,8 +119,23 @@ test("case mostra o que mudou na nossa voz; depoimento em rascunho não vai para
 test("nenhuma página mostra textos de rascunho", async ({ page }) => {
   for (const caminho of paginas) {
     await page.goto(caminho);
-    await expect(page.locator("body"), caminho).not.toContainText(/rascunho|provisóri|fictíci|ilustrativ/i);
+    await expect(page.locator("body"), caminho).not.toContainText(/rascunho|provisóri|fictíci|ilustrativ|\[confirmar com/i);
   }
+});
+
+test("/henrick: projetos e produtos saem do conteúdo, com links para o case e o site, e sem chamada de diagnóstico", async ({ page }) => {
+  await page.goto("/henrick");
+  const projetos = page.getByRole("region", { name: "Projetos" });
+  await expect(projetos.getByRole("heading", { level: 3 })).toHaveCount(5);
+  await expect(projetos.getByRole("link", { name: "Ver o case Emer" })).toHaveAttribute("href", "/clientes/emer");
+  await expect(projetos.getByRole("link", { name: /^emermedicosonline\.com\.br/ })).toHaveAttribute("href", "https://www.emermedicosonline.com.br/");
+  await expect(projetos).toContainText("Tecnologias: Next.js · TypeScript");
+  const produtos = page.getByRole("region", { name: "Produtos próprios" });
+  await expect(produtos.getByRole("heading", { level: 3 })).toHaveCount(3);
+  await expect(produtos).toContainText("Em piloto");
+  await expect(page.getByRole("heading", { name: "Vamos tirar seu projeto do papel?" })).toHaveCount(0);
+  await page.goto("/sobre");
+  await expect(page.getByRole("link", { name: "Henrick Bessa" })).toHaveAttribute("href", "/henrick");
 });
 
 test("botão 'Pausar animações' congela o que se move sozinho e lembra a escolha", async ({ page }) => {
