@@ -11,8 +11,8 @@ export const produtos = [
   carregar(dadosProdutoSchema, "aplicarsaude", aplicarsaude),
 ].sort((a, b) => a.dados.ordem - b.dados.ordem);
 
-// Selo de quem ainda não está disponível (cartão em /produtos e lista de interesse).
-export const ROTULO_SITUACAO = { em_piloto: "Em piloto", em_desenvolvimento: "Em desenvolvimento" } as const;
+// Selo da situação: /produtos e a lista de interesse só mostram quem não está disponível; /henrick mostra todos.
+export const ROTULO_SITUACAO = { disponivel: "Disponível", em_piloto: "Em piloto", em_desenvolvimento: "Em desenvolvimento" } as const;
 
 export function buscarProduto(slug: string) {
   return produtos.find((p) => p.slug === slug);

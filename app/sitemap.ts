@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...produtos.map((p) => `/produtos/${p.slug}`),
     "/diagnostico",
     "/sobre",
+    "/henrick",
     "/privacidade",
     "/clientes",
     ...servicos.map((s) => `/servicos/${s.slug}`),
